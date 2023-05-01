@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "cubingmexico-dev",
+  "private_key_id": "91c906dca8384498950e84fcfd53a38c00b6b5c9",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQC14XVuZZjYjam2\n7fM9lByiEX97G/z2w2IgVz563uDJpoNEyyuYv4yWLSTB0JMU9ScSiq+sTr9vgT11\np1BOu3up8WB6Mf8nLTJobxrEeXrzFjVdlYZn9hQpz/4474FxWn9PFVvlmGbIx7AW\ndTRPDk8DgOGJhgJF2HhsFYPURGZW8Uut2xdN2spteb19sH6iadi+/gTgm5MKHhl7\nA3BlK9/UD/7Hq8R6IBqBHfve13QSsUDtystju4li0jMlSlU6QsYP29RiTDvOQx8m\nMNDDGI9qcmsSq9knfbuAVIoQ77sVomOQWZ0eSnJ2b7W+DHpUYwvbXZBDgBI+cHNo\n1Er0/gUJAgMBAAECggEAKqh9jW4AwlG/i2sV0MyLRqvJ9Yrj8tBylFlCCzl5CXKn\neRwZ1pKem55s75RG2vSAvIWQnF4/4hwy2QRr/ntUjtBRK3fMe1jLaNkeMxS29Iqx\n64glZP6/Tes9mgb6miZ6k4bT7e6ntNG5CBtnMF+PwqeYvlOS9uTFobwOFlwQkLVT\ngGXI8r6tacOCULVza9fTntplSJJ5mAVINTAeZIlOdoH9cbI90Uv7fTdpbVUs3rGq\nHINAFxd7lp3U8+rnLT551k6WWMlrlM1VDd7x3FEQEDMYWw8XH67F996AEB1syps3\noimH/pJYx3gQ4a7Mq+pgYBtQh3b7NZL75VFUu8ZN7QKBgQDyMrvZGEh+cG07JRyC\nc2BwWsGP+oZA79iIzrOlZ+/Yo8WgIzVFsbrEEmWYeJe6M25Nb/6773rd72M8BAbq\nZFTMk81FQhMMy/4+Tya0ccc8KrAT7Ao3QBQVTB0oEFL04x5Z/5wN6C5995Crqr+E\n+J0UClcmRt7kG2qIu7Jze6ZcewKBgQDAPss2zkSzI/0rOLApqbYgWTXgMGrbUBGQ\nstW8wVDUcdpIuuKowquB8rGurt7Gg+bA9T0nFNyDcc+ac1LazZMfIL+fEyuBA1ph\nxxFPV+oK9o8VpS7tnsQ09Sub6tYmvox17nQ1lyrWq4Zya+i9r7qjUaefDXFA2PTN\n8RzxwN+3SwKBgQCN+yXZ/31H+fpeyMOsyZxIYTvFfrTDTpdeo+X2WjblhiRtWxZ4\ns9br6Gj8d/1iX5IS/UuUurAJeLNw1F+FeqmngCG+rxxhzRhPSLFE6MpGQDQWibH3\nb64WShdxjBhFjPsXAVxnXqwalk2OBTve5KuYuvMZ8kPp7xSF8ZqMTnlZDwKBgQCw\ngHZ+yP5WIrKr3g4PElu+c2l9fbZ9yJN38FlARZR6mFU69SpomuJwGmx73t12EV/o\nxL/yg7q5i+J5AWyOqrNqntyPpkAI4RU4NFZ2LFca3agczV26mEu3+2igbAlV5Rh8\npgNXuISCN1Tm9J/ol9CZZbyp0OOsEAUilz5lzxkW5QKBgQCRWKXYOyHtD/VEPkDQ\nkze92ckhaMNdbBMCCMhK/J+4F2YVjwdldTOmqhTJcRBwO51EWJ5TVaLK2lI0GxTy\nYQtbN+3TpGjjVw99BUB62qIFqsUddvZ3zC1cmGl8ewNjo9Ae0rL54iwQXG8iPrsT\nhQ34PkoORIs6fduOiV3DoNhjnQ==\n-----END PRIVATE KEY-----\n",
+  "client_email": "cloud-sql-proxy-dev@cubingmexico-dev.iam.gserviceaccount.com",
+  "client_id": "109166932404214626321",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/cloud-sql-proxy-dev%40cubingmexico-dev.iam.gserviceaccount.com"
+}
