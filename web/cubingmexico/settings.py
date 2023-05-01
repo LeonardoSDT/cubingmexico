@@ -30,6 +30,9 @@ ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS').split(" ") if os.environ.get('AL
 
 ENV = os.environ.get('ENV')
 
+# Custom Use modeling
+AUTH_USER_MODEL = 'cubingmexico_web.User'
+
 # Application definition
 
 INSTALLED_APPS = [
