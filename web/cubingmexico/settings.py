@@ -30,9 +30,6 @@ ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS').split(" ") if os.environ.get('AL
 
 ENV = os.environ.get('ENV')
 
-# Custom Use modeling
-AUTH_USER_MODEL = 'cubingmexico_web.User'
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -42,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'cubingmexico_web'
+    'cubingmexico_web',
+    'cubingmexico_wca',
 ]
 
 MIDDLEWARE = [
@@ -60,7 +58,7 @@ ROOT_URLCONF = 'cubingmexico.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, "templates")],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -126,9 +124,21 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = 'static/'
-STATIC_ROOT = 'cubingmexico/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Custom Use modeling
+AUTH_USER_MODEL = 'cubingmexico_web.User'
+
+# WCA
+
+WCA_OAUTH_URI = 'https://www.worldcubeassociation.org/oauth/'
+WCA_API_URI = 'https://www.worldcubeassociation.org/api/v0/'
+
+WCA_CLIENT_ID = 'Mq3iaMGMdkO4GkVWpy2Wza70gCZPDwVcHSssjScr-xk'
+WCA_CLIENT_SECRET = 'wqGIOkBxjyio3gSNQwrqkiEOutZCBLrGncYvu4cfCYM'
+WCA_CALLBACK = 'http://localhost:8000/cubingmexico_wca/callback/'

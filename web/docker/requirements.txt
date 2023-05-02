@@ -4,3 +4,4 @@ mysqlclient
 supervisor
 tzdata
 uwsgi
+requests

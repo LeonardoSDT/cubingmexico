@@ -4,3 +4,81 @@
 2023-05-01 19:25:40,598 INFO spawned: 'uwsgi' with pid 11
 2023-05-01 19:25:41,963 INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
 2023-05-01 19:25:41,964 INFO success: uwsgi entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-05-01 20:35:14,967 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2023-05-01 20:35:14,972 INFO supervisord started with pid 8
+2023-05-01 20:35:15,977 INFO spawned: 'nginx' with pid 9
+2023-05-01 20:35:15,980 INFO spawned: 'uwsgi' with pid 10
+2023-05-01 20:35:17,300 INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-05-01 20:35:17,301 INFO success: uwsgi entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-05-01 20:36:32,688 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2023-05-01 20:36:32,693 INFO supervisord started with pid 9
+2023-05-01 20:36:33,696 INFO spawned: 'nginx' with pid 10
+2023-05-01 20:36:33,699 INFO spawned: 'uwsgi' with pid 11
+2023-05-01 20:36:35,056 INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-05-01 20:36:35,056 INFO success: uwsgi entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-05-01 21:51:44,220 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2023-05-01 21:51:44,227 INFO supervisord started with pid 9
+2023-05-01 21:51:45,232 INFO spawned: 'nginx' with pid 10
+2023-05-01 21:51:45,237 INFO spawned: 'uwsgi' with pid 11
+2023-05-01 21:51:46,562 INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-05-01 21:51:46,563 INFO success: uwsgi entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-05-01 21:53:55,688 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2023-05-01 21:53:55,694 INFO supervisord started with pid 8
+2023-05-01 21:53:56,699 INFO spawned: 'nginx' with pid 9
+2023-05-01 21:53:56,702 INFO spawned: 'uwsgi' with pid 10
+2023-05-01 21:53:58,029 INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-05-01 21:53:58,030 INFO success: uwsgi entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-05-01 22:09:23,793 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2023-05-01 22:09:23,798 INFO supervisord started with pid 9
+2023-05-01 22:09:24,801 INFO spawned: 'nginx' with pid 10
+2023-05-01 22:09:24,803 INFO spawned: 'uwsgi' with pid 11
+2023-05-01 22:09:26,160 INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-05-01 22:09:26,160 INFO success: uwsgi entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-05-01 22:42:53,184 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2023-05-01 22:42:53,189 INFO supervisord started with pid 9
+2023-05-01 22:42:54,195 INFO spawned: 'nginx' with pid 10
+2023-05-01 22:42:54,200 INFO spawned: 'uwsgi' with pid 11
+2023-05-01 22:42:55,501 INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-05-01 22:42:55,502 INFO success: uwsgi entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-05-01 22:47:49,762 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2023-05-01 22:47:49,767 INFO supervisord started with pid 9
+2023-05-01 22:47:50,771 INFO spawned: 'nginx' with pid 10
+2023-05-01 22:47:50,773 INFO spawned: 'uwsgi' with pid 11
+2023-05-01 22:47:52,244 INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-05-01 22:47:52,245 INFO success: uwsgi entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-05-01 23:07:05,279 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2023-05-01 23:07:05,284 INFO supervisord started with pid 9
+2023-05-01 23:07:06,287 INFO spawned: 'nginx' with pid 10
+2023-05-01 23:07:06,289 INFO spawned: 'uwsgi' with pid 11
+2023-05-01 23:07:07,711 INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-05-01 23:07:07,712 INFO success: uwsgi entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-05-02 00:12:17,484 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2023-05-02 00:12:17,490 INFO supervisord started with pid 9
+2023-05-02 00:12:18,496 INFO spawned: 'nginx' with pid 10
+2023-05-02 00:12:18,502 INFO spawned: 'uwsgi' with pid 11
+2023-05-02 00:12:19,865 INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-05-02 00:12:19,866 INFO success: uwsgi entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-05-02 00:17:34,306 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2023-05-02 00:17:34,312 INFO supervisord started with pid 9
+2023-05-02 00:17:35,317 INFO spawned: 'nginx' with pid 10
+2023-05-02 00:17:35,321 INFO spawned: 'uwsgi' with pid 11
+2023-05-02 00:17:36,754 INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-05-02 00:17:36,756 INFO success: uwsgi entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-05-02 00:38:14,603 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2023-05-02 00:38:14,608 INFO supervisord started with pid 9
+2023-05-02 00:38:15,612 INFO spawned: 'nginx' with pid 10
+2023-05-02 00:38:15,615 INFO spawned: 'uwsgi' with pid 11
+2023-05-02 00:38:17,052 INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-05-02 00:38:17,053 INFO success: uwsgi entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-05-02 01:16:12,922 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2023-05-02 01:16:12,927 INFO supervisord started with pid 9
+2023-05-02 01:16:13,933 INFO spawned: 'nginx' with pid 10
+2023-05-02 01:16:13,938 INFO spawned: 'uwsgi' with pid 11
+2023-05-02 01:16:15,352 INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-05-02 01:16:15,353 INFO success: uwsgi entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-05-02 02:44:31,293 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2023-05-02 02:44:31,298 INFO supervisord started with pid 9
+2023-05-02 02:44:32,305 INFO spawned: 'nginx' with pid 10
+2023-05-02 02:44:32,310 INFO spawned: 'uwsgi' with pid 11
+2023-05-02 02:44:33,693 INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-05-02 02:44:33,694 INFO success: uwsgi entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)

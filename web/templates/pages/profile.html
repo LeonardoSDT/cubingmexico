@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}Inicio{% endblock %}
+
+{% block content %}
+
+{% include "includes/navbar.html" %}
+
+<h1>Perfil</h1>
+
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{ user.wcaprofile.name }}</h5>
+                <p class="card-text">
+                  {% if user.wcaprofile.wca_id %}
+                    WCA ID: {{ user.wcaprofile.wca_id }}
+                  {% else %}
+                    No WCA ID yet
+                  {% endif %}
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Detalles</h5>
+                <p class="card-text">
+                    <p>Joined WCA: {{ user.wcaprofile.wca_created_at }}</p>
+                    <p>Joined PCA: {{ user.date_joined }}</p>
+                    <hr>
+                    <form action="{% url 'cubingmexico_web:profile' %}" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="{{ form.state.id_for_label }}">Estado:</label>
+                        <select name="{{ form.state.name }}" required id="{{ form.state.id_for_label }}" class="form-control">
+                        {% for value, label in form.fields.state.choices %}
+                            {% if form.state.value == value %}
+                            <option value="{{ value }}" selected>{{ label }}</option>
+                            {% else %}
+                            <option value="{{ value }}">{{ label }}</option>
+                            {% endif %}
+                        {% endfor %}
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-default">Guardar</button>
+                    </form>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}
