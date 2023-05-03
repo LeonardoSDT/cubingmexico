@@ -1,7 +1,10 @@
 Django==4.1.7
+django-extensions
 djangorestframework
 mysqlclient
 supervisor
 tzdata
 uwsgi
 requests
+pandas
+numpy

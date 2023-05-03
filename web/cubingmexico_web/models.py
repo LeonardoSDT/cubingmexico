@@ -29,47 +29,18 @@ class WCAProfile(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
 
+class State(models.Model):
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
+
 class CubingmexicoProfile(models.Model):
     def __str__(self):
         return str(self.user)
-    
-    STATE_CHOICES = (
-        ('Aguascalientes', 'Aguascalientes'),
-        ('Baja California', 'Baja California'),
-        ('Baja California Sur', 'Baja California Sur'),
-        ('Campeche', 'Campeche'),
-        ('Coahuila', 'Coahuila'),
-        ('Colima', 'Colima'),
-        ('Chiapas', 'Chiapas'),
-        ('Chihuahua', 'Chihuahua'),
-        ('Ciudad de México', 'Ciudad de México'),
-        ('Durango', 'Durango'),
-        ('Guanajuato', 'Guanajuato'),
-        ('Guerrero', 'Guerrero'),
-        ('Hidalgo', 'Hidalgo'),
-        ('Jalisco', 'Jalisco'),
-        ('Estado de México', 'Estado de México'),
-        ('Michoacán', 'Michoacán'),
-        ('Morelos', 'Morelos'),
-        ('Nayarit', 'Nayarit'),
-        ('Nuevo León', 'Nuevo León'),
-        ('Oaxaca', 'Oaxaca'),
-        ('Puebla', 'Puebla'),
-        ('Querétaro', 'Querétaro'),
-        ('Quintana Roo', 'Quintana Roo'),
-        ('San Luis Potosí', 'San Luis Potosí'),
-        ('Sinaloa', 'Sinaloa'),
-        ('Sonora', 'Sonora'),
-        ('Tabasco', 'Tabasco'),
-        ('Tamaulipas', 'Tamaulipas'),
-        ('Tlaxcala', 'Tlaxcala'),
-        ('Veracruz', 'Veracruz'),
-        ('Yucatán', 'Yucatán'),
-        ('Zacatecas', 'Zacatecas'),
-    )
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    state = models.CharField(max_length=255, choices=STATE_CHOICES, null=True, blank=True)
+    state = models.ForeignKey(State, on_delete=models.SET_NULL, null=True, blank=True, default='')
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

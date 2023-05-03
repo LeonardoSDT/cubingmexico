@@ -1,185 +1,248 @@
 from django.db import models
+from django.db.models.manager import BaseManager
 
 # Create your models here.
 
-class Competition(models.Model):
-    name = models.CharField(max_length=50, db_column='name')
-    cityName = models.CharField(max_length=50, db_column='cityName')
-    countryId = models.CharField(max_length=50, db_column='countryId')
-    information = models.TextField(null=True, blank=True, db_column='information')
-    year = models.IntegerField(db_column='year')
-    month = models.IntegerField(db_column='month')
-    day = models.IntegerField(db_column='day')
-    endMonth = models.IntegerField(db_column='endMonth')
-    endDay = models.IntegerField(db_column='endDay')
-    eventSpecs = models.CharField(max_length=256, null=True, blank=True, db_column='eventSpecs')
-    wcaDelegate = models.TextField(null=True, blank=True, db_column='wcaDelegate')
-    organiser = models.TextField(null=True, blank=True, db_column='organiser')
-    venue = models.CharField(max_length=240, db_column='venue')
-    venueAddress = models.CharField(max_length=120, null=True, blank=True, db_column='venueAddress')
-    venueDetails = models.CharField(max_length=120, null=True, blank=True, db_column='venueDetails')
-    external_website = models.CharField(max_length=200, null=True, blank=True, db_column='external_website')
-    cellName = models.CharField(max_length=45, db_column='cellName')
-    latitude = models.IntegerField(null=True, blank=True, db_column='latitude')
-    longitude = models.IntegerField(null=True, blank=True, db_column='longitude')
-
-    class Meta:
-        db_table = 'Competitions'
-        managed = False
-
-
 class Continent(models.Model):
-    name = models.CharField(max_length=50, db_column='name')
-    recordName = models.CharField(max_length=3, db_column='recordName')
-    latitude = models.IntegerField(db_column='latitude')
-    longitude = models.IntegerField(db_column='longitude')
-    zoom = models.IntegerField(db_column='zoom')
-
-    class Meta:
-        db_table = 'Continents'
-        managed = False
+    id = models.CharField(primary_key=True, max_length=50)
+    name = models.CharField(max_length=50)
+    record_name = models.CharField(max_length=3, blank=True, null=True)
+    latitude = models.IntegerField()
+    longitude = models.IntegerField()
+    zoom = models.IntegerField()
 
 
 class Country(models.Model):
-    name = models.CharField(max_length=50, db_column='name')
-    continentId = models.CharField(max_length=50, db_column='continentId')
-    latitude = models.IntegerField(db_column='latitude')
-    longitude = models.IntegerField(db_column='longitude')
-    zoom = models.IntegerField(db_column='zoom')
-    iso2 = models.CharField(max_length=2, null=True, blank=True, db_column='iso2')
-
-    class Meta:
-        db_table = 'Countries'
-        managed = False
+    id = models.CharField(primary_key=True, max_length=50)
+    name = models.CharField(max_length=50)
+    continent = models.ForeignKey(
+        Continent,
+        max_length=50,
+        null=True,
+        on_delete=models.DO_NOTHING,
+    )
+    iso2 = models.CharField(max_length=2, blank=True, null=True)
 
 
 class Event(models.Model):
-    name = models.CharField(max_length=54, db_column='name')
-    rank = models.IntegerField(db_column='rank')
-    format = models.CharField(max_length=10, db_column='format')
-    cellName = models.CharField(max_length=45, db_column='cellName')
-
-    class Meta:
-        db_table = 'Events'
-        managed = False
+    id = models.CharField(primary_key=True, max_length=6)
+    name = models.CharField(max_length=54)
+    rank = models.IntegerField()
+    format = models.CharField(max_length=10)
+    cell_name = models.CharField(max_length=45)
 
 
-class Format(models.Model):
-    name = models.CharField(max_length=50, db_column='name')
-    sort_by = models.CharField(max_length=255, db_column='sort_by')
-    sort_by_second = models.CharField(max_length=255, db_column='sort_by_second')
-    expected_solve_count = models.IntegerField(db_column='expected_solve_count')
-    trim_fastest_n = models.IntegerField(db_column='trim_fastest_n')
-    trim_slowest_n = models.IntegerField(db_column='trim_slowest_n')
+class PersonQuerySet(models.QuerySet):
+    def get(self, *args, **kwargs):
+        """
+        Perform the query and return a single object matching the given
+        keyword arguments.
+        """
+        clone = self.filter(*args, **kwargs)
 
-    class Meta:
-        db_table = 'Formats'
-        managed = False
+        if self.query.can_filter() and not self.query.distinct_fields:
+            clone = clone.order_by()
+
+        num = len(clone)
+
+        if not num:
+            raise self.model.DoesNotExist(
+                "%s matching query does not exist." % self.model._meta.object_name
+            )
+
+        return clone._result_cache[num - 1]
 
 
 class Person(models.Model):
-    subid = models.IntegerField(db_column='subid')
-    name = models.CharField(max_length=80, db_column='name')
-    countryId = models.CharField(max_length=50, db_column='countryId')
-    gender = models.CharField(max_length=1, db_column='gender')
+    GENDER_MALE = "m"
+    GENDER_FEMALE = "f"
+    GENDER_CHOICES = (
+        (GENDER_MALE, "Male"),
+        (GENDER_FEMALE, "Female"),
+    )
+
+    id = models.CharField(primary_key=True, max_length=10)
+    subid = models.IntegerField()
+    name = models.CharField(max_length=80, blank=True, null=True)
+    country = models.ForeignKey(
+        Country,
+        max_length=50,
+        null=True,
+        on_delete=models.DO_NOTHING,
+    )
+    gender = models.CharField(
+        max_length=1, choices=GENDER_CHOICES, blank=True, null=True
+    )
+
+    objects = BaseManager.from_queryset(PersonQuerySet)()
 
     class Meta:
-        db_table = 'Persons'
-        managed = False
+        unique_together = (("id", "subid"),)
+        base_manager_name = "objects"
+
+
+class Competition(models.Model):
+    id = models.CharField(primary_key=True, max_length=32)
+    name = models.CharField(max_length=50)
+    city_name = models.CharField(max_length=50)
+    country = models.ForeignKey(
+        Country,
+        max_length=50,
+        null=True,
+        on_delete=models.DO_NOTHING,
+    )
+    information = models.TextField(blank=True, null=True)
+    year = models.PositiveSmallIntegerField()
+    month = models.PositiveSmallIntegerField()
+    day = models.PositiveSmallIntegerField()
+    end_month = models.PositiveSmallIntegerField()
+    end_day = models.PositiveSmallIntegerField()
+    event_specs = models.CharField(max_length=256, blank=True, null=True)
+    wca_delegate = models.TextField(blank=True, null=True)
+    organizer = models.TextField(blank=True, null=True)
+    venue = models.CharField(max_length=240, null=True)
+    venue_address = models.CharField(max_length=120, blank=True, null=True)
+    venue_details = models.CharField(max_length=120, blank=True, null=True)
+    external_website = models.CharField(max_length=200, blank=True, null=True)
+    cell_name = models.CharField(max_length=45)
+    latitude = models.IntegerField(blank=True, null=True)
+    longitude = models.IntegerField(blank=True, null=True)
+
+    # Custom fields
+    start_date = models.DateField(blank=True, null=True)
+    end_date = models.DateField(blank=True, null=True)
+    events = models.ManyToManyField(Event)
+    organizers = models.ManyToManyField(Person, related_name="organized_comps")
+    delegates = models.ManyToManyField(Person, related_name="delegated_comps")
+
+
+class Format(models.Model):
+    id = models.CharField(primary_key=True, max_length=1)
+    name = models.CharField(max_length=50)
+    sort_by = models.CharField(max_length=255)
+    sort_by_second = models.CharField(max_length=255)
+    expected_solve_count = models.IntegerField()
+    trim_fastest_n = models.IntegerField()
+    trim_slowest_n = models.IntegerField()
 
 
 class RanksAverage(models.Model):
-    personId = models.CharField(max_length=10, db_column='personId')
-    eventId = models.CharField(max_length=6, db_column='eventId')
-    best = models.IntegerField(db_column='best')
-    worldRank = models.IntegerField(db_column='worldRank')
-    continentRank = models.IntegerField(db_column='continentRank')
-    countryRank = models.IntegerField(db_column='countryRank')
-
-    class Meta:
-        db_table = 'RanksAverage'
-        managed = False
+    person = models.ForeignKey(
+        Person,
+        max_length=10,
+        null=True,
+        on_delete=models.DO_NOTHING,
+    )
+    event = models.ForeignKey(
+        Event, max_length=6, null=True, on_delete=models.DO_NOTHING
+    )
+    best = models.IntegerField(null=True)
+    world_rank = models.IntegerField()
+    continent_rank = models.IntegerField()
+    country_rank = models.IntegerField()
 
 
 class RanksSingle(models.Model):
-    personId = models.CharField(max_length=10, db_column='personId')
-    eventId = models.CharField(max_length=6, db_column='eventId')
-    best = models.IntegerField(db_column='best')
-    worldRank = models.IntegerField(db_column='worldRank')
-    continentRank = models.IntegerField(db_column='continentRank')
-    countryRank = models.IntegerField(db_column='countryRank')
+    person = models.ForeignKey(
+        Person,
+        max_length=10,
+        null=True,
+        on_delete=models.DO_NOTHING,
+    )
+    event = models.ForeignKey(
+        Event, max_length=6, null=True, on_delete=models.DO_NOTHING
+    )
+    best = models.IntegerField(null=True)
+    world_rank = models.IntegerField()
+    continent_rank = models.IntegerField()
+    country_rank = models.IntegerField()
 
-    class Meta:
-        db_table = 'RanksSingle'
-        managed = False
+
+class RoundType(models.Model):
+    id = models.CharField(primary_key=True, max_length=1)
+    rank = models.IntegerField()
+    name = models.CharField(max_length=50)
+    cell_name = models.CharField(max_length=45)
+    final = models.IntegerField()
 
 
 class Result(models.Model):
-    competitionId = models.CharField(max_length=32, db_column='competitionId')
-    eventId = models.CharField(max_length=6, db_column='eventId')
-    roundTypeId = models.CharField(max_length=1, db_column='roundTypeId')
-    pos = models.IntegerField(db_column='pos')
-    best = models.IntegerField(db_column='best')
-    average = models.IntegerField(db_column='average')
-    personName = models.CharField(max_length=80, null=True, blank=True, db_column='personName')
-    personId = models.CharField(max_length=10, db_column='personId')
-    personCountryId = models.CharField(max_length=50, null=True, blank=True, db_column='personCountryId')
-    formatId = models.CharField(max_length=1, db_column='formatId')
-    value1 = models.IntegerField(db_column='value1')
-    value2 = models.IntegerField(db_column='value2')
-    value3 = models.IntegerField(db_column='value3')
-    value4 = models.IntegerField(db_column='value4')
-    value5 = models.IntegerField(db_column='value5')
-    regionalSingleRecord = models.CharField(max_length=3, null=True, blank=True, db_column='regionalSingleRecord')
-    regionalAverageRecord = models.CharField(max_length=3, null=True, blank=True, db_column='regionalAverageRecord')
-
-    class Meta:
-        db_table = 'Results'
-        managed = False
-
-    def to_dict(self):
-        return {
-            'competitionId': self.competitionId,
-            'eventId': self.eventId,
-            'roundTypeId': self.roundTypeId,
-            'pos': self.pos,
-            'best': self.best,
-            'average': self.average,
-            'personName': self.personName,
-            'personId': self.personId,
-            'personCountryId': self.personCountryId,
-            'formatId': self.formatId,
-            'value1': self.value1,
-            'value2': self.value2,
-            'value3': self.value3,
-            'value4': self.value4,
-            'value5': self.value5,
-            'regionalSingleRecord': self.regionalSingleRecord,
-            'regionalAverageRecord': self.regionalAverageRecord,
-        }
-
-
-class RoundTypes(models.Model):
-    rank = models.IntegerField()
-    name = models.CharField(max_length=50)
-    cellName = models.CharField(max_length=45)
-    final = models.IntegerField()
-
-    class Meta:
-        db_table = 'RoundTypes'
-        managed = False
+    competition = models.ForeignKey(
+        Competition,
+        max_length=32,
+        null=True,
+        on_delete=models.DO_NOTHING,
+    )
+    event = models.ForeignKey(
+        Event, max_length=6, null=True, on_delete=models.DO_NOTHING
+    )
+    round_type = models.ForeignKey(
+        RoundType,
+        max_length=1,
+        null=True,
+        on_delete=models.DO_NOTHING,
+    )
+    pos = models.SmallIntegerField()
+    best = models.IntegerField(db_index=True)
+    average = models.IntegerField(db_index=True)
+    person_name = models.CharField(max_length=80, blank=True, null=True)
+    person = models.ForeignKey(
+        Person,
+        max_length=10,
+        null=True,
+        on_delete=models.DO_NOTHING,
+    )
+    country = models.ForeignKey(
+        Country,
+        max_length=50,
+        blank=True,
+        null=True,
+        on_delete=models.DO_NOTHING,
+    )
+    format = models.ForeignKey(
+        Format,
+        max_length=1,
+        null=True,
+        on_delete=models.DO_NOTHING,
+    )
+    value1 = models.IntegerField()
+    value2 = models.IntegerField()
+    value3 = models.IntegerField()
+    value4 = models.IntegerField()
+    value5 = models.IntegerField()
+    regional_single_record = models.CharField(max_length=3, blank=True, null=True)
+    regional_average_record = models.CharField(max_length=3, blank=True, null=True)
 
 
 class Scramble(models.Model):
-    scrambleId = models.IntegerField()
-    competitionId = models.CharField(max_length=32)
-    eventId = models.CharField(max_length=6)
-    roundTypeId = models.CharField(max_length=1)
-    groupId = models.CharField(max_length=3)
-    isExtra = models.IntegerField()
-    scrambleNum = models.IntegerField()
-    scramble = models.CharField(max_length=500)
+    scramble_id = models.PositiveIntegerField()
+    competition = models.ForeignKey(
+        Competition,
+        max_length=32,
+        null=True,
+        on_delete=models.DO_NOTHING,
+    )
+    event = models.ForeignKey(
+        Event, max_length=6, null=True, on_delete=models.DO_NOTHING
+    )
+    round_type = models.ForeignKey(
+        RoundType,
+        max_length=1,
+        null=True,
+        on_delete=models.DO_NOTHING,
+    )
+    group_id = models.CharField(max_length=3)
+    is_extra = models.IntegerField()
+    scramble_num = models.IntegerField()
+    scramble = models.TextField()
 
-    class Meta:
-        db_table = 'Scrambles'
-        managed = False
+
+class Championship(models.Model):
+    id = models.IntegerField(primary_key=True)
+    competition = models.ForeignKey(
+        Competition,
+        max_length=191,
+        null=True,
+        on_delete=models.DO_NOTHING,
+    )
+    championship_type = models.CharField(max_length=191)

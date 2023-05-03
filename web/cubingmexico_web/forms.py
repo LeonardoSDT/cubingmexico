@@ -1,9 +1,12 @@
 from django.forms import ModelForm
+from django import forms
 
-from .models import CubingmexicoProfile
+from .models import CubingmexicoProfile, State
 
 
-class CubingmexicoProfileForm(ModelForm):
+class CubingmexicoProfileForm(forms.ModelForm):
+    state = forms.ModelChoiceField(queryset=State.objects.all(), empty_label="Selecciona una opción")
+
     class Meta:
         model = CubingmexicoProfile
-        fields = ['state',]
+        fields = ['state']

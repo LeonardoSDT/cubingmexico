@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %}Rankings nacionales{% endblock %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+{% endblock stylesheets %}
+
+{% block content %}
+
+{% load divide_by_100 %}
+
+<h1 class="my-3">Rankings nacionales</h1>
+
+<table id="rankings" class="table table-striped" style="width:100%">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Nombre</th>
+            <th>Tiempo</th>
+            <th>Competición</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for result in single_333 %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ result.person_name }}</td>
+            <td>{{ result.best|divide_by_100|floatformat:2 }}</td>
+            <td>{{ result.competition.name }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <th>#</th>
+            <th>Nombre</th>
+            <th>Tiempo</th>
+            <th>Competición</th>
+        </tr>
+    </tfoot>
+  </table>
+
+{% endblock %}
+
+{% block javascripts %}
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#rankings').DataTable({
+            "language": {
+                url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json',
+            }
+        });
+    });
+</script>
+{% endblock javascripts %}

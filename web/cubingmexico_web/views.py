@@ -12,9 +12,11 @@ from django.views.generic.base import RedirectView
 
 from .models import User, WCAProfile, CubingmexicoProfile
 from .forms import CubingmexicoProfileForm
-from .utils import wca_authorize_uri, wca_access_token_uri
+from .utils import wca_authorize_uri, wca_access_token_uri, get_rankings
 
 # Create your views here.
+
+##################################################
 
 class AuthenticateMixin:
     """
@@ -61,6 +63,53 @@ class ProfileView(AuthenticateMixin, ContentMixin, TemplateView):
         context['form'] = CubingmexicoProfileForm(instance=self.request.user.cubingmexicoprofile)
         return context
     
+class NationalRankingsView(ContentMixin, TemplateView):
+    template_name = 'pages/national/rankings.html'
+    page = 'cubingmexico_web:national_rankings'
+
+    def get_context_data(self, **kwargs):
+        context = super(NationalRankingsView, self).get_context_data(**kwargs)
+        context['single_222'] = get_rankings(event_type='222', rank_type='best', state_filter=1)
+        context['single_333'] = get_rankings(event_type='333', rank_type='best', state_filter=1)
+        context['segment'] = 'national_rankings'
+        return context
+    
+class StateRankingsView(ContentMixin, TemplateView):
+    template_name = 'pages/state/rankings.html'
+    page = 'cubingmexico_web:state_rankings'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['segment'] = 'state_rankings'
+        return context
+    
+class StateRecordsView(ContentMixin, TemplateView):
+    template_name = 'pages/state/records.html'
+    page = 'cubingmexico_web:state_records'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['segment'] = 'state_records'
+        return context
+
+class StateTeamsView(ContentMixin, TemplateView):
+    template_name = 'pages/state/teams.html'
+    page = 'cubingmexico_web:state_teams'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['segment'] = 'state_teams'
+        return context
+    
+class UNRsView(ContentMixin, TemplateView):
+    template_name = 'pages/national/unrs.html'
+    page = 'cubingmexico_web:unrs'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['segment'] = 'unrs'
+        return context
+
 class WCACallbackView(RedirectView):
     """
     Validates WCA user, creates a Cubingmexico user and a WCA profile

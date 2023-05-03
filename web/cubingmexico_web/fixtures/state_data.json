@@ -1,0 +1,226 @@
+[
+    {
+        "model": "cubingmexico_web.state",
+        "pk": "1",
+        "fields": {
+            "name": "Aguascalientes"
+        }
+    },
+    {
+        "model": "cubingmexico_web.state",
+        "pk": "2",
+        "fields": {
+            "name": "Baja California"
+        }
+    },
+    {
+        "model": "cubingmexico_web.state",
+        "pk": "3",
+        "fields": {
+            "name": "Baja California Sur"
+        }
+    },
+    {
+        "model": "cubingmexico_web.state",
+        "pk": "4",
+        "fields": {
+            "name": "Campeche"
+        }
+    },
+    {
+        "model": "cubingmexico_web.state",
+        "pk": "5",
+        "fields": {
+            "name": "Coahuila"
+        }
+    },
+    {
+        "model": "cubingmexico_web.state",
+        "pk": "6",
+        "fields": {
+            "name": "Colima"
+        }
+    },
+    {
+        "model": "cubingmexico_web.state",
+        "pk": "7",
+        "fields": {
+            "name": "Chiapas"
+        }
+    },
+    {
+        "model": "cubingmexico_web.state",
+        "pk": "8",
+        "fields": {
+            "name": "Chihuahua"
+        }
+    },
+    {
+        "model": "cubingmexico_web.state",
+        "pk": "9",
+        "fields": {
+            "name": "Ciudad de México"
+        }
+    },
+    {
+        "model": "cubingmexico_web.state",
+        "pk": "10",
+        "fields": {
+            "name": "Durango"
+        }
+    },
+    {
+        "model": "cubingmexico_web.state",
+        "pk": "11",
+        "fields": {
+            "name": "Guanajuato"
+        }
+    },
+    {
+        "model": "cubingmexico_web.state",
+        "pk": "12",
+        "fields": {
+            "name": "Guerrero"
+        }
+    },
+    {
+        "model": "cubingmexico_web.state",
+        "pk": "13",
+        "fields": {
+            "name": "Hidalgo"
+        }
+    },
+    {
+        "model": "cubingmexico_web.state",
+        "pk": "14",
+        "fields": {
+            "name": "Jalisco"
+        }
+    },
+    {
+        "model": "cubingmexico_web.state",
+        "pk": "15",
+        "fields": {
+            "name": "Estado de México"
+        }
+    },
+    {
+        "model": "cubingmexico_web.state",
+        "pk": "16",
+        "fields": {
+            "name": "Michoacán"
+        }
+    },
+    {
+        "model": "cubingmexico_web.state",
+        "pk": "17",
+        "fields": {
+            "name": "Morelos"
+        }
+    },
+    {
+        "model": "cubingmexico_web.state",
+        "pk": "18",
+        "fields": {
+            "name": "Nayarit"
+        }
+    },
+    {
+        "model": "cubingmexico_web.state",
+        "pk": "19",
+        "fields": {
+            "name": "Nuevo León"
+        }
+    },
+    {
+        "model": "cubingmexico_web.state",
+        "pk": "20",
+        "fields": {
+            "name": "Oaxaca"
+        }
+    },
+    {
+        "model": "cubingmexico_web.state",
+        "pk": "21",
+        "fields": {
+            "name": "Puebla"
+        }
+    },
+    {
+        "model": "cubingmexico_web.state",
+        "pk": "22",
+        "fields": {
+            "name": "Querétaro"
+        }
+    },
+    {
+        "model": "cubingmexico_web.state",
+        "pk": "23",
+        "fields": {
+            "name": "Quintana Roo"
+        }
+    },
+    {
+        "model": "cubingmexico_web.state",
+        "pk": "24",
+        "fields": {
+            "name": "San Luis Potosí"
+        }
+    },
+    {
+        "model": "cubingmexico_web.state",
+        "pk": "25",
+        "fields": {
+            "name": "Sinaloa"
+        }
+    },
+    {
+        "model": "cubingmexico_web.state",
+        "pk": "26",
+        "fields": {
+            "name": "Sonora"
+        }
+    },
+    {
+        "model": "cubingmexico_web.state",
+        "pk": "27",
+        "fields": {
+            "name": "Tabasco"
+        }
+    },
+    {
+        "model": "cubingmexico_web.state",
+        "pk": "28",
+        "fields": {
+            "name": "Tamaulipas"
+        }
+    },
+    {
+        "model": "cubingmexico_web.state",
+        "pk": "29",
+        "fields": {
+            "name": "Tlaxcala"
+        }
+    },
+    {
+        "model": "cubingmexico_web.state",
+        "pk": "30",
+        "fields": {
+            "name": "Veracruz"
+        }
+    },
+    {
+        "model": "cubingmexico_web.state",
+        "pk": "31",
+        "fields": {
+            "name": "Yucatán"
+        }
+    },
+    {
+        "model": "cubingmexico_web.state",
+        "pk": "32",
+        "fields": {
+            "name": "Zacatecas"
+    }
+    }
+]
