@@ -1,6 +1,6 @@
 # World Cube Association – Results Database Export
 
-- Date: May 3, 2023
+- Date: May 4, 2023
 - Export Format Version: 1.0.0
 - Contact: WCA Results Team (results@worldcubeassociation.org)
 - Website: https://www.worldcubeassociation.org/results
@@ -23,7 +23,7 @@ as users are clearly notified of the following:
 
 > This information is based on competition results owned and maintained by the
 > World Cube Assocation, published at https://worldcubeassociation.org/results
-> as of May 3, 2023.
+> as of May 4, 2023.
 
 ## Acknowledgements
 

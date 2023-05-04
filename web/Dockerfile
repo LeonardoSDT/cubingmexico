@@ -1,5 +1,5 @@
 FROM python:3
-EXPOSE 8000
+EXPOSE 8080
 # Nginx
 RUN apt-get update
 RUN apt-get install -y net-tools nginx
