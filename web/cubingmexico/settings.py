@@ -144,4 +144,5 @@ WCA_API_URI = 'https://www.worldcubeassociation.org/api/v0/'
 
 WCA_CLIENT_ID = 'Mq3iaMGMdkO4GkVWpy2Wza70gCZPDwVcHSssjScr-xk'
 WCA_CLIENT_SECRET = 'wqGIOkBxjyio3gSNQwrqkiEOutZCBLrGncYvu4cfCYM'
-WCA_CALLBACK = 'http://localhost:8000/cubingmexico_wca/callback/'
+# WCA_CALLBACK = 'http://localhost:8080/cubingmexico_wca/callback/'
+WCA_CALLBACK = 'https://web-dev-p3uk45s5ka-uc.a.run.app/cubingmexico_wca/callback/'
