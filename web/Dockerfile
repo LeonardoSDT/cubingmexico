@@ -17,7 +17,7 @@ RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 COPY . /code/
 # Timezone sync
-RUN echo "America/Mazatlan" > /etc/timezone
+RUN echo "America/Mexico_City" > /etc/timezone
 RUN dpkg-reconfigure -f noninteractive tzdata
 # Pass the version and branch name as environment variables
 ARG version=dev

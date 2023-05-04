@@ -1,0 +1,27 @@
+{% extends 'base_rankings.html' %}
+
+{% block title %}Ranking nacional de 5x5x5 Single{% endblock %}
+
+{% block rankingtitle %}
+<h1 class="my-3">Ranking nacional de 5x5x5 Single</h1>
+{% endblock %}
+
+{% block singleaveragebuttons %}
+    <div class="d-grid gap-2 d-md-block mb-3">
+        <a href="{% url 'cubingmexico_web:national_rankings_555_single' %}" class="btn btn-primary disabled">Single</a>
+        <a href="{% url 'cubingmexico_web:national_rankings_555_average' %}" class="btn btn-primary">Media</a>
+    </div>
+{% endblock %}
+
+{% block content %}
+    {% load time_formatter %}
+
+    {% for result in single_555 %}
+    <tr>
+        <td>{{ forloop.counter }}</td>
+        <td><a href="https://www.worldcubeassociation.org/persons/{{ result.person.id }}" class="text-decoration-none">{{ result.person_name }}</a></td>
+        <td>{{ result.best|time_formatter }}</td>
+        <td>{{ result.competition.name }}</td>
+    </tr>
+    {% endfor %}
+{% endblock %}

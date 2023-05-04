@@ -80,14 +80,16 @@ WSGI_APPLICATION = 'cubingmexico.wsgi.application'
 
 DATABASES = {
   'default': {
-    'HOST': os.environ['PMA_HOST'],
-    'ENGINE': 'django.db.backends.mysql',
-    'USER': os.environ['MYSQL_USER'],
-    'PASSWORD': os.environ['MYSQL_PASSWORD'],
-    'NAME': os.environ['MYSQL_DB'],
-    'OPTIONS': {'charset': 'utf8mb4'},
+    'ENGINE': 'django.db.backends.postgresql',
+    'NAME': os.environ['POSTGRES_DB'],
+    'USER': os.environ['POSTGRES_USER'],
+    'PASSWORD': os.environ['POSTGRES_PASSWORD'],
+    'HOST': os.environ['PG_HOST'],
+    'PORT': os.environ.get('PG_PORT', '5432'),
+    'OPTIONS': {'client_encoding': 'UTF8'},
   },
 }
+
 
 
 # Password validation
@@ -114,7 +116,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'es-mx'
 
-TIME_ZONE = 'America/Mazatlan'
+TIME_ZONE = 'America/Mexico_City'
 
 USE_I18N = True
 
