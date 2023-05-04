@@ -1,0 +1,11 @@
+steps:
+# Build the container image
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/cubingmexico-dev/cubingmexico:$BRANCH_NAME', './web/']
+# Push the container image to Container Registry
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/cubingmexico-dev/cubingmexico:$BRANCH_NAME']
+# Deploy container image to Cloud Run
+- name: 'gcr.io/cloud-builders/gcloud'
+  id: 'Deploying image to Cloud Run'
+  args: ['run', 'deploy', '${_CLOUD_RUN_SERVICE}', '--image', 'gcr.io/cubingmexico-dev/cubingmexico:$BRANCH_NAME', '--region', 'us-central1', '--platform', 'managed', '--allow-unauthenticated']
