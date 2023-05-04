@@ -29,22 +29,29 @@
                     <!-- <p>Te uniste a la WCA el {{ user.wcaprofile.wca_created_at }}</p> -->
                     <p>Te uniste a Cubingmexico el {{ user.date_joined }}</p>
                     <hr>
-                    {% if user.wcaprofile.country_iso2 == 'MX' %}
-                        <p>Acorde a tu información de la WCA, vives en México.</p>
-                        <form action="{% url 'cubingmexico_web:profile' %}" method="post">
-                        {% csrf_token %}
-                        <div class="form-group">
-                            <label for="{{ form.state.id_for_label }}" class="mb-1"><strong>Estado:</strong></label>
-                            <select name="{{ form.state.name }}" required id="{{ form.state.id_for_label }}" class="form-control">
-                            {% for value, label in form.fields.state.choices %}
-                                <option value="{{ value }}" {% if form.state.value == value %}selected{% endif %}>{{ label }}</option>
-                            {% endfor %}
-                            </select>
-                        </div>
-                        <button type="submit" class="btn btn-primary mt-2">Guardar</button>
-                        </form>
+                    {% if user.cubingmexicoprofile.state == '' or user.cubingmexicoprofile.state == None %}
+                        {% if user.wcaprofile.country_iso2 == 'MX' %}
+                            <p>Acorde a tu información de la WCA, vives en México.</p>
+                            <p><strong>Nota:</strong> Asegúrate de elegir bien tu estado, una vez que lo ingreses no podrás modificarlo.</p>
+                            <p>Si necesitas modificar este dato en un futuro, tendrás que ponerte en contacto con un administrador.</p>
+                            <form action="{% url 'cubingmexico_web:profile' %}" method="post">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="{{ form.state.id_for_label }}" class="mb-1"><strong>Selecciona el estado en el que vives actualmente:</strong></label>
+                                <select name="{{ form.state.name }}" required id="{{ form.state.id_for_label }}" class="form-control">
+                                {% for value, label in form.fields.state.choices %}
+                                    <option value="{{ value }}" {% if form.state.value == value %}selected{% endif %}>{{ label }}</option>
+                                {% endfor %}
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary mt-2">Guardar</button>
+                            </form>
+                        {% else %}
+                            <p>Acorde a tu información de la WCA, no vives en México.</p>
+                        {% endif %}
                     {% else %}
-                        <p>Acorde a tu información de la WCA, no vives en México.</p>
+                    <p>Vives en <strong>{{user.cubingmexicoprofile.state}}</strong></p>
+                    <p>Si necesitas modificar este dato ponte en contacto con un administrador.</p>
                     {% endif %}
                 </p>
             </div>

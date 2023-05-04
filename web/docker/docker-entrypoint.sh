@@ -5,6 +5,8 @@ then
    python manage.py collectstatic --noinput
 fi
 
+python manage.py loaddata cubingmexico_web/fixtures/state_data.json
+
 sh /code/docker/sync_wca_database.sh
 
 # Launch supervisor
