@@ -172,3 +172,21 @@
 2023-05-04 03:44:27,156 INFO spawned: 'uwsgi' with pid 34
 2023-05-04 03:44:29,130 INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
 2023-05-04 03:44:29,130 INFO success: uwsgi entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-05-04 14:06:35,016 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2023-05-04 14:06:35,060 INFO supervisord started with pid 32
+2023-05-04 14:06:36,063 INFO spawned: 'nginx' with pid 33
+2023-05-04 14:06:36,065 INFO spawned: 'uwsgi' with pid 34
+2023-05-04 14:06:37,511 INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-05-04 14:06:37,512 INFO success: uwsgi entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-05-04 18:37:42,596 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2023-05-04 18:37:42,613 INFO supervisord started with pid 32
+2023-05-04 18:37:43,616 INFO spawned: 'nginx' with pid 33
+2023-05-04 18:37:43,619 INFO spawned: 'uwsgi' with pid 34
+2023-05-04 18:37:45,159 INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-05-04 18:37:45,160 INFO success: uwsgi entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-05-04 18:47:26,997 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2023-05-04 18:47:27,063 INFO supervisord started with pid 32
+2023-05-04 18:47:28,065 INFO spawned: 'nginx' with pid 33
+2023-05-04 18:47:28,067 INFO spawned: 'uwsgi' with pid 34
+2023-05-04 18:47:29,482 INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-05-04 18:47:29,483 INFO success: uwsgi entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)

@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ object.name }}{% endblock %}
+
+{% block content %}
+
+<h1 class="my-3">{{ object.name }}</h1>
+
+<div class="row">
+    <div class="col-md-6 col-12 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <img src="{{ object.team_logo.url }}" class="rounded mx-auto d-block mb-3" height="300px">
+                <p class="card-text text-center">{{ object.description }}</p>
+                <p class="text-center h3">
+                    {% if object.facebook_link != '' %}
+                        <a href="{{ object.facebook_link }}" class="link-dark"><i class="bi bi-facebook m-1"></i></a>
+                    {% endif %}
+                    {% if object.instagram_link != '' %}
+                        <a href="{{ object.instagram_link }}" class="link-dark"><i class="bi bi-instagram m-1"></i></a>
+                    {% endif %}
+                </p>
+                <p class="text-center">
+                    {% if user.is_authenticated and user.cubingmexicoprofile.state == object.state and user.cubingmexicoprofile.state_team == None %}
+                        Puedes unirte a este team
+                        <a href="" class="btn btn-primary disabled">Únete</a>
+                    {% endif %}
+                </p>
+                <p class="text-center">
+                    {% if user.is_authenticated and user.cubingmexicoprofile.is_state_team_leader and user.cubingmexicoprofile.state_team_id == object.pk %}
+                        <a href="{% url 'cubingmexico_web:edit_team' pk=object.pk %}" class="btn btn-primary"><i class="bi bi-pencil-fill me-2"></i> Editar información del Team</a>
+                    {% endif %}
+                    <a href="{% url 'cubingmexico_web:state_teams' %}" class="btn btn-secondary">Ver otros Teams</a>
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-12">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title text-center">Miembros del {{ object.name }}</h5>
+                {% if team_members %}
+                    {% for member in team_members %}
+                        <p>
+                            {% if member.wcaprofile.wca_id != None %}
+                            <a href="{% url 'cubingmexico_web:my_results' wca_id=member.wcaprofile.wca_id %}">{{ member.wcaprofile.wca_id }}</a>
+                            {% else %}
+                            Sin WCA ID
+                            {% endif %}
+                             - {{ member.wcaprofile.name }}
+                            {% if member.cubingmexicoprofile.is_state_team_leader %}
+                            - <strong>Administrador del Team</strong>
+                            {% endif %}
+                        </p>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-center">Aún no hay miembros en este team :(</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

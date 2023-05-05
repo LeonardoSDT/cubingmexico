@@ -10,26 +10,27 @@
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">Rankings</a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
               <li><a class="dropdown-item" href="{% url 'cubingmexico_web:national_rankings_333_single' %}">Nacionales</a></li>
-              <li><a class="dropdown-item" href="{% url 'cubingmexico_web:state_rankings' %}">Estatales</a></li>
+              <li><a class="dropdown-item" href="#">Estatales</a></li>
           </ul>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">Récords</a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
               <li><a class="dropdown-item" href="#">Nacionales</a></li>
-              <li><a class="dropdown-item" href="{% url 'cubingmexico_web:state_records' %}">Estatales</a></li>
-              <li><a class="dropdown-item" href="{% url 'cubingmexico_web:unrs' %}">Nacionales No Oficiales (UNRs)</a></li>
+              <li><a class="dropdown-item" href="#">Estatales</a></li>
+              <li><a class="dropdown-item" href="#">Nacionales No Oficiales (UNRs)</a></li>
           </ul>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{% url 'cubingmexico_web:state_teams' %}">Teams estatales</a>
         </li>
         {% if user.is_authenticated %}
-          <li class="nav-item dropdown">
+          <li class="nav-item dropdown me-5">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">{{ user.wcaprofile }}</a>
               <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                  <li><a class="dropdown-item{% if page == 'profile' %} active{% endif %}" href="{% url 'cubingmexico_web:profile' %}">Perfil</a></li>
-                  <li><a class="dropdown-item" href="{% url 'cubingmexico_web:logout' %}">Cerar sesión</a></li>
+                <li><a class="dropdown-item" href="{% url 'cubingmexico_web:profile' %}">Perfil</a></li>
+                <li><a class="dropdown-item" href="{% url 'cubingmexico_web:my_results' wca_id=request.user.wcaprofile.wca_id %}">Mis resultados</a></li>
+                <li><a class="dropdown-item" href="{% url 'cubingmexico_web:logout' %}">Cerar sesión</a></li>
               </ul>
           </li>
           {% else %}

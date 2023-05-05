@@ -35,12 +35,33 @@ class State(models.Model):
     def __str__(self):
         return self.name
 
+class StateTeam(models.Model):
+    def __str__(self):
+        return str(self.name)
+
+    name = models.CharField(max_length=255)
+    description =  models.TextField(null=True, blank=True, default='')
+    state = models.ForeignKey(State, on_delete=models.CASCADE)
+    team_logo = models.ImageField(upload_to='img/team_logos/', null=True, blank=True)
+    facebook_link = models.URLField(max_length=255, blank=True, default='')
+    instagram_link = models.URLField(max_length=255, blank=True, default='')
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        permissions = (
+            ('edit_stateteam', 'Can edit state team'),
+        )
+
 class CubingmexicoProfile(models.Model):
     def __str__(self):
         return str(self.user)
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     state = models.ForeignKey(State, on_delete=models.SET_NULL, null=True, blank=True, default='')
+    state_team = models.ForeignKey(StateTeam, on_delete=models.SET_NULL, null=True, blank=True, default='')
+    is_state_team_leader = models.BooleanField(default=False)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
