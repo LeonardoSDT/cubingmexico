@@ -20,14 +20,34 @@
                         <a href="{{ object.instagram_link }}" class="link-dark"><i class="bi bi-instagram m-1"></i></a>
                     {% endif %}
                 </p>
+                {% if user.is_authenticated and user.cubingmexicoprofile.state == object.state and user.cubingmexicoprofile.person_state_team == None %}
+                    <p class="text-center">
+                        <div class="modal" tabindex="-1" id="join_team_modal">
+                            <div class="modal-dialog">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h5 class="modal-title">¡Atención!</h5>
+                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                  <p>Esta es una comunidad de cuberos en {{ object.state }}, para unirte contáctalos en sus redes sociales:</p>
+                                    {% if object.facebook_link != '' %}
+                                        <p><a href="{{ object.facebook_link }}"><i class="bi bi-facebook me-1"></i>{{ object.facebook_link }}</a></p>
+                                    {% endif %}
+                                    {% if object.instagram_link != '' %}
+                                        <p><a href="{{ object.instagram_link }}"><i class="bi bi-instagram me-1"></i>{{ object.instagram_link }}</a></p>
+                                    {% endif %}
+                                </div>
+                                <div class="modal-footer">
+                                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                </div>
+                              </div>
+                            </div>
+                        </div>
+                    </p>
+                {% endif %}
                 <p class="text-center">
-                    {% if user.is_authenticated and user.cubingmexicoprofile.state == object.state and user.cubingmexicoprofile.state_team == None %}
-                        Puedes unirte a este team
-                        <a href="" class="btn btn-primary disabled">Únete</a>
-                    {% endif %}
-                </p>
-                <p class="text-center">
-                    {% if user.is_authenticated and user.cubingmexicoprofile.is_state_team_leader and user.cubingmexicoprofile.state_team_id == object.pk %}
+                    {% if user.is_authenticated and user.cubingmexicoprofile.is_state_team_leader and user.cubingmexicoprofile.person_state_team.state_team_id == object.pk %}
                         <a href="{% url 'cubingmexico_web:edit_team' pk=object.pk %}" class="btn btn-primary"><i class="bi bi-pencil-fill me-2"></i> Editar información del Team</a>
                     {% endif %}
                     <a href="{% url 'cubingmexico_web:state_teams' %}" class="btn btn-secondary">Ver otros Teams</a>
@@ -39,18 +59,20 @@
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title text-center">Miembros del {{ object.name }}</h5>
-                {% if team_members %}
-                    {% for member in team_members %}
+                {% if team_members or auth_team_members %}
+                    {% for auth_member in auth_team_members %}
                         <p>
-                            {% if member.wcaprofile.wca_id != None %}
-                            <a href="{% url 'cubingmexico_web:my_results' wca_id=member.wcaprofile.wca_id %}">{{ member.wcaprofile.wca_id }}</a>
-                            {% else %}
-                            Sin WCA ID
-                            {% endif %}
-                             - {{ member.wcaprofile.name }}
-                            {% if member.cubingmexicoprofile.is_state_team_leader %}
+                            <a href="{% url 'cubingmexico_web:my_results' wca_id=auth_member.wcaprofile.wca_id %}">{{ auth_member.wcaprofile.wca_id }}</a>
+                            - {{ auth_member.wcaprofile.name }}
+                            {% if auth_member.cubingmexicoprofile.is_state_team_leader %}
                             - <strong>Administrador del Team</strong>
                             {% endif %}
+                        </p>
+                    {% endfor %}
+                    {% for member in team_members %}
+                        <p>
+                            <a href="https://www.worldcubeassociation.org/persons/{{ member.person.id }}" class="link-secondary">{{ member.person.id }}</a>
+                             - {{ member.person.name }}
                         </p>
                     {% endfor %}
                 {% else %}
@@ -62,3 +84,13 @@
 </div>
 
 {% endblock %}
+
+{% block javascripts %}
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+
+<script>
+    $(document).ready(function(){
+        $('#join_team_modal').modal('show');
+    });
+</script>    
+{% endblock javascripts %}

@@ -4,3 +4,5 @@ web/data/WCA_export.tsv.zip
 gcp/*.json
 web/supervisord.log
 web/supervisord.log
+*.log
+*.pid

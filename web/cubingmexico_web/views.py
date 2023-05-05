@@ -14,7 +14,7 @@ from django.views.generic.edit import UpdateView
 
 from django.core.files.storage import default_storage
 
-from .models import User, WCAProfile, CubingmexicoProfile
+from .models import User, WCAProfile, CubingmexicoProfile, PersonStateTeam
 from .forms import *
 from .utils import *
 
@@ -450,7 +450,12 @@ class IndividualStateTeamView(ContentMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['team_members'] = User.objects.filter(cubingmexicoprofile__state_team_id=self.object.pk)
+
+        wca_ids = WCAProfile.objects.filter(user__cubingmexicoprofile__person_state_team__state_team__id=self.object.pk).values_list('wca_id', flat=True)
+
+        context['team_members'] = PersonStateTeam.objects.filter(state_team_id=self.object.pk).exclude(person__id__in=wca_ids)
+        context['auth_team_members'] = User.objects.filter(cubingmexicoprofile__person_state_team__state_team__id=self.object.pk)
+        
         return context
     
 class EditStateTeamView(ContentMixin, CanEditStateTeamView, UpdateView):
@@ -535,8 +540,17 @@ class WCACallbackView(RedirectView):
                 wca_updated_at=profile_data['updated_at'],
             )
             # Create Cubingmexico profile
+            try:
+                person_state_team = PersonStateTeam.objects.get(person=wca_profile.wca_id)
+                person_state = person_state_team.state_team.state
+            except PersonStateTeam.DoesNotExist:
+                person_state_team = None
+                person_state = None
+
             CubingmexicoProfile.objects.create(
                 user=user,
+                state=person_state,
+                person_state_team=person_state_team,
             )
             # Redirect new users to their profile page
             redirect_uri = 'cubingmexico_web:profile'

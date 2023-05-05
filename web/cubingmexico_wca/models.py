@@ -75,6 +75,9 @@ class Person(models.Model):
     )
 
     objects = BaseManager.from_queryset(PersonQuerySet)()
+    
+    def __str__(self):
+        return str(f'{self.id}, {self.name}')
 
     class Meta:
         unique_together = (("id", "subid"),)
