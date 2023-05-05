@@ -7,10 +7,8 @@
 {% endblock %}
 
 {% block singleaveragebuttons %}
-    <div class="d-grid gap-2 d-md-block mb-3">
-        <a href="{% url 'cubingmexico_web:national_rankings_555_single' %}" class="btn btn-primary">Single</a>
-        <a href="{% url 'cubingmexico_web:national_rankings_555_average' %}" class="btn btn-primary disabled">Media</a>
-    </div>
+    <a href="{% url 'cubingmexico_web:national_rankings_555_single' %}" class="btn btn-primary">Single</a>
+    <a href="{% url 'cubingmexico_web:national_rankings_555_average' %}" class="btn btn-primary disabled">Media</a>
 {% endblock %}
 
 {% block content %}

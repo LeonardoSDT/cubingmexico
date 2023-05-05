@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}Teams estatales{% endblock %}
+
+{% block content %}
+
+<h1 class="text-center my-3">Teams estatales</h1>
+
+<div class="card mb-3">
+    <div class="card-body">
+      <blockquote class="blockquote mb-0">
+        <p>"Los teams, esa gente que por placer se reúnen en plazas, que se contagian de entusiasmo al mirar los logros de sus miembros, que empujan a otros y que en conjunto comparten su pasión por el speedcubing."</p>
+        <footer class="blockquote-footer">Aru Gordillo, <cite title="Source Title">Delegada de la WCA en México</cite></footer>
+      </blockquote>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        {% if state_teams == None %}
+            <div class="col text-center">
+                <p class="h3">Todavía no hay ningún team registrado :(</p>
+            </div>
+        {% else %}
+            {% for team in state_teams %}
+                <div class="col text-center mb-3">
+                    <div class="card mx-auto" style="width: 18rem;">
+                        {% if team.team_logo %}
+                            <img src="{{ team.team_logo.url }}" class="card-img-top" alt="...">
+                        {% else %}
+                            <img src="" class="card-img-top" alt="...">
+                        {% endif %}
+                        <div class="card-body">
+                        <h5 class="card-title">{{ team.name }}</h5>
+                        <p class="card-text">{{ team.description }}</p>
+                        <p class="card-text"><strong>Estado:</strong> {{ team.state }}</p>
+                        <a href="{% url 'cubingmexico_web:team' pk=team.pk %}" class="btn btn-primary">Ver Team</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

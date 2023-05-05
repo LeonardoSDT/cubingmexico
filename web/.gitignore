@@ -1,3 +1,6 @@
 *.pyc
 __pycache__/
 .env
+media/img/team_logos/*.jpg
+media/img/team_logos/*.png
+media/img/team_logos/*.svg
