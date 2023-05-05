@@ -10,4 +10,6 @@ requests
 pandas
 numpy
 Pillow
+django-environ
+google-cloud-secret-manager
 django-storages[google]

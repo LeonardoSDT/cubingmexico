@@ -1,4 +1,6 @@
 
 *.tsv
 web/data/WCA_export.tsv.zip
-gcp/application_default_credentials.json
+gcp/*.json
+web/supervisord.log
+web/supervisord.log

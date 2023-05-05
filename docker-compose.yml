@@ -22,6 +22,9 @@ services:
         - ./web/docker/nginx.conf:/etc/nginx/sites-enabled/nginx.conf
         - ./web/docker/supervisord.dev.conf:/etc/supervisord.conf
         - ./web/gcp:/code/gcp
+        - ./gcp/cubingmexico-dev-73a7238ce15e.json:/secrets/credentials.json
+    env_file:
+      - ./web/.env
     environment:
         POSTGRES_USER: admin
         POSTGRES_PASSWORD: cc\D&uo7K~_USP&H
