@@ -10,3 +10,4 @@ requests
 pandas
 numpy
 Pillow
+django-storages[google]
