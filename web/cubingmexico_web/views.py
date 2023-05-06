@@ -89,42 +89,21 @@ class MyResultsView(ContentMixin, TemplateView):
         context['wca_profile'] = get_wcaprofile(wca_id=wca_id)
         return context
 
-class NationalRankingsSingleView(ContentMixin, TemplateView):
-    template_name = 'pages/rankings/national/single.html'
-    page = 'cubingmexico_web:national_rankings_single'
+class NationalRankingsView(ContentMixin, TemplateView):
+    page = 'cubingmexico_web:national_rankings'
+
+    def dispatch(self, request, *args, **kwargs):
+        self.ranking_type = kwargs.pop('ranking_type', 'single')
+        return super().dispatch(request, *args, **kwargs)
+
+    template_name = 'pages/rankings/national.html'
 
     def get_context_data(self, **kwargs):
         event_type = self.kwargs.get('event_type', '333')
         context = super().get_context_data(**kwargs)
-        context['rankings'] = get_single_rankings(event_type=event_type)
+        context['rankings'] = get_rankings(event_type=event_type, ranking_type=self.ranking_type)
         context['selected_event'] = event_type
-        return context
-
-class NationalRankingsAverageView(ContentMixin, TemplateView):
-    template_name = 'pages/rankings/national/average.html'
-    page = 'cubingmexico_web:national_rankings_average'
-
-    def get_context_data(self, **kwargs):
-        event_type = self.kwargs.get('event_type', '333')
-        context = super().get_context_data(**kwargs)
-        context['rankings'] = get_average_rankings(event_type=event_type)
-        context['selected_event'] = event_type
-        return context
-
-class StateRankingsView(ContentMixin, TemplateView):
-    template_name = 'pages/state/rankings.html'
-    page = 'cubingmexico_web:state_rankings'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        return context
-    
-class StateRecordsView(ContentMixin, TemplateView):
-    template_name = 'pages/state/records.html'
-    page = 'cubingmexico_web:state_records'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+        context['ranking_type'] = self.ranking_type
         return context
 
 class StateTeamsView(ContentMixin, TemplateView):
@@ -172,14 +151,6 @@ class EditStateTeamView(ContentMixin, CanEditStateTeamView, UpdateView):
         else:
             qs = qs.none()
         return qs
-
-class UNRsView(ContentMixin, TemplateView):
-    template_name = 'pages/national/unrs.html'
-    page = 'cubingmexico_web:unrs'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        return context
 
 class WCACallbackView(RedirectView):
     """

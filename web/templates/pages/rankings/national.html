@@ -1,6 +1,44 @@
 {% extends 'base.html' %}
 
-{% block title %}Ranking nacional{% endblock %}
+{% block title %}
+Ranking nacional de
+{% if event_type == '333' %}
+    3×3×3
+{% elif event_type == '222' %}
+    2×2×2
+{% elif event_type == '444' %}
+    4×4×4
+{% elif event_type == '555' %}
+    5×5×5
+{% elif event_type == '666' %}
+    6×6×6
+{% elif event_type == '777' %}
+    7×7×7
+{% elif event_type == '333bf' %}
+    3×3×3 A Ciegas
+{% elif event_type == '333fm' %}
+    3×3×3 Menos Movimientos
+{% elif event_type == '333oh' %}
+    3×3×3 Una Mano
+{% elif event_type == 'clock' %}
+    Clock
+{% elif event_type == 'minx' %}
+    Megaminx
+{% elif event_type == 'pyram' %}
+    Pyraminx
+{% elif event_type == 'skewb' %}
+    Skewb
+{% elif event_type == 'sq1' %}
+    Square-1
+{% elif event_type == '444bf' %}
+    4×4×4 A Ciegas
+{% elif event_type == '555bf' %}
+    5×5×5 A Ciegas
+{% elif event_type == '333mbf' %}
+    3×3×3 Múltiples A Ciegas
+{% endif %}
+{{ ranking_type|title }}
+{% endblock %}
 
 {% load static %}
 {% load time_formatter %}
@@ -13,7 +51,44 @@
 {% endblock stylesheets %}
 
 {% block content %}
-    <h1 class="my-3">Ranking nacional</h1>
+    <h1 class="my-3">Ranking nacional de
+        {% if event_type == '333' %}
+            3×3×3
+        {% elif event_type == '222' %}
+            2×2×2
+        {% elif event_type == '444' %}
+            4×4×4
+        {% elif event_type == '555' %}
+            5×5×5
+        {% elif event_type == '666' %}
+            6×6×6
+        {% elif event_type == '777' %}
+            7×7×7
+        {% elif event_type == '333bf' %}
+            3×3×3 A Ciegas
+        {% elif event_type == '333fm' %}
+            3×3×3 Menos Movimientos
+        {% elif event_type == '333oh' %}
+            3×3×3 Una Mano
+        {% elif event_type == 'clock' %}
+            Clock
+        {% elif event_type == 'minx' %}
+            Megaminx
+        {% elif event_type == 'pyram' %}
+            Pyraminx
+        {% elif event_type == 'skewb' %}
+            Skewb
+        {% elif event_type == 'sq1' %}
+            Square-1
+        {% elif event_type == '444bf' %}
+            4×4×4 A Ciegas
+        {% elif event_type == '555bf' %}
+            5×5×5 A Ciegas
+        {% elif event_type == '333mbf' %}
+            3×3×3 Múltiples A Ciegas
+        {% endif %}
+        {{ ranking_type|title }}
+    </h1>
 
     <div class="mb-3">
         <div class="flex flex-row flex-wrap">
@@ -39,8 +114,8 @@
 
     {% if selected_event != '333mbf' %}
     <div class="btn-group mb-3" role="group">
-        <a href="{% url 'cubingmexico_web:national_rankings_single' event_type=selected_event %}" class="btn btn-primary disabled">Single</a>
-        <a href="{% url 'cubingmexico_web:national_rankings_average' event_type=selected_event %}" class="btn btn-primary">Media</a>
+        <a href="{% url 'cubingmexico_web:national_rankings_single' event_type=selected_event %}" class="btn btn-primary {% if 'single' in ranking_type %} disabled {% endif %}">Single</a>
+        <a href="{% url 'cubingmexico_web:national_rankings_average' event_type=selected_event %}" class="btn btn-primary {% if 'average' in ranking_type %} disabled {% endif %}">Media</a>
     </div>
     {% endif %}
 
@@ -55,18 +130,22 @@
         </thead>
         <tbody>
             {% for result in rankings %}
-            <tr>
-                <td>{{ forloop.counter }}</td>
-                <td><a href="https://www.worldcubeassociation.org/persons/{{ result.person.id }}" class="text-decoration-none">{{ result.person_name }}</a></td>
-                {% if selected_event == '333mbf' %}
-                    <td>{{ result.best|time_formatter_333mbf }}</td>
-                {% elif selected_event == '333fm' %}
-                    <td>{{ result.best }}</td>
-                {% else %}
-                    <td>{{ result.best|time_formatter }}</td>
-                {% endif %}
-                <td>{{ result.competition.name }}</td>
-            </tr>
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td><a href="https://www.worldcubeassociation.org/persons/{{ result.person.id }}" class="text-decoration-none">{{ result.person_name }}</a></td>
+                    {% if ranking_type == 'single' %}
+                        {% if selected_event == '333mbf' %}
+                            <td>{{ result.best|time_formatter_333mbf }}</td>
+                        {% elif selected_event == '333fm' %}
+                            <td>{{ result.best }}</td>
+                        {% else %}
+                            <td>{{ result.best|time_formatter }}</td>
+                        {% endif %}
+                    {% else %}
+                    <td>{{ result.average|time_formatter }}</td>
+                    {% endif %}
+                    <td>{{ result.competition.name }}</td>
+                </tr>
             {% endfor %}
         </tbody>
         <tfoot>

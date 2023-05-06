@@ -44,34 +44,21 @@ def wca_access_token_uri(code):
     - sq1 (Square-1)
     """
 
-def get_single_rankings(event_type='333'):
+def get_rankings(event_type='333', ranking_type='single'):
+    filter_key = 'best' if ranking_type == 'single' else 'average'
+    
     result_ids = (
-        Result.objects.filter(country_id='Mexico', event=event_type, best__gt=0)
-        .order_by("person_id", "best")
+        Result.objects.filter(country_id='Mexico', event=event_type, **{f"{filter_key}__gt": 0})
+        .order_by("person_id", filter_key)
         .distinct("person_id")
         .values_list("id")
     )
     results = (
         Result.objects.filter(pk__in=result_ids)
         .select_related("event", "person", "competition")
-        .order_by("best")
+        .order_by(filter_key)
     )
-    
-    return results
 
-def get_average_rankings(event_type='333'):
-    result_ids = (
-        Result.objects.filter(country_id='Mexico', event=event_type, average__gt=0)
-        .order_by("person_id", "average")
-        .distinct("person_id")
-        .values_list("id")
-    )
-    results = (
-        Result.objects.filter(pk__in=result_ids)
-        .select_related("event", "person", "competition")
-        .order_by("average")
-    )
-    
     return results
 
 def get_my_single_results(wca_id=''):
