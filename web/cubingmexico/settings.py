@@ -33,6 +33,7 @@ DEBUG = False
 
 env = environ.Env(
     SECRET_KEY=(str, os.getenv("SECRET_KEY")),
+    DATABASE_URL=(str, os.getenv("DATABASE_URL")),
     GS_BUCKET_NAME=(str, os.getenv("GS_BUCKET_NAME")),
 )
 
@@ -65,9 +66,7 @@ else:
 
 SECRET_KEY = env("SECRET_KEY")
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS').split(" ") if os.environ.get('ALLOWED_HOSTS') else ['localhost', '127.0.0.1']
-
-ENV = os.environ.get('ENV')
+ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
@@ -116,20 +115,13 @@ WSGI_APPLICATION = 'cubingmexico.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/4.1/ref/settings/#databases
+# Use django-environ to parse the connection string
+DATABASES = {"default": env.db()}
 
-DATABASES = {
-  'default': {
-    'ENGINE': 'django.db.backends.postgresql',
-    'NAME': os.environ['POSTGRES_DB'],
-    'USER': os.environ['POSTGRES_USER'],
-    'PASSWORD': os.environ['POSTGRES_PASSWORD'],
-    'HOST': os.environ['PG_HOST'],
-    'PORT': os.environ.get('PG_PORT', '5432'),
-    'OPTIONS': {'client_encoding': 'UTF8'},
-  },
-}
-
+# If the flag as been set, configure to use proxy
+if os.getenv("USE_CLOUD_SQL_AUTH_PROXY", None):
+    DATABASES["default"]["HOST"] = "cloudsql-proxy"
+    DATABASES["default"]["PORT"] = 5432
 
 
 # Password validation

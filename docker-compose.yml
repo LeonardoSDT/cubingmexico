@@ -1,51 +1,29 @@
 version: '3'
 services:
-  sql_proxy:
-    image: gcr.io/cloudsql-docker/gce-proxy:1.16
-    ports:
-        - "127.0.0.1:5432:5432"
-    command:
-        - "/cloud_sql_proxy"
-        - "-instances=cubingmexico-dev:us-central1:cubingmexico-postgresql-dev=tcp:0.0.0.0:5432"
-        - "-credential_file=/root/keys/keyfile.json"
-    volumes:
-        - ./gcp/cubingmexico-dev-91c906dca838.json:/root/keys/keyfile.json:ro
-    networks:
-        - cubingmexico-network
   web:
+    container_name: cubingmexico
     build:
-        context: ./web/
+        context: .
     ports:
         - "8080:8080"
     volumes:
         - ./web:/code
-        - ./web/docker/nginx.conf:/etc/nginx/sites-enabled/nginx.conf
-        - ./web/docker/supervisord.dev.conf:/etc/supervisord.conf
-        - ./web/gcp:/code/gcp
         - ./gcp/cubingmexico-dev-73a7238ce15e.json:/secrets/credentials.json
     env_file:
-      - ./web/.env
-    environment:
-        POSTGRES_USER: admin
-        POSTGRES_PASSWORD: cc\D&uo7K~_USP&H
-        POSTGRES_DB: cubingmexico-db-dev
-        PG_HOST: sql_proxy
-        DEBUG: 1
-        ALLOWED_HOSTS: localhost 127.0.0.1 dev.djangoprj.com web
-        ENV: dev
-    depends_on:
-        - sql_proxy
-    networks:
-        - cubingmexico-network
-  pgadmin4:
-    image: dpage/pgadmin4
+      - ./.env
+    restart: always
+
+# The proxy will help us connect to remote CloudSQL instance locally.
+# Make sure to turn off any VPNs for the proxy to work.
+  cloudsqlproxy:
+    container_name: cloudsql-proxy
+    image: gcr.io/cloudsql-docker/gce-proxy:1.19.1
+    volumes:
+      - ./gcp/cubingmexico-dev-73a7238ce15e.json:/secrets/cloudsql/credentials.json
     ports:
-      - "8083:80"
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-      PGADMIN_DEFAULT_PASSWORD: cc\D&uo7K~_USP&H
-    networks:
-      - cubingmexico-network
-networks:
-   cubingmexico-network:
-      driver: bridge
+      - 127.0.0.1:5432:5432
+    command:
+      - "/cloud_sql_proxy"
+      - "-instances=cubingmexico-dev:us-central1:cubingmexico-postgresql-dev=tcp:0.0.0.0:5432"
+      - "-credential_file=/secrets/cloudsql/credentials.json"
+    restart: always

@@ -1,8 +1,11 @@
 Django==4.1.7
+gunicorn
 psycopg2-binary
+django-environ
+google-cloud-secret-manager
+django-storages[google]
 django-extensions
 djangorestframework
-mysqlclient
 supervisor
 tzdata
 uwsgi
@@ -10,6 +13,3 @@ requests
 pandas
 numpy
 Pillow
-django-environ
-google-cloud-secret-manager
-django-storages[google]
