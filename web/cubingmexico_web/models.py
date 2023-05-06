@@ -36,6 +36,7 @@ class WCAProfile(models.Model):
 
 class State(models.Model):
     name = models.CharField(max_length=255)
+    three_letter_code = models.CharField(max_length=3)
 
     def __str__(self):
         return self.name

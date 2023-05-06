@@ -7,15 +7,15 @@
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
       <ul class="navbar-nav ms-auto">
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">Rankings</a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink1" role="button" data-bs-toggle="dropdown" aria-expanded="false">Rankings</a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink1">
               <li><a class="dropdown-item" href="{% url 'cubingmexico_web:national_rankings_single' event_type='333' %}">Nacionales</a></li>
-              <li><a class="dropdown-item" href="#">Estatales</a></li>
+              <li><a class="dropdown-item" href="{% url 'cubingmexico_web:state_rankings_single' event_type='333' state='CMX' %}">Estatales</a></li>
           </ul>
         </li>
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">Récords</a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink2" role="button" data-bs-toggle="dropdown" aria-expanded="false">Récords</a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink2">
               <li><a class="dropdown-item" href="{% url 'cubingmexico_web:national_records' %}">Nacionales</a></li>
               <li><a class="dropdown-item" href="#">Estatales</a></li>
               <li><a class="dropdown-item" href="#">Nacionales No Oficiales (UNRs)</a></li>
@@ -26,8 +26,8 @@
         </li>
         {% if user.is_authenticated %}
           <li class="nav-item dropdown me-5">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">{{ user.wcaprofile }}</a>
-              <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink3" role="button" data-bs-toggle="dropdown" aria-expanded="false">{{ user.wcaprofile }}</a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink3">
                 <li><a class="dropdown-item" href="{% url 'cubingmexico_web:profile' %}">Perfil</a></li>
                 <li><a class="dropdown-item" href="{% url 'cubingmexico_web:my_results' wca_id=request.user.wcaprofile.wca_id %}">Mis resultados</a></li>
                 <li><a class="dropdown-item" href="{% url 'cubingmexico_web:logout' %}">Cerar sesión</a></li>

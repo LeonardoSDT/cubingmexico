@@ -117,6 +117,26 @@ class NationalRecordsView(ContentMixin, TemplateView):
         context['average_records'] = get_records(is_average=True)
         return context
 
+class StateRankingsView(ContentMixin, TemplateView):
+    page = 'cubingmexico_web:state_rankings'
+
+    def dispatch(self, request, *args, **kwargs):
+        self.ranking_type = kwargs.pop('ranking_type', 'single')
+        return super().dispatch(request, *args, **kwargs)
+
+    template_name = 'pages/rankings/state.html'
+
+    def get_context_data(self, **kwargs):
+        event_type = self.kwargs.get('event_type', '333')
+        state = self.kwargs.get('state', 'CMX')
+        context = super().get_context_data(**kwargs)
+        context['rankings'] = get_state_rankings(state=state, event_type=event_type, ranking_type=self.ranking_type)
+        context['selected_event'] = event_type
+        context['selected_state'] = state
+        context['ranking_type'] = self.ranking_type
+        context['states'] = State.objects.all()
+        return context
+
 class StateTeamsView(ContentMixin, TemplateView):
     template_name = 'pages/teams/teams.html'
     page = 'cubingmexico_web:state_teams'
@@ -233,4 +253,3 @@ class WCACallbackView(RedirectView):
         login(self.request, wca_profile.user)
 
         return reverse(redirect_uri)
-    

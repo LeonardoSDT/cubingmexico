@@ -62,6 +62,24 @@ def get_rankings(event_type='333', ranking_type='single'):
 
     return results
 
+def get_state_rankings(state='CMX', event_type='333', ranking_type='single'):
+    filter_key = 'best' if ranking_type == 'single' else 'average'
+    
+    result_ids = (
+        Result.objects.filter(person__personstateteam__state_team__state__three_letter_code=state, event=event_type, **{f"{filter_key}__gt": 0})
+        .exclude(event_id__in=['333ft', 'magic', 'mmagic'])
+        .order_by("person_id", filter_key)
+        .distinct("person_id")
+        .values_list("id")
+    )
+    results = (
+        Result.objects.filter(pk__in=result_ids)
+        .select_related("event", "person", "competition")
+        .order_by(filter_key)
+    )
+
+    return results
+
 def get_records(is_average=False):
     if is_average:
         field = "average"
