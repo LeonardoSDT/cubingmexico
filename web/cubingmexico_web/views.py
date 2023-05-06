@@ -84,8 +84,8 @@ class MyResultsView(ContentMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super(MyResultsView, self).get_context_data(**kwargs)
         wca_id = self.kwargs['wca_id']
-        context['my_single_results'] = get_my_single_results(wca_id=wca_id)
-        context['my_average_results'] = get_my_average_results(wca_id=wca_id)
+        context['my_single_results'] = get_my_results(wca_id=wca_id, is_average=False)
+        context['my_average_results'] = get_my_results(wca_id=wca_id, is_average=True)
         context['wca_profile'] = get_wcaprofile(wca_id=wca_id)
         return context
 
@@ -104,6 +104,17 @@ class NationalRankingsView(ContentMixin, TemplateView):
         context['rankings'] = get_rankings(event_type=event_type, ranking_type=self.ranking_type)
         context['selected_event'] = event_type
         context['ranking_type'] = self.ranking_type
+        return context
+
+class NationalRecordsView(ContentMixin, TemplateView):
+    page = 'cubingmexico_web:national_records'
+
+    template_name = 'pages/records/national.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['single_records'] = get_records(is_average=False)
+        context['average_records'] = get_records(is_average=True)
         return context
 
 class StateTeamsView(ContentMixin, TemplateView):

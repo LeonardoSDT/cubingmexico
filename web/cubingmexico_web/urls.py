@@ -10,6 +10,7 @@ urlpatterns = [
     path('person/<str:wca_id>/', MyResultsView.as_view(), name='my_results'),
     path('national_rankings/<str:event_type>/single/', NationalRankingsView.as_view(), name='national_rankings_single', kwargs={'ranking_type': 'single'}),
     path('national_rankings/<str:event_type>/average/', NationalRankingsView.as_view(), name='national_rankings_average', kwargs={'ranking_type': 'average'}),
+    path('national_records/', NationalRecordsView.as_view(), name='national_records'),
     path('teams/', StateTeamsView.as_view(), name='state_teams'),
     path('team/<int:pk>/', IndividualStateTeamView.as_view(), name='team'),
     path('team/<int:pk>/edit/', EditStateTeamView.as_view(), name='edit_team'),
