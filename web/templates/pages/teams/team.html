@@ -20,35 +20,10 @@
                         <a href="{{ object.instagram_link }}" class="link-dark"><i class="bi bi-instagram m-1"></i></a>
                     {% endif %}
                 </p>
-                {% if user.is_authenticated and user.cubingmexicoprofile.state == object.state and user.cubingmexicoprofile.person_state_team == None %}
-                    <p class="text-center">
-                        <div class="modal" tabindex="-1" id="join_team_modal">
-                            <div class="modal-dialog">
-                              <div class="modal-content">
-                                <div class="modal-header">
-                                  <h5 class="modal-title">¡Atención!</h5>
-                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                  <p>Esta es una comunidad de cuberos en {{ object.state }}, para unirte contáctalos en sus redes sociales:</p>
-                                    {% if object.facebook_link != '' %}
-                                        <p><a href="{{ object.facebook_link }}"><i class="bi bi-facebook me-1"></i>{{ object.facebook_link }}</a></p>
-                                    {% endif %}
-                                    {% if object.instagram_link != '' %}
-                                        <p><a href="{{ object.instagram_link }}"><i class="bi bi-instagram me-1"></i>{{ object.instagram_link }}</a></p>
-                                    {% endif %}
-                                </div>
-                                <div class="modal-footer">
-                                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                                </div>
-                              </div>
-                            </div>
-                        </div>
-                    </p>
-                {% endif %}
                 <p class="text-center">
                     {% if user.is_authenticated and user.cubingmexicoprofile.is_state_team_leader and user.cubingmexicoprofile.person_state_team.state_team_id == object.pk %}
-                        <a href="{% url 'cubingmexico_web:edit_team' pk=object.pk %}" class="btn btn-primary"><i class="bi bi-pencil-fill me-2"></i> Editar información del Team</a>
+                        <a href="{% url 'cubingmexico_web:edit_team' pk=object.pk %}" class="btn btn-primary mb-2"><i class="bi bi-pencil-fill me-2"></i> Editar información del Team</a>
+                        <a href="{% url 'cubingmexico_web:add_member' pk=object.pk %}" class="btn btn-primary mb-2"><i class="bi bi-plus-lg me-2"></i> Añadir miembro al Team</a>
                     {% endif %}
                     <a href="{% url 'cubingmexico_web:state_teams' %}" class="btn btn-secondary">Ver otros Teams</a>
                 </p>
@@ -82,6 +57,33 @@
         </div>
     </div>
 </div>
+
+{% if user.is_authenticated and user.cubingmexicoprofile.state == object.state and user.cubingmexicoprofile.person_state_team == None %}
+    <p class="text-center">
+        <div class="modal" tabindex="-1" id="join_team_modal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">¡Atención!</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Esta es una comunidad de cuberos en {{ object.state }}, para unirte contáctalos en sus redes sociales:</p>
+                    {% if object.facebook_link != '' %}
+                        <p><a href="{{ object.facebook_link }}"><i class="bi bi-facebook me-1"></i>{{ object.facebook_link }}</a></p>
+                    {% endif %}
+                    {% if object.instagram_link != '' %}
+                        <p><a href="{{ object.instagram_link }}"><i class="bi bi-instagram me-1"></i>{{ object.instagram_link }}</a></p>
+                    {% endif %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+                </div>
+            </div>
+        </div>
+    </p>
+{% endif %}
 
 {% endblock %}
 

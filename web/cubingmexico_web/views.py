@@ -5,12 +5,12 @@ from django.contrib.auth import login
 from django.contrib.auth.views import LogoutView
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.http import Http404
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.utils.crypto import get_random_string
 from django.views.generic import TemplateView, DetailView
 from django.views.generic.base import RedirectView
-from django.views.generic.edit import UpdateView
+from django.views.generic.edit import UpdateView, CreateView
 
 from django.core.files.storage import default_storage
 
@@ -177,12 +177,35 @@ class EditStateTeamView(ContentMixin, CanEditStateTeamView, UpdateView):
     def get_queryset(self):
         qs = super().get_queryset()
         profile = self.request.user.cubingmexicoprofile
-        if profile and profile.state_team:
-            qs = qs.filter(pk=profile.state_team.pk)
+        if profile and profile.person_state_team.state_team:
+            qs = qs.filter(pk=profile.person_state_team.state_team.pk)
         else:
             qs = qs.none()
         return qs
 
+class AddStateTeamMemberView(ContentMixin, CanEditStateTeamView, CreateView):
+    template_name = 'pages/teams/add_member.html'
+    form_class = PersonStateTeamForm
+
+    def get_success_url(self):
+        return reverse('cubingmexico_web:team', kwargs={'pk': self.kwargs['pk']})
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['state_team'] = get_object_or_404(StateTeam, pk=self.kwargs['pk'])
+        return context
+
+    def form_valid(self, form):
+        # Get the StateTeam object based on the URL parameter pk
+        state_team = get_object_or_404(StateTeam, pk=self.kwargs['pk'])
+        
+        # Set the 'state_team' field of the PersonStateTeam instance
+        person_state_team = form.save(commit=False)
+        person_state_team.state_team = state_team
+        person_state_team.save()
+        
+        return super().form_valid(form)
+    
 class WCACallbackView(RedirectView):
     """
     Validates WCA user, creates a Cubingmexico user and a WCA profile

@@ -1,7 +1,8 @@
 from django.forms import ModelForm
 from django import forms
 
-from .models import CubingmexicoProfile, State, StateTeam
+from .models import CubingmexicoProfile, State, StateTeam, PersonStateTeam
+from cubingmexico_wca.models import Person
 
 
 class CubingmexicoProfileForm(forms.ModelForm):
@@ -9,8 +10,11 @@ class CubingmexicoProfileForm(forms.ModelForm):
         model = CubingmexicoProfile
         fields = ['state']
 
-    state = forms.ModelChoiceField(queryset=State.objects.all(), empty_label="Selecciona una opción")
-
+    state = forms.ModelChoiceField(
+        queryset=State.objects.all(),
+        empty_label="Selecciona una opción",
+        widget=forms.Select(attrs={'class': 'form-control'})
+        )
 
 class StateTeamForm(forms.ModelForm):
     class Meta:
@@ -49,3 +53,15 @@ class StateTeamForm(forms.ModelForm):
         widget=forms.URLInput(attrs={'class': 'form-control'}),
         required=False
     )
+
+class PersonStateTeamForm(forms.ModelForm):
+    class Meta:
+        model = PersonStateTeam
+        fields = ['person']
+
+    person = forms.ModelChoiceField(
+        queryset=Person.objects.all(),
+        empty_label="Selecciona una persona",
+        label="Persona",
+        widget=forms.Select(attrs={'class': 'form-control'})
+        )
