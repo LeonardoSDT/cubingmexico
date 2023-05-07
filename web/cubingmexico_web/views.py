@@ -62,6 +62,11 @@ class IndexView(ContentMixin, TemplateView):
     template_name = 'pages/index.html'
     page = 'cubingmexico_web:index'
 
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_superuser:
+            return redirect(reverse_lazy('cubingmexico_web:logout'))
+        return super().dispatch(request, *args, **kwargs)
+
 class ProfileView(AuthenticateMixin, ContentMixin, TemplateView):
     template_name = 'pages/profile.html'
     page = 'cubingmexico_web:profile'
@@ -134,6 +139,20 @@ class StateRankingsView(ContentMixin, TemplateView):
         context['selected_event'] = event_type
         context['selected_state'] = state
         context['ranking_type'] = self.ranking_type
+        context['states'] = State.objects.all()
+        return context
+    
+class StateRecordsView(ContentMixin, TemplateView):
+    page = 'cubingmexico_web:state_records'
+
+    template_name = 'pages/records/state.html'
+
+    def get_context_data(self, **kwargs):
+        state = self.kwargs.get('state', 'CMX')
+        context = super().get_context_data(**kwargs)
+        context['single_records'] = get_state_records(state=state, is_average=False)
+        context['average_records'] = get_state_records(state=state, is_average=True)
+        context['selected_state'] = state
         context['states'] = State.objects.all()
         return context
 

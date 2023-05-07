@@ -17,7 +17,7 @@
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink2" role="button" data-bs-toggle="dropdown" aria-expanded="false">Récords</a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink2">
               <li><a class="dropdown-item" href="{% url 'cubingmexico_web:national_records' %}">Nacionales</a></li>
-              <li><a class="dropdown-item" href="#">Estatales</a></li>
+              <li><a class="dropdown-item" href="{% url 'cubingmexico_web:state_records' state='CMX' %}">Estatales</a></li>
               <li><a class="dropdown-item" href="#">Nacionales No Oficiales (UNRs)</a></li>
           </ul>
         </li>
