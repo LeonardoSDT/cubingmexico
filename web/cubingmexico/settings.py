@@ -65,9 +65,12 @@ else:
 
 SECRET_KEY = env("SECRET_KEY")
 
-ALLOWED_HOSTS = ["*"]
+if os.getenv("PYTHON_ENV") == "dev":
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+else:
+    ALLOWED_HOSTS = ['cubingmexico-p3uk45s5ka-uc.a.run.app']
 
-CORS_ORIGIN_WHITELIST = ['https://cubingmexico-p3uk45s5ka-uc.a.run.app']
+CSRF_TRUSTED_ORIGINS = ['https://cubingmexico-p3uk45s5ka-uc.a.run.app']
 
 # Application definition
 
