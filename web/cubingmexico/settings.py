@@ -67,6 +67,8 @@ SECRET_KEY = env("SECRET_KEY")
 
 ALLOWED_HOSTS = ["*"]
 
+CSRF_TRUSTED_ORIGINS = "https://cubingmexico-p3uk45s5ka-uc.a.run.app/"
+
 # Application definition
 
 INSTALLED_APPS = [
