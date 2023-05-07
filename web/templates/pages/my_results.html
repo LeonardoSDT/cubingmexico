@@ -2,10 +2,16 @@
 
 {% block title %}Resultados de {{ wca_profile.name }}{% endblock %}
 
-{% block stylesheets %}
 {% load static %}
+{% load divide_by_100 %}
+{% load time_formatter %}
+{% load time_formatter_333mbf %}
+
+{% block stylesheets %}
 <link rel="stylesheet" href="{% static 'css/cubing-icons.css' %}">
 {% endblock stylesheets %}
+
+
 
 {% block content %}
 
@@ -34,301 +40,65 @@
             </div>
             <div class="card-body">
                 <table class="table table-striped" style="width:100%">
-                    {% load divide_by_100 %}
-                    {% load time_formatter %}
-                    {% load time_formatter_333mbf %}
                     <thead>
                         <tr>
                             <th>Evento</th>
-                            <th>Single</th>
-                            <th>Media</th>
+                            <th>Resultado</th>
+                            <th>Competencia</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td><span class="cubing-icon event-333 m-1 h5"></span> 3x3x3</td>
-                            <td>
-                                {% for result in my_single_results %}
-                                    {% if result.event_id == '333' %}
-                                        {{ result.best|time_formatter }}
+                        {% for record in my_single_results %}
+                            <tr>
+                                <td>
+                                    <span class="cubing-icon event-{{ record.event.id }} m-1 h4 text-dark"></span>
+                                    {% if record.event.id == '333' %}
+                                        3×3×3
+                                    {% elif record.event.id == '222' %}
+                                        2×2×2
+                                    {% elif record.event.id == '444' %}
+                                        4×4×4
+                                    {% elif record.event.id == '555' %}
+                                        5×5×5
+                                    {% elif record.event.id == '666' %}
+                                        6×6×6
+                                    {% elif record.event.id == '777' %}
+                                        7×7×7
+                                    {% elif record.event.id == '333bf' %}
+                                        3×3×3 A Ciegas
+                                    {% elif record.event.id == '333fm' %}
+                                        3×3×3 Menos Movimientos
+                                    {% elif record.event.id == '333oh' %}
+                                        3×3×3 Una Mano
+                                    {% elif record.event.id == 'clock' %}
+                                        Clock
+                                    {% elif record.event.id == 'minx' %}
+                                        Megaminx
+                                    {% elif record.event.id == 'pyram' %}
+                                        Pyraminx
+                                    {% elif record.event.id == 'skewb' %}
+                                        Skewb
+                                    {% elif record.event.id == 'sq1' %}
+                                        Square-1
+                                    {% elif record.event.id == '444bf' %}
+                                        4×4×4 A Ciegas
+                                    {% elif record.event.id == '555bf' %}
+                                        5×5×5 A Ciegas
+                                    {% elif record.event.id == '333mbf' %}
+                                        3×3×3 Múltiples A Ciegas
                                     {% endif %}
-                                {% endfor %}
-                            </td>
-                            <td>
-                                {% for result in my_average_results %}
-                                    {% if result.event_id == '333' %}
-                                        {{ result.average|time_formatter }}
-                                    {% endif %}
-                                {% endfor %}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><span class="cubing-icon event-222 m-1 h5"></span> 2x2x2</td>
-                            <td>
-                                {% for result in my_single_results %}
-                                    {% if result.event_id == '222' %}
-                                        {{ result.best|time_formatter }}
-                                    {% endif %}
-                                {% endfor %}
-                            </td>
-                            <td>
-                                {% for result in my_average_results %}
-                                    {% if result.event_id == '222' %}
-                                        {{ result.average|time_formatter }}
-                                    {% endif %}
-                                {% endfor %}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><span class="cubing-icon event-444 m-1 h5"></span> 4x4x4</td>
-                            <td>
-                                {% for result in my_single_results %}
-                                    {% if result.event_id == '444' %}
-                                        {{ result.best|time_formatter }}
-                                    {% endif %}
-                                {% endfor %}
-                            </td>
-                            <td>
-                                {% for result in my_average_results %}
-                                    {% if result.event_id == '444' %}
-                                        {{ result.average|time_formatter }}
-                                    {% endif %}
-                                {% endfor %}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><span class="cubing-icon event-555 m-1 h5"></span> 5x5x5</td>
-                            <td>
-                                {% for result in my_single_results %}
-                                    {% if result.event_id == '555' %}
-                                        {{ result.best|time_formatter }}
-                                    {% endif %}
-                                {% endfor %}
-                            </td>
-                            <td>
-                                {% for result in my_average_results %}
-                                    {% if result.event_id == '555' %}
-                                        {{ result.average|time_formatter }}
-                                    {% endif %}
-                                {% endfor %}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><span class="cubing-icon event-666 m-1 h5"></span> 6x6x6</td>
-                            <td>
-                                {% for result in my_single_results %}
-                                    {% if result.event_id == '666' %}
-                                        {{ result.best|time_formatter }}
-                                    {% endif %}
-                                {% endfor %}
-                            </td>
-                            <td>
-                                {% for result in my_average_results %}
-                                    {% if result.event_id == '666' %}
-                                        {{ result.average|time_formatter }}
-                                    {% endif %}
-                                {% endfor %}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><span class="cubing-icon event-777 m-1 h5"></span> 7x7x7</td>
-                            <td>
-                                {% for result in my_single_results %}
-                                    {% if result.event_id == '777' %}
-                                        {{ result.best|time_formatter }}
-                                    {% endif %}
-                                {% endfor %}
-                            </td>
-                            <td>
-                                {% for result in my_average_results %}
-                                    {% if result.event_id == '777' %}
-                                        {{ result.average|time_formatter }}
-                                    {% endif %}
-                                {% endfor %}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><span class="cubing-icon event-333bf m-1 h5"></span> 3x3x3 A Ciegas</td>
-                            <td>
-                                {% for result in my_single_results %}
-                                    {% if result.event_id == '333bf' %}
-                                        {{ result.best|time_formatter }}
-                                    {% endif %}
-                                {% endfor %}
-                            </td>
-                            <td>
-                                {% for result in my_average_results %}
-                                    {% if result.event_id == '333bf' %}
-                                        {{ result.average|time_formatter }}
-                                    {% endif %}
-                                {% endfor %}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><span class="cubing-icon event-333fm m-1 h5"></span> 3x3x3 Menos Movimientos</td>
-                            <td>
-                                {% for result in my_single_results %}
-                                    {% if result.event_id == '333fm' %}
-                                        {{ result.best }}
-                                    {% endif %}
-                                {% endfor %}
-                            </td>
-                            <td>
-                                {% for result in my_average_results %}
-                                    {% if result.event_id == '333fm' %}
-                                        {{ result.average|divide_by_100 }}
-                                    {% endif %}
-                                {% endfor %}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><span class="cubing-icon event-333oh m-1 h5"></span> 3x3x3 Una Mano</td>
-                            <td>
-                                {% for result in my_single_results %}
-                                    {% if result.event_id == '333oh' %}
-                                        {{ result.best|time_formatter }}
-                                    {% endif %}
-                                {% endfor %}
-                            </td>
-                            <td>
-                                {% for result in my_average_results %}
-                                    {% if result.event_id == '333oh' %}
-                                        {{ result.average|time_formatter }}
-                                    {% endif %}
-                                {% endfor %}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><span class="cubing-icon event-clock m-1 h5"></span> Clock</td>
-                            <td>
-                                {% for result in my_single_results %}
-                                    {% if result.event_id == 'clock' %}
-                                        {{ result.best|time_formatter }}
-                                    {% endif %}
-                                {% endfor %}
-                            </td>
-                            <td>
-                                {% for result in my_average_results %}
-                                    {% if result.event_id == 'clock' %}
-                                        {{ result.average|time_formatter }}
-                                    {% endif %}
-                                {% endfor %}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><span class="cubing-icon event-minx m-1 h5"></span> Megaminx</td>
-                            <td>
-                                {% for result in my_single_results %}
-                                    {% if result.event_id == 'minx' %}
-                                        {{ result.best|time_formatter }}
-                                    {% endif %}
-                                {% endfor %}
-                            </td>
-                            <td>
-                                {% for result in my_average_results %}
-                                    {% if result.event_id == 'minx' %}
-                                        {{ result.average|time_formatter }}
-                                    {% endif %}
-                                {% endfor %}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><span class="cubing-icon event-pyram m-1 h5"></span> Pyraminx</td>
-                            <td>
-                                {% for result in my_single_results %}
-                                    {% if result.event_id == 'pyram' %}
-                                        {{ result.best|time_formatter }}
-                                    {% endif %}
-                                {% endfor %}
-                            </td>
-                            <td>
-                                {% for result in my_average_results %}
-                                    {% if result.event_id == 'pyram' %}
-                                        {{ result.average|time_formatter }}
-                                    {% endif %}
-                                {% endfor %}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><span class="cubing-icon event-skewb m-1 h5"></span> Skewb</td>
-                            <td>
-                                {% for result in my_single_results %}
-                                    {% if result.event_id == 'skewb' %}
-                                        {{ result.best|time_formatter }}
-                                    {% endif %}
-                                {% endfor %}
-                            </td>
-                            <td>
-                                {% for result in my_average_results %}
-                                    {% if result.event_id == 'skewb' %}
-                                        {{ result.average|time_formatter }}
-                                    {% endif %}
-                                {% endfor %}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><span class="cubing-icon event-sq1 m-1 h5"></span> Square-1</td>
-                            <td>
-                                {% for result in my_single_results %}
-                                    {% if result.event_id == 'sq1' %}
-                                        {{ result.best|time_formatter }}
-                                    {% endif %}
-                                {% endfor %}
-                            </td>
-                            <td>
-                                {% for result in my_average_results %}
-                                    {% if result.event_id == 'sq1' %}
-                                        {{ result.average|time_formatter }}
-                                    {% endif %}
-                                {% endfor %}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><span class="cubing-icon event-444bf m-1 h5"></span> 4x4x4 A Ciegas</td>
-                            <td>
-                                {% for result in my_single_results %}
-                                    {% if result.event_id == '444bf' %}
-                                        {{ result.best|time_formatter }}
-                                    {% endif %}
-                                {% endfor %}
-                            </td>
-                            <td>
-                                {% for result in my_average_results %}
-                                    {% if result.event_id == '444bf' %}
-                                        {{ result.average|time_formatter }}
-                                    {% endif %}
-                                {% endfor %}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><span class="cubing-icon event-555bf m-1 h5"></span> 5x5x5 A Ciegas</td>
-                            <td>
-                                {% for result in my_single_results %}
-                                    {% if result.event_id == '555bf' %}
-                                        {{ result.best|time_formatter }}
-                                    {% endif %}
-                                {% endfor %}
-                            </td>
-                            <td>
-                                {% for result in my_average_results %}
-                                    {% if result.event_id == '555bf' %}
-                                        {{ result.average|time_formatter }}
-                                    {% endif %}
-                                {% endfor %}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><span class="cubing-icon event-333mbf m-1 h5"></span> 3x3x3 Múltiples A Ciegas</td>
-                            <td>
-                                {% for result in my_single_results %}
-                                    {% if result.event_id == '333mbf' %}
-                                        {{ result.best|time_formatter_333mbf }}
-                                    {% endif %}
-                                {% endfor %}
-                            </td>
-                            <td></td>
-                        </tr>
-                    </tbody>
+                                </td>
+                                {% if record.event.id == '333mbf' %}
+                                <td>{{ record.best|time_formatter_333mbf }}</td>
+                                {% elif record.event.id == '333fm' %}
+                                <td>{{ record.best }}</td>
+                                {% else %}
+                                <td>{{ record.best|time_formatter }}</td>
+                                {% endif %}
+                                <td>{{ record.competition.name }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
                 </table>
             </div>
         </div>

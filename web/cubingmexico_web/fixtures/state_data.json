@@ -3,224 +3,256 @@
         "model": "cubingmexico_web.state",
         "pk": "1",
         "fields": {
-            "name": "Aguascalientes"
+            "name": "Aguascalientes",
+            "three_letter_code": "AGU"
         }
     },
     {
         "model": "cubingmexico_web.state",
         "pk": "2",
         "fields": {
-            "name": "Baja California"
+            "name": "Baja California",
+            "three_letter_code": "BCN"
         }
     },
     {
         "model": "cubingmexico_web.state",
         "pk": "3",
         "fields": {
-            "name": "Baja California Sur"
+            "name": "Baja California Sur",
+            "three_letter_code": "BCS"
         }
     },
     {
         "model": "cubingmexico_web.state",
         "pk": "4",
         "fields": {
-            "name": "Campeche"
+            "name": "Campeche",
+            "three_letter_code": "CAM"
         }
     },
     {
         "model": "cubingmexico_web.state",
         "pk": "5",
         "fields": {
-            "name": "Coahuila"
+            "name": "Coahuila",
+            "three_letter_code": "COA"
         }
     },
     {
         "model": "cubingmexico_web.state",
         "pk": "6",
         "fields": {
-            "name": "Colima"
+            "name": "Colima",
+            "three_letter_code": "COL"
         }
     },
     {
         "model": "cubingmexico_web.state",
         "pk": "7",
         "fields": {
-            "name": "Chiapas"
+            "name": "Chiapas",
+            "three_letter_code": "CHP"
         }
     },
     {
         "model": "cubingmexico_web.state",
         "pk": "8",
         "fields": {
-            "name": "Chihuahua"
+            "name": "Chihuahua",
+            "three_letter_code": "CHH"
         }
     },
     {
         "model": "cubingmexico_web.state",
         "pk": "9",
         "fields": {
-            "name": "Ciudad de México"
+            "name": "Ciudad de México",
+            "three_letter_code": "CMX"
         }
     },
     {
         "model": "cubingmexico_web.state",
         "pk": "10",
         "fields": {
-            "name": "Durango"
+            "name": "Durango",
+            "three_letter_code": "DUR"
         }
     },
     {
         "model": "cubingmexico_web.state",
         "pk": "11",
         "fields": {
-            "name": "Guanajuato"
+            "name": "Guanajuato",
+            "three_letter_code": "GUA"
         }
     },
     {
         "model": "cubingmexico_web.state",
         "pk": "12",
         "fields": {
-            "name": "Guerrero"
+            "name": "Guerrero",
+            "three_letter_code": "GRO"
         }
     },
     {
         "model": "cubingmexico_web.state",
         "pk": "13",
         "fields": {
-            "name": "Hidalgo"
+            "name": "Hidalgo",
+            "three_letter_code": "HID"
         }
     },
     {
         "model": "cubingmexico_web.state",
         "pk": "14",
         "fields": {
-            "name": "Jalisco"
+            "name": "Jalisco",
+            "three_letter_code": "JAL"
         }
     },
     {
         "model": "cubingmexico_web.state",
         "pk": "15",
         "fields": {
-            "name": "Estado de México"
+            "name": "Estado de México",
+            "three_letter_code": "MEX"
         }
     },
     {
         "model": "cubingmexico_web.state",
         "pk": "16",
         "fields": {
-            "name": "Michoacán"
+            "name": "Michoacán",
+            "three_letter_code": "MIC"
         }
     },
     {
         "model": "cubingmexico_web.state",
         "pk": "17",
         "fields": {
-            "name": "Morelos"
+            "name": "Morelos",
+            "three_letter_code": "MOR"
         }
     },
     {
         "model": "cubingmexico_web.state",
         "pk": "18",
         "fields": {
-            "name": "Nayarit"
+            "name": "Nayarit",
+            "three_letter_code": "NAY"
         }
     },
     {
         "model": "cubingmexico_web.state",
         "pk": "19",
         "fields": {
-            "name": "Nuevo León"
+            "name": "Nuevo León",
+            "three_letter_code": "NLE"
         }
     },
     {
         "model": "cubingmexico_web.state",
         "pk": "20",
         "fields": {
-            "name": "Oaxaca"
+            "name": "Oaxaca",
+            "three_letter_code": "OAX"
         }
     },
     {
         "model": "cubingmexico_web.state",
         "pk": "21",
         "fields": {
-            "name": "Puebla"
+            "name": "Puebla",
+            "three_letter_code": "PUE"
         }
     },
     {
         "model": "cubingmexico_web.state",
         "pk": "22",
         "fields": {
-            "name": "Querétaro"
+            "name": "Querétaro",
+            "three_letter_code": "QUE"
         }
     },
     {
         "model": "cubingmexico_web.state",
         "pk": "23",
         "fields": {
-            "name": "Quintana Roo"
+            "name": "Quintana Roo",
+            "three_letter_code": "ROO"
         }
     },
     {
         "model": "cubingmexico_web.state",
         "pk": "24",
         "fields": {
-            "name": "San Luis Potosí"
+            "name": "San Luis Potosí",
+            "three_letter_code": "SLP"
         }
     },
     {
         "model": "cubingmexico_web.state",
         "pk": "25",
         "fields": {
-            "name": "Sinaloa"
+            "name": "Sinaloa",
+            "three_letter_code": "SIN"
         }
     },
     {
         "model": "cubingmexico_web.state",
         "pk": "26",
         "fields": {
-            "name": "Sonora"
+            "name": "Sonora",
+            "three_letter_code": "SON"
         }
     },
     {
         "model": "cubingmexico_web.state",
         "pk": "27",
         "fields": {
-            "name": "Tabasco"
+            "name": "Tabasco",
+            "three_letter_code": "TAB"
         }
     },
     {
         "model": "cubingmexico_web.state",
         "pk": "28",
         "fields": {
-            "name": "Tamaulipas"
+            "name": "Tamaulipas",
+            "three_letter_code": "TAM"
         }
     },
     {
         "model": "cubingmexico_web.state",
         "pk": "29",
         "fields": {
-            "name": "Tlaxcala"
+            "name": "Tlaxcala",
+            "three_letter_code": "TLA"
         }
     },
     {
         "model": "cubingmexico_web.state",
         "pk": "30",
         "fields": {
-            "name": "Veracruz"
+            "name": "Veracruz",
+            "three_letter_code": "VER"
         }
     },
     {
         "model": "cubingmexico_web.state",
         "pk": "31",
         "fields": {
-            "name": "Yucatán"
+            "name": "Yucatán",
+            "three_letter_code": "YUC"
         }
     },
     {
         "model": "cubingmexico_web.state",
         "pk": "32",
         "fields": {
-            "name": "Zacatecas"
+            "name": "Zacatecas",
+            "three_letter_code": "ZAC"
     }
     }
 ]

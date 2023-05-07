@@ -10,8 +10,13 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
+import io
 import os
 from pathlib import Path
+
+import environ
+import google.auth
+from google.cloud import secretmanager
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,14 +26,47 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-t#tl_1y#m#7h3+b6-s7r6x!dszbb5z-ub4vdf1ko93#dzhm5v5'
+# SECRET_KEY = 'django-insecure-t#tl_1y#m#7h3+b6-s7r6x!dszbb5z-ub4vdf1ko93#dzhm5v5'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = int(os.environ.get("DEBUG", default=1))
+DEBUG = False
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS').split(" ") if os.environ.get('ALLOWED_HOSTS') else ['localhost', '127.0.0.1']
+env = environ.Env(
+    SECRET_KEY=(str, os.getenv("SECRET_KEY")),
+    DATABASE_URL=(str, os.getenv("DATABASE_URL")),
+    GS_BUCKET_NAME=(str, os.getenv("GS_BUCKET_NAME")),
+)
 
-ENV = os.environ.get('ENV')
+# Attempt to load the Project ID into the environment, safely failing on error.
+try:
+    _, os.environ["GOOGLE_CLOUD_PROJECT"] = google.auth.default()
+except google.auth.exceptions.DefaultCredentialsError:
+    pass
+
+# Use local .env file in dev mode
+if os.getenv("PYTHON_ENV") == "dev":
+    DEBUG = True
+
+# Use GCP secret manager in prod mode
+elif os.getenv("GOOGLE_CLOUD_PROJECT", None):
+    project_id = os.getenv("GOOGLE_CLOUD_PROJECT")
+
+    client = secretmanager.SecretManagerServiceClient()
+    settings_name = os.getenv("SETTINGS_NAME", "cubingmexico_settings")
+    name = f"projects/{project_id}/secrets/{settings_name}/versions/latest"
+    payload = client.access_secret_version(name=name).payload.data.decode(
+        "UTF-8"
+    )
+
+    env.read_env(io.StringIO(payload))
+else:
+    raise Exception(
+        "No local .env or GOOGLE_CLOUD_PROJECT detected. No secrets found."
+    )
+
+SECRET_KEY = env("SECRET_KEY")
+
+ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
@@ -40,6 +78,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_extensions',
+    'storages',
     'cubingmexico_web',
     'cubingmexico_wca',
 ]
@@ -76,20 +115,13 @@ WSGI_APPLICATION = 'cubingmexico.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/4.1/ref/settings/#databases
+# Use django-environ to parse the connection string
+DATABASES = {"default": env.db()}
 
-DATABASES = {
-  'default': {
-    'ENGINE': 'django.db.backends.postgresql',
-    'NAME': os.environ['POSTGRES_DB'],
-    'USER': os.environ['POSTGRES_USER'],
-    'PASSWORD': os.environ['POSTGRES_PASSWORD'],
-    'HOST': os.environ['PG_HOST'],
-    'PORT': os.environ.get('PG_PORT', '5432'),
-    'OPTIONS': {'client_encoding': 'UTF8'},
-  },
-}
-
+# If the flag as been set, configure to use proxy
+if os.getenv("USE_CLOUD_SQL_AUTH_PROXY", None):
+    DATABASES["default"]["HOST"] = "cloudsql-proxy"
+    DATABASES["default"]["PORT"] = 5432
 
 
 # Password validation
@@ -126,11 +158,16 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = 'static/'
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATIC_URL = '/static/'
+# STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+# MEDIA_URL = '/media/'
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
+GS_BUCKET_NAME = env("GS_BUCKET_NAME")
+STATICFILES_DIRS = []
+DEFAULT_FILE_STORAGE = "storages.backends.gcloud.GoogleCloudStorage"
+STATICFILES_STORAGE = "storages.backends.gcloud.GoogleCloudStorage"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
@@ -147,4 +184,4 @@ WCA_API_URI = 'https://www.worldcubeassociation.org/api/v0/'
 
 WCA_CLIENT_ID = 'Mq3iaMGMdkO4GkVWpy2Wza70gCZPDwVcHSssjScr-xk'
 WCA_CLIENT_SECRET = 'wqGIOkBxjyio3gSNQwrqkiEOutZCBLrGncYvu4cfCYM'
-WCA_CALLBACK = 'https://web-dev-p3uk45s5ka-uc.a.run.app/cubingmexico_wca/callback/'
+WCA_CALLBACK = 'http://localhost:8080/cubingmexico_wca/callback/'

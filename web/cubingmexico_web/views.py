@@ -14,7 +14,7 @@ from django.views.generic.edit import UpdateView
 
 from django.core.files.storage import default_storage
 
-from .models import User, WCAProfile, CubingmexicoProfile
+from .models import User, WCAProfile, CubingmexicoProfile, PersonStateTeam
 from .forms import *
 from .utils import *
 
@@ -84,355 +84,57 @@ class MyResultsView(ContentMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super(MyResultsView, self).get_context_data(**kwargs)
         wca_id = self.kwargs['wca_id']
-        context['my_single_results'] = get_my_single_results(wca_id=wca_id)
-        context['my_average_results'] = get_my_average_results(wca_id=wca_id)
+        context['my_single_results'] = get_my_results(wca_id=wca_id, is_average=False)
+        context['my_average_results'] = get_my_results(wca_id=wca_id, is_average=True)
         context['wca_profile'] = get_wcaprofile(wca_id=wca_id)
         return context
 
-class NationalRankings333SingleView(ContentMixin, TemplateView):
-    template_name = 'pages/rankings/333/single.html'
-    page = 'cubingmexico_web:national_rankings_333_single'
+class NationalRankingsView(ContentMixin, TemplateView):
+    page = 'cubingmexico_web:national_rankings'
+
+    def dispatch(self, request, *args, **kwargs):
+        self.ranking_type = kwargs.pop('ranking_type', 'single')
+        return super().dispatch(request, *args, **kwargs)
+
+    template_name = 'pages/rankings/national.html'
 
     def get_context_data(self, **kwargs):
-        context = super(NationalRankings333SingleView, self).get_context_data(**kwargs)
-        context['single_333'] = get_single_rankings(event_type='333')
-        context['selected_event'] = '333'
+        event_type = self.kwargs.get('event_type', '333')
+        context = super().get_context_data(**kwargs)
+        context['rankings'] = get_rankings(event_type=event_type, ranking_type=self.ranking_type)
+        context['selected_event'] = event_type
+        context['ranking_type'] = self.ranking_type
         return context
-    
-class NationalRankings333AverageView(ContentMixin, TemplateView):
-    template_name = 'pages/rankings/333/average.html'
-    page = 'cubingmexico_web:national_rankings_333_average'
+
+class NationalRecordsView(ContentMixin, TemplateView):
+    page = 'cubingmexico_web:national_records'
+
+    template_name = 'pages/records/national.html'
 
     def get_context_data(self, **kwargs):
-        context = super(NationalRankings333AverageView, self).get_context_data(**kwargs)
-        context['average_333'] = get_average_rankings(event_type='333')
-        context['selected_event'] = '333'
+        context = super().get_context_data(**kwargs)
+        context['single_records'] = get_records(is_average=False)
+        context['average_records'] = get_records(is_average=True)
         return context
 
-class NationalRankings222SingleView(ContentMixin, TemplateView):
-    template_name = 'pages/rankings/222/single.html'
-    page = 'cubingmexico_web:national_rankings_222_single'
-
-    def get_context_data(self, **kwargs):
-        context = super(NationalRankings222SingleView, self).get_context_data(**kwargs)
-        context['single_222'] = get_single_rankings(event_type='222')
-        context['selected_event'] = '222'
-        return context
-    
-class NationalRankings222AverageView(ContentMixin, TemplateView):
-    template_name = 'pages/rankings/222/average.html'
-    page = 'cubingmexico_web:national_rankings_222_average'
-
-    def get_context_data(self, **kwargs):
-        context = super(NationalRankings222AverageView, self).get_context_data(**kwargs)
-        context['average_222'] = get_average_rankings(event_type='222')
-        context['selected_event'] = '222'
-        return context
-
-class NationalRankings444SingleView(ContentMixin, TemplateView):
-    template_name = 'pages/rankings/444/single.html'
-    page = 'cubingmexico_web:national_rankings_444_single'
-
-    def get_context_data(self, **kwargs):
-        context = super(NationalRankings444SingleView, self).get_context_data(**kwargs)
-        context['single_444'] = get_single_rankings(event_type='444')
-        context['selected_event'] = '444'
-        return context
-    
-class NationalRankings444AverageView(ContentMixin, TemplateView):
-    template_name = 'pages/rankings/444/average.html'
-    page = 'cubingmexico_web:national_rankings_444_average'
-
-    def get_context_data(self, **kwargs):
-        context = super(NationalRankings444AverageView, self).get_context_data(**kwargs)
-        context['average_444'] = get_average_rankings(event_type='444')
-        context['selected_event'] = '444'
-        return context
-
-class NationalRankings555SingleView(ContentMixin, TemplateView):
-    template_name = 'pages/rankings/555/single.html'
-    page = 'cubingmexico_web:national_rankings_555_single'
-
-    def get_context_data(self, **kwargs):
-        context = super(NationalRankings555SingleView, self).get_context_data(**kwargs)
-        context['single_555'] = get_single_rankings(event_type='555')
-        context['selected_event'] = '555'
-        return context
-    
-class NationalRankings555AverageView(ContentMixin, TemplateView):
-    template_name = 'pages/rankings/555/average.html'
-    page = 'cubingmexico_web:national_rankings_555_average'
-
-    def get_context_data(self, **kwargs):
-        context = super(NationalRankings555AverageView, self).get_context_data(**kwargs)
-        context['average_555'] = get_average_rankings(event_type='555')
-        context['selected_event'] = '555'
-        return context
-    
-class NationalRankings666SingleView(ContentMixin, TemplateView):
-    template_name = 'pages/rankings/666/single.html'
-    page = 'cubingmexico_web:national_rankings_666_single'
-
-    def get_context_data(self, **kwargs):
-        context = super(NationalRankings666SingleView, self).get_context_data(**kwargs)
-        context['single_666'] = get_single_rankings(event_type='666')
-        context['selected_event'] = '666'
-        return context
-    
-class NationalRankings666AverageView(ContentMixin, TemplateView):
-    template_name = 'pages/rankings/666/average.html'
-    page = 'cubingmexico_web:national_rankings_666_average'
-
-    def get_context_data(self, **kwargs):
-        context = super(NationalRankings666AverageView, self).get_context_data(**kwargs)
-        context['average_666'] = get_average_rankings(event_type='666')
-        context['selected_event'] = '666'
-        return context
-
-class NationalRankings777SingleView(ContentMixin, TemplateView):
-    template_name = 'pages/rankings/777/single.html'
-    page = 'cubingmexico_web:national_rankings_777_single'
-
-    def get_context_data(self, **kwargs):
-        context = super(NationalRankings777SingleView, self).get_context_data(**kwargs)
-        context['single_777'] = get_single_rankings(event_type='777')
-        context['selected_event'] = '777'
-        return context
-    
-class NationalRankings777AverageView(ContentMixin, TemplateView):
-    template_name = 'pages/rankings/777/average.html'
-    page = 'cubingmexico_web:national_rankings_777_average'
-
-    def get_context_data(self, **kwargs):
-        context = super(NationalRankings777AverageView, self).get_context_data(**kwargs)
-        context['average_777'] = get_average_rankings(event_type='777')
-        context['selected_event'] = '777'
-        return context
-
-class NationalRankings333bfSingleView(ContentMixin, TemplateView):
-    template_name = 'pages/rankings/333bf/single.html'
-    page = 'cubingmexico_web:national_rankings_333bf_single'
-
-    def get_context_data(self, **kwargs):
-        context = super(NationalRankings333bfSingleView, self).get_context_data(**kwargs)
-        context['single_333bf'] = get_single_rankings(event_type='333bf')
-        context['selected_event'] = '3bf'
-        return context
-    
-class NationalRankings333bfAverageView(ContentMixin, TemplateView):
-    template_name = 'pages/rankings/333bf/average.html'
-    page = 'cubingmexico_web:national_rankings_333bf_average'
-
-    def get_context_data(self, **kwargs):
-        context = super(NationalRankings333bfAverageView, self).get_context_data(**kwargs)
-        context['average_333bf'] = get_average_rankings(event_type='333bf')
-        context['selected_event'] = '3bf'
-        return context
-
-class NationalRankings333fmSingleView(ContentMixin, TemplateView):
-    template_name = 'pages/rankings/333fm/single.html'
-    page = 'cubingmexico_web:national_rankings_333fm_single'
-
-    def get_context_data(self, **kwargs):
-        context = super(NationalRankings333fmSingleView, self).get_context_data(**kwargs)
-        context['single_333fm'] = get_single_rankings(event_type='333fm')
-        context['selected_event'] = '3fm'
-        return context
-    
-class NationalRankings333fmAverageView(ContentMixin, TemplateView):
-    template_name = 'pages/rankings/333fm/average.html'
-    page = 'cubingmexico_web:national_rankings_333fm_average'
-
-    def get_context_data(self, **kwargs):
-        context = super(NationalRankings333fmAverageView, self).get_context_data(**kwargs)
-        context['average_333fm'] = get_average_rankings(event_type='333fm')
-        context['selected_event'] = '3fm'
-        return context
-
-class NationalRankings333ohSingleView(ContentMixin, TemplateView):
-    template_name = 'pages/rankings/333oh/single.html'
-    page = 'cubingmexico_web:national_rankings_333oh_single'
-
-    def get_context_data(self, **kwargs):
-        context = super(NationalRankings333ohSingleView, self).get_context_data(**kwargs)
-        context['single_333oh'] = get_single_rankings(event_type='333oh')
-        context['selected_event'] = '3oh'
-        return context
-    
-class NationalRankings333ohAverageView(ContentMixin, TemplateView):
-    template_name = 'pages/rankings/333oh/average.html'
-    page = 'cubingmexico_web:national_rankings_333oh_average'
-
-    def get_context_data(self, **kwargs):
-        context = super(NationalRankings333ohAverageView, self).get_context_data(**kwargs)
-        context['average_333oh'] = get_average_rankings(event_type='333oh')
-        context['selected_event'] = '3oh'
-        return context
-
-class NationalRankingsclockSingleView(ContentMixin, TemplateView):
-    template_name = 'pages/rankings/clock/single.html'
-    page = 'cubingmexico_web:national_rankings_clock_single'
-
-    def get_context_data(self, **kwargs):
-        context = super(NationalRankingsclockSingleView, self).get_context_data(**kwargs)
-        context['single_clock'] = get_single_rankings(event_type='clock')
-        context['selected_event'] = 'clock'
-        return context
-    
-class NationalRankingsclockAverageView(ContentMixin, TemplateView):
-    template_name = 'pages/rankings/clock/average.html'
-    page = 'cubingmexico_web:national_rankings_clock_average'
-
-    def get_context_data(self, **kwargs):
-        context = super(NationalRankingsclockAverageView, self).get_context_data(**kwargs)
-        context['average_clock'] = get_average_rankings(event_type='clock')
-        context['selected_event'] = 'clock'
-        return context
-
-class NationalRankingsminxSingleView(ContentMixin, TemplateView):
-    template_name = 'pages/rankings/minx/single.html'
-    page = 'cubingmexico_web:national_rankings_minx_single'
-
-    def get_context_data(self, **kwargs):
-        context = super(NationalRankingsminxSingleView, self).get_context_data(**kwargs)
-        context['single_minx'] = get_single_rankings(event_type='minx')
-        context['selected_event'] = 'minx'
-        return context
-    
-class NationalRankingsminxAverageView(ContentMixin, TemplateView):
-    template_name = 'pages/rankings/minx/average.html'
-    page = 'cubingmexico_web:national_rankings_minx_average'
-
-    def get_context_data(self, **kwargs):
-        context = super(NationalRankingsminxAverageView, self).get_context_data(**kwargs)
-        context['average_minx'] = get_average_rankings(event_type='minx')
-        context['selected_event'] = 'minx'
-        return context
-
-class NationalRankingspyramSingleView(ContentMixin, TemplateView):
-    template_name = 'pages/rankings/pyram/single.html'
-    page = 'cubingmexico_web:national_rankings_pyram_single'
-
-    def get_context_data(self, **kwargs):
-        context = super(NationalRankingspyramSingleView, self).get_context_data(**kwargs)
-        context['single_pyram'] = get_single_rankings(event_type='pyram')
-        context['selected_event'] = 'pyram'
-        return context
-    
-class NationalRankingspyramAverageView(ContentMixin, TemplateView):
-    template_name = 'pages/rankings/pyram/average.html'
-    page = 'cubingmexico_web:national_rankings_pyram_average'
-
-    def get_context_data(self, **kwargs):
-        context = super(NationalRankingspyramAverageView, self).get_context_data(**kwargs)
-        context['average_pyram'] = get_average_rankings(event_type='pyram')
-        context['selected_event'] = 'pyram'
-        return context
-
-class NationalRankingsskewbSingleView(ContentMixin, TemplateView):
-    template_name = 'pages/rankings/skewb/single.html'
-    page = 'cubingmexico_web:national_rankings_skewb_single'
-
-    def get_context_data(self, **kwargs):
-        context = super(NationalRankingsskewbSingleView, self).get_context_data(**kwargs)
-        context['single_skewb'] = get_single_rankings(event_type='skewb')
-        context['selected_event'] = 'skewb'
-        return context
-    
-class NationalRankingsskewbAverageView(ContentMixin, TemplateView):
-    template_name = 'pages/rankings/skewb/average.html'
-    page = 'cubingmexico_web:national_rankings_skewb_average'
-
-    def get_context_data(self, **kwargs):
-        context = super(NationalRankingsskewbAverageView, self).get_context_data(**kwargs)
-        context['average_skewb'] = get_average_rankings(event_type='skewb')
-        context['selected_event'] = 'skewb'
-        return context
-
-class NationalRankingssq1SingleView(ContentMixin, TemplateView):
-    template_name = 'pages/rankings/sq1/single.html'
-    page = 'cubingmexico_web:national_rankings_sq1_single'
-
-    def get_context_data(self, **kwargs):
-        context = super(NationalRankingssq1SingleView, self).get_context_data(**kwargs)
-        context['single_sq1'] = get_single_rankings(event_type='sq1')
-        context['selected_event'] = 'sq1'
-        return context
-    
-class NationalRankingssq1AverageView(ContentMixin, TemplateView):
-    template_name = 'pages/rankings/sq1/average.html'
-    page = 'cubingmexico_web:national_rankings_sq1_average'
-
-    def get_context_data(self, **kwargs):
-        context = super(NationalRankingssq1AverageView, self).get_context_data(**kwargs)
-        context['average_sq1'] = get_average_rankings(event_type='sq1')
-        context['selected_event'] = 'sq1'
-        return context
-
-class NationalRankings444bfSingleView(ContentMixin, TemplateView):
-    template_name = 'pages/rankings/444bf/single.html'
-    page = 'cubingmexico_web:national_rankings_444bf_single'
-
-    def get_context_data(self, **kwargs):
-        context = super(NationalRankings444bfSingleView, self).get_context_data(**kwargs)
-        context['single_444bf'] = get_single_rankings(event_type='444bf')
-        context['selected_event'] = '4bf'
-        return context
-    
-class NationalRankings444bfAverageView(ContentMixin, TemplateView):
-    template_name = 'pages/rankings/444bf/average.html'
-    page = 'cubingmexico_web:national_rankings_444bf_average'
-
-    def get_context_data(self, **kwargs):
-        context = super(NationalRankings444bfAverageView, self).get_context_data(**kwargs)
-        context['average_444bf'] = get_average_rankings(event_type='444bf')
-        context['selected_event'] = '4bf'
-        return context
-
-class NationalRankings555bfSingleView(ContentMixin, TemplateView):
-    template_name = 'pages/rankings/555bf/single.html'
-    page = 'cubingmexico_web:national_rankings_555bf_single'
-
-    def get_context_data(self, **kwargs):
-        context = super(NationalRankings555bfSingleView, self).get_context_data(**kwargs)
-        context['single_555bf'] = get_single_rankings(event_type='555bf')
-        context['selected_event'] = '5bf'
-        return context
-    
-class NationalRankings555bfAverageView(ContentMixin, TemplateView):
-    template_name = 'pages/rankings/555bf/average.html'
-    page = 'cubingmexico_web:national_rankings_555bf_average'
-
-    def get_context_data(self, **kwargs):
-        context = super(NationalRankings555bfAverageView, self).get_context_data(**kwargs)
-        context['average_555bf'] = get_average_rankings(event_type='555bf')
-        context['selected_event'] = '5bf'
-        return context
-
-class NationalRankings333mbfView(ContentMixin, TemplateView):
-    template_name = 'pages/rankings/333mbf/333mbf.html'
-    page = 'cubingmexico_web:national_rankings_333mbf'
-
-    def get_context_data(self, **kwargs):
-        context = super(NationalRankings333mbfView, self).get_context_data(**kwargs)
-        context['single_333mbf'] = get_single_rankings(event_type='333mbf')
-        context['selected_event'] = '3mbf'
-        return context
-    
 class StateRankingsView(ContentMixin, TemplateView):
-    template_name = 'pages/state/rankings.html'
     page = 'cubingmexico_web:state_rankings'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        return context
-    
-class StateRecordsView(ContentMixin, TemplateView):
-    template_name = 'pages/state/records.html'
-    page = 'cubingmexico_web:state_records'
+    def dispatch(self, request, *args, **kwargs):
+        self.ranking_type = kwargs.pop('ranking_type', 'single')
+        return super().dispatch(request, *args, **kwargs)
+
+    template_name = 'pages/rankings/state.html'
 
     def get_context_data(self, **kwargs):
+        event_type = self.kwargs.get('event_type', '333')
+        state = self.kwargs.get('state', 'CMX')
         context = super().get_context_data(**kwargs)
+        context['rankings'] = get_state_rankings(state=state, event_type=event_type, ranking_type=self.ranking_type)
+        context['selected_event'] = event_type
+        context['selected_state'] = state
+        context['ranking_type'] = self.ranking_type
+        context['states'] = State.objects.all()
         return context
 
 class StateTeamsView(ContentMixin, TemplateView):
@@ -450,7 +152,12 @@ class IndividualStateTeamView(ContentMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['team_members'] = User.objects.filter(cubingmexicoprofile__state_team_id=self.object.pk)
+
+        wca_ids = WCAProfile.objects.filter(user__cubingmexicoprofile__person_state_team__state_team__id=self.object.pk).values_list('wca_id', flat=True)
+
+        context['team_members'] = PersonStateTeam.objects.filter(state_team_id=self.object.pk).exclude(person__id__in=wca_ids)
+        context['auth_team_members'] = User.objects.filter(cubingmexicoprofile__person_state_team__state_team__id=self.object.pk)
+        
         return context
     
 class EditStateTeamView(ContentMixin, CanEditStateTeamView, UpdateView):
@@ -475,14 +182,6 @@ class EditStateTeamView(ContentMixin, CanEditStateTeamView, UpdateView):
         else:
             qs = qs.none()
         return qs
-
-class UNRsView(ContentMixin, TemplateView):
-    template_name = 'pages/national/unrs.html'
-    page = 'cubingmexico_web:unrs'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        return context
 
 class WCACallbackView(RedirectView):
     """
@@ -535,8 +234,17 @@ class WCACallbackView(RedirectView):
                 wca_updated_at=profile_data['updated_at'],
             )
             # Create Cubingmexico profile
+            try:
+                person_state_team = PersonStateTeam.objects.get(person=wca_profile.wca_id)
+                person_state = person_state_team.state_team.state
+            except PersonStateTeam.DoesNotExist:
+                person_state_team = None
+                person_state = None
+
             CubingmexicoProfile.objects.create(
                 user=user,
+                state=person_state,
+                person_state_team=person_state_team,
             )
             # Redirect new users to their profile page
             redirect_uri = 'cubingmexico_web:profile'
@@ -545,4 +253,3 @@ class WCACallbackView(RedirectView):
         login(self.request, wca_profile.user)
 
         return reverse(redirect_uri)
-    

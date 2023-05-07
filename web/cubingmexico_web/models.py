@@ -4,8 +4,13 @@ from django.db import models
 
 from django.contrib.auth.models import AbstractUser
 
+from cubingmexico_wca.models import Person
+
 class User(AbstractUser):
     has_default_password = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.username
 
 
 class WCAProfile(models.Model):
@@ -31,6 +36,7 @@ class WCAProfile(models.Model):
 
 class State(models.Model):
     name = models.CharField(max_length=255)
+    three_letter_code = models.CharField(max_length=3)
 
     def __str__(self):
         return self.name
@@ -53,13 +59,23 @@ class StateTeam(models.Model):
             ('edit_stateteam', 'Can edit state team'),
         )
 
+class PersonStateTeam(models.Model):
+    person = models.ForeignKey(Person, on_delete=models.CASCADE)
+    state_team = models.ForeignKey(StateTeam, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return str(f'{self.person.name}, {self.state_team.name}')
+    
+    class Meta:
+        unique_together = ('person', 'state_team')
+
 class CubingmexicoProfile(models.Model):
     def __str__(self):
-        return str(self.user)
+        return str(self.user.wcaprofile.name)
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     state = models.ForeignKey(State, on_delete=models.SET_NULL, null=True, blank=True, default='')
-    state_team = models.ForeignKey(StateTeam, on_delete=models.SET_NULL, null=True, blank=True, default='')
+    person_state_team = models.ForeignKey(PersonStateTeam, on_delete=models.SET_NULL, null=True, blank=True, default='')
     is_state_team_leader = models.BooleanField(default=False)
 
     created_at = models.DateTimeField(auto_now_add=True)
