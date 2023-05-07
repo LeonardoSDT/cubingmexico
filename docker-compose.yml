@@ -22,8 +22,5 @@ services:
       - ./gcp/cubingmexico-dev-bd15a5adb915.json:/secrets/cloudsql/credentials.json
     ports:
       - 127.0.0.1:5432:5432
-    command:
-      - "/cloud_sql_proxy"
-      - "-instances=cubingmexico-dev:us-central1:cubingmexico-postgresql-dev=tcp:0.0.0.0:5432"
-      - "-credential_file=/secrets/cloudsql/credentials.json"
+    command: /cloud_sql_proxy -instances="cubingmexico-dev:us-central1:cubingmexico-postgresql-dev"=tcp:0.0.0.0:5432 -credential_file=/secrets/cloudsql/credentials.json
     restart: always
