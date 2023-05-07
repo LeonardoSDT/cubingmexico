@@ -28,41 +28,11 @@
             <tr>
                 <td>
                     <span class="cubing-icon event-{{ record.event.id }} m-1 h4 text-dark"></span>
-                    {% if record.event.id == '333' %}
-                        3×3×3
-                    {% elif record.event.id == '222' %}
-                        2×2×2
-                    {% elif record.event.id == '444' %}
-                        4×4×4
-                    {% elif record.event.id == '555' %}
-                        5×5×5
-                    {% elif record.event.id == '666' %}
-                        6×6×6
-                    {% elif record.event.id == '777' %}
-                        7×7×7
-                    {% elif record.event.id == '333bf' %}
-                        3×3×3 A Ciegas
-                    {% elif record.event.id == '333fm' %}
-                        3×3×3 Menos Movimientos
-                    {% elif record.event.id == '333oh' %}
-                        3×3×3 Una Mano
-                    {% elif record.event.id == 'clock' %}
-                        Clock
-                    {% elif record.event.id == 'minx' %}
-                        Megaminx
-                    {% elif record.event.id == 'pyram' %}
-                        Pyraminx
-                    {% elif record.event.id == 'skewb' %}
-                        Skewb
-                    {% elif record.event.id == 'sq1' %}
-                        Square-1
-                    {% elif record.event.id == '444bf' %}
-                        4×4×4 A Ciegas
-                    {% elif record.event.id == '555bf' %}
-                        5×5×5 A Ciegas
-                    {% elif record.event.id == '333mbf' %}
-                        3×3×3 Múltiples A Ciegas
-                    {% endif %}
+                    {% for event in events %}
+                        {% if event.id == selected_event %}
+                            {{ event.name }}
+                        {% endif %}
+                    {% endfor %}
                 </td>
                 <td><a href="https://www.worldcubeassociation.org/persons/{{ record.person.id }}" class="text-decoration-none">{{ record.person_name }}</a></td>
                 {% if record.event.id == '333mbf' %}
@@ -92,41 +62,11 @@
             <tr>
                 <td>
                     <span class="cubing-icon event-{{ record.event.id }} m-1 h4 text-dark"></span>
-                    {% if record.event.id == '333' %}
-                        3×3×3
-                    {% elif record.event.id == '222' %}
-                        2×2×2
-                    {% elif record.event.id == '444' %}
-                        4×4×4
-                    {% elif record.event.id == '555' %}
-                        5×5×5
-                    {% elif record.event.id == '666' %}
-                        6×6×6
-                    {% elif record.event.id == '777' %}
-                        7×7×7
-                    {% elif record.event.id == '333bf' %}
-                        3×3×3 A Ciegas
-                    {% elif record.event.id == '333fm' %}
-                        3×3×3 Menos Movimientos
-                    {% elif record.event.id == '333oh' %}
-                        3×3×3 Una Mano
-                    {% elif record.event.id == 'clock' %}
-                        Clock
-                    {% elif record.event.id == 'minx' %}
-                        Megaminx
-                    {% elif record.event.id == 'pyram' %}
-                        Pyraminx
-                    {% elif record.event.id == 'skewb' %}
-                        Skewb
-                    {% elif record.event.id == 'sq1' %}
-                        Square-1
-                    {% elif record.event.id == '444bf' %}
-                        4×4×4 A Ciegas
-                    {% elif record.event.id == '555bf' %}
-                        5×5×5 A Ciegas
-                    {% elif record.event.id == '333mbf' %}
-                        3×3×3 Múltiples A Ciegas
-                    {% endif %}
+                    {% for event in events %}
+                        {% if event.id == selected_event %}
+                            {{ event.name }}
+                        {% endif %}
+                    {% endfor %}
                 </td>
                 <td><a href="https://www.worldcubeassociation.org/persons/{{ record.person.id }}" class="text-decoration-none">{{ record.person_name }}</a></td>
                 {% if record.event.id == '333fm' %}

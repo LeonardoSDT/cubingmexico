@@ -1,43 +1,21 @@
 {% extends 'base.html' %}
 
 {% block title %}
-Ranking estatal {{ selected_state }} de
-{% if event_type == '333' %}
-    3×3×3
-{% elif event_type == '222' %}
-    2×2×2
-{% elif event_type == '444' %}
-    4×4×4
-{% elif event_type == '555' %}
-    5×5×5
-{% elif event_type == '666' %}
-    6×6×6
-{% elif event_type == '777' %}
-    7×7×7
-{% elif event_type == '333bf' %}
-    3×3×3 A Ciegas
-{% elif event_type == '333fm' %}
-    3×3×3 Menos Movimientos
-{% elif event_type == '333oh' %}
-    3×3×3 Una Mano
-{% elif event_type == 'clock' %}
-    Clock
-{% elif event_type == 'minx' %}
-    Megaminx
-{% elif event_type == 'pyram' %}
-    Pyraminx
-{% elif event_type == 'skewb' %}
-    Skewb
-{% elif event_type == 'sq1' %}
-    Square-1
-{% elif event_type == '444bf' %}
-    4×4×4 A Ciegas
-{% elif event_type == '555bf' %}
-    5×5×5 A Ciegas
-{% elif event_type == '333mbf' %}
-    3×3×3 Múltiples A Ciegas
-{% endif %}
-{{ ranking_type|title }}
+Ranking estatal
+{% for state in states %}
+    {% if state.three_letter_code == selected_state %}
+        {{ state.name }}
+    {% endif %}
+{% endfor %}
+de
+{% for event in events %}
+    {% if event.id == selected_event %}
+        {{ event.name }}
+        {% if event.id != '333mbf' %}
+            {{ ranking_type|title }}
+        {% endif %}
+    {% endif %}
+{% endfor %}
 {% endblock %}
 
 {% load static %}
@@ -54,43 +32,22 @@ Ranking estatal {{ selected_state }} de
 {% block content %}
     <div class="row">
         <div class="col-12 col-sm-9">
-            <h1 class="my-3">Ranking estatal {{ selected_state }} de
-                {% if event_type == '333' %}
-                    3×3×3
-                {% elif event_type == '222' %}
-                    2×2×2
-                {% elif event_type == '444' %}
-                    4×4×4
-                {% elif event_type == '555' %}
-                    5×5×5
-                {% elif event_type == '666' %}
-                    6×6×6
-                {% elif event_type == '777' %}
-                    7×7×7
-                {% elif event_type == '333bf' %}
-                    3×3×3 A Ciegas
-                {% elif event_type == '333fm' %}
-                    3×3×3 Menos Movimientos
-                {% elif event_type == '333oh' %}
-                    3×3×3 Una Mano
-                {% elif event_type == 'clock' %}
-                    Clock
-                {% elif event_type == 'minx' %}
-                    Megaminx
-                {% elif event_type == 'pyram' %}
-                    Pyraminx
-                {% elif event_type == 'skewb' %}
-                    Skewb
-                {% elif event_type == 'sq1' %}
-                    Square-1
-                {% elif event_type == '444bf' %}
-                    4×4×4 A Ciegas
-                {% elif event_type == '555bf' %}
-                    5×5×5 A Ciegas
-                {% elif event_type == '333mbf' %}
-                    3×3×3 Múltiples A Ciegas
-                {% endif %}
-                {{ ranking_type|title }}
+            <h1 class="my-3">
+                Ranking estatal
+                {% for state in states %}
+                    {% if state.three_letter_code == selected_state %}
+                        {{ state.name }}
+                    {% endif %}
+                {% endfor %}
+                de
+                {% for event in events %}
+                    {% if event.id == selected_event %}
+                        {{ event.name }}
+                        {% if event.id != '333mbf' %}
+                            {{ ranking_type|title }}
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
             </h1>
         
             <div class="mb-3">
@@ -122,18 +79,15 @@ Ranking estatal {{ selected_state }} de
             </div>
             {% endif %}        
         </div>
-        <div class="col-12 col-sm-3 d-flex justify-content-center mt-5">
-            <div class="dropdown">
-                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-                    Selecciona un estado
-                </a>
-              
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                    {% for state in states %}
-                        <li><a class="dropdown-item" href="{% url 'cubingmexico_web:state_rankings_single' event_type=selected_event state=state.three_letter_code %}">{{ state.name }}</a></li>
-                    {% endfor %}
-                </ul>
-            </div>
+        <div class="col-12 col-sm-3 d-flex justify-content-center my-3">
+            <form>
+                <label for="state-select"><strong>Selecciona un estado</strong></label>
+                <select class="form-select" id="state-select" onchange="location = this.value;">
+                  {% for state in states %}
+                    <option value="{% url 'cubingmexico_web:state_rankings_single' event_type=selected_event state=state.three_letter_code %}" {% if state.three_letter_code == selected_state %}selected{% endif %}>{{ state.name }}</option>
+                  {% endfor %}
+                </select>
+              </form>              
         </div>        
     </div>
     
@@ -149,7 +103,7 @@ Ranking estatal {{ selected_state }} de
         <tbody>
             {% for result in rankings %}
                 <tr>
-                    <td>{{ forloop.counter }}</td>
+                    <td scope="row">{{ forloop.counter }}</td>
                     <td><a href="https://www.worldcubeassociation.org/persons/{{ result.person.id }}" class="text-decoration-none">{{ result.person_name }}</a></td>
                     {% if ranking_type == 'single' %}
                         {% if selected_event == '333mbf' %}

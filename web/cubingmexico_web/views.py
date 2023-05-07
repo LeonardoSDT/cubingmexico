@@ -15,6 +15,7 @@ from django.views.generic.edit import UpdateView, CreateView
 from django.core.files.storage import default_storage
 
 from .models import User, WCAProfile, CubingmexicoProfile, PersonStateTeam
+from cubingmexico_wca.models import Event
 from .forms import *
 from .utils import *
 
@@ -109,6 +110,7 @@ class NationalRankingsView(ContentMixin, TemplateView):
         context['rankings'] = get_rankings(event_type=event_type, ranking_type=self.ranking_type)
         context['selected_event'] = event_type
         context['ranking_type'] = self.ranking_type
+        context['events'] = Event.objects.all()
         return context
 
 class NationalRecordsView(ContentMixin, TemplateView):
@@ -120,6 +122,7 @@ class NationalRecordsView(ContentMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         context['single_records'] = get_records(is_average=False)
         context['average_records'] = get_records(is_average=True)
+        context['events'] = Event.objects.all()
         return context
 
 class StateRankingsView(ContentMixin, TemplateView):
@@ -140,6 +143,7 @@ class StateRankingsView(ContentMixin, TemplateView):
         context['selected_state'] = state
         context['ranking_type'] = self.ranking_type
         context['states'] = State.objects.all()
+        context['events'] = Event.objects.all()
         return context
     
 class StateRecordsView(ContentMixin, TemplateView):
@@ -154,6 +158,7 @@ class StateRecordsView(ContentMixin, TemplateView):
         context['average_records'] = get_state_records(state=state, is_average=True)
         context['selected_state'] = state
         context['states'] = State.objects.all()
+        context['events'] = Event.objects.all()
         return context
 
 class StateTeamsView(ContentMixin, TemplateView):

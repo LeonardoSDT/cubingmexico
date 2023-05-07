@@ -2,42 +2,14 @@
 
 {% block title %}
 Ranking nacional de
-{% if event_type == '333' %}
-    3×3×3
-{% elif event_type == '222' %}
-    2×2×2
-{% elif event_type == '444' %}
-    4×4×4
-{% elif event_type == '555' %}
-    5×5×5
-{% elif event_type == '666' %}
-    6×6×6
-{% elif event_type == '777' %}
-    7×7×7
-{% elif event_type == '333bf' %}
-    3×3×3 A Ciegas
-{% elif event_type == '333fm' %}
-    3×3×3 Menos Movimientos
-{% elif event_type == '333oh' %}
-    3×3×3 Una Mano
-{% elif event_type == 'clock' %}
-    Clock
-{% elif event_type == 'minx' %}
-    Megaminx
-{% elif event_type == 'pyram' %}
-    Pyraminx
-{% elif event_type == 'skewb' %}
-    Skewb
-{% elif event_type == 'sq1' %}
-    Square-1
-{% elif event_type == '444bf' %}
-    4×4×4 A Ciegas
-{% elif event_type == '555bf' %}
-    5×5×5 A Ciegas
-{% elif event_type == '333mbf' %}
-    3×3×3 Múltiples A Ciegas
-{% endif %}
-{{ ranking_type|title }}
+{% for event in events %}
+    {% if event.id == selected_event %}
+        {{ event.name }}
+        {% if event.id != '333mbf' %}
+            {{ ranking_type|title }}
+        {% endif %}
+    {% endif %}
+{% endfor %}
 {% endblock %}
 
 {% load static %}
@@ -53,41 +25,14 @@ Ranking nacional de
 
 {% block content %}
     <h1 class="my-3">Ranking nacional de
-        {% if event_type == '333' %}
-            3×3×3
-        {% elif event_type == '222' %}
-            2×2×2
-        {% elif event_type == '444' %}
-            4×4×4
-        {% elif event_type == '555' %}
-            5×5×5
-        {% elif event_type == '666' %}
-            6×6×6
-        {% elif event_type == '777' %}
-            7×7×7
-        {% elif event_type == '333bf' %}
-            3×3×3 A Ciegas
-        {% elif event_type == '333fm' %}
-            3×3×3 Menos Movimientos
-        {% elif event_type == '333oh' %}
-            3×3×3 Una Mano
-        {% elif event_type == 'clock' %}
-            Clock
-        {% elif event_type == 'minx' %}
-            Megaminx
-        {% elif event_type == 'pyram' %}
-            Pyraminx
-        {% elif event_type == 'skewb' %}
-            Skewb
-        {% elif event_type == 'sq1' %}
-            Square-1
-        {% elif event_type == '444bf' %}
-            4×4×4 A Ciegas
-        {% elif event_type == '555bf' %}
-            5×5×5 A Ciegas
-        {% elif event_type == '333mbf' %}
-            3×3×3 Múltiples A Ciegas
-        {% endif %}
+        {% for event in events %}
+            {% if event.id == selected_event %}
+                {{ event.name }}
+                {% if event.id != '333mbf' %}
+                    {{ ranking_type|title }}
+                {% endif %}
+            {% endif %}
+        {% endfor %}
         {{ ranking_type|title }}
     </h1>
 
