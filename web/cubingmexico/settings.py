@@ -26,7 +26,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = 'django-insecure-t#tl_1y#m#7h3+b6-s7r6x!dszbb5z-ub4vdf1ko93#dzhm5v5'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -159,10 +158,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = '/static/'
-# STATIC_ROOT = os.path.join(BASE_DIR, "static")
-
-# MEDIA_URL = '/media/'
-# MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 GS_BUCKET_NAME = env("GS_BUCKET_NAME")
 STATICFILES_DIRS = []
@@ -184,4 +179,7 @@ WCA_API_URI = 'https://www.worldcubeassociation.org/api/v0/'
 
 WCA_CLIENT_ID = 'Mq3iaMGMdkO4GkVWpy2Wza70gCZPDwVcHSssjScr-xk'
 WCA_CLIENT_SECRET = 'wqGIOkBxjyio3gSNQwrqkiEOutZCBLrGncYvu4cfCYM'
-WCA_CALLBACK = 'https://cubingmexico-p3uk45s5ka-uc.a.run.app/cubingmexico_wca/callback/'
+if os.getenv("PYTHON_ENV") == "dev":
+    WCA_CALLBACK = 'https://cubingmexico-p3uk45s5ka-uc.a.run.app/cubingmexico_wca/callback/'
+else:
+    WCA_CALLBACK = 'http://localhost:8080/cubingmexico_wca/callback/'
