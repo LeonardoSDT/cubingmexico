@@ -16,9 +16,9 @@
             </div>
             <div class="card-body">
                 {% if object.team_logo %}
-                    <img src="{{ object.team_logo.url }}" class="rounded mx-auto d-block mb-3" height="300px">
+                    <img src="{{ object.team_logo.url }}" class="rounded mx-auto d-block mb-3" height="300px" alt="Logotipo de {{ object.name }}">
                 {% else %}
-                    <img src="" class="rounded mx-auto d-block mb-3" height="300px">
+                    <img src="" class="rounded mx-auto d-block mb-3" height="300px" alt="Logotipo de {{ object.name }}">
                 {% endif %}
                 <p>{{ object.description }}</p>
                 <p class="h3">
