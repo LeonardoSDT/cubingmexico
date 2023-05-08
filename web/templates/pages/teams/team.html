@@ -15,7 +15,11 @@
                 <h3>{{ object.name }}</h3>
             </div>
             <div class="card-body">
-                <img src="{{ object.team_logo.url }}" class="rounded mx-auto d-block mb-3" height="300px">
+                {% if object.team_logo %}
+                    <img src="{{ object.team_logo.url }}" class="rounded mx-auto d-block mb-3" height="300px">
+                {% else %}
+                    <img src="" class="rounded mx-auto d-block mb-3" height="300px">
+                {% endif %}
                 <p>{{ object.description }}</p>
                 <p class="h3">
                     {% if object.facebook_link != '' %}
