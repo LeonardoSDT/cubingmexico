@@ -56,49 +56,36 @@ def get_rankings(event_type='333', ranking_type='single', state=None):
     results = Result.objects.filter(pk__in=result_ids).select_related("event", "person", "competition").order_by(filter_key)
     return results
 
-def get_records(is_average=False):
+def get_records(state=None, is_average=False):
     if is_average:
         field = "average"
     else:
         field = "best"
 
+    filter_kwargs = {f"{field}__gt": 0}
+    exclude_event_ids = ['333ft', 'magic', 'mmagic']
+    order_by_fields = ["event_id", field]
+
+    if state:
+        filter_kwargs["person__personstateteam__state_team__state__three_letter_code"] = state
+
     records_ids = (
-        Result.objects.filter(country_id='Mexico', **{f"{field}__gt": 0})
-        .exclude(event_id__in=['333ft', 'magic', 'mmagic'])
-        .order_by("event_id", field)
+        Result.objects.filter(country_id='Mexico', **filter_kwargs)
+        .exclude(event_id__in=exclude_event_ids)
+        .order_by(*order_by_fields)
         .distinct("event_id")
         .values_list("id", flat=True)
     )
-    
+
     records = (
         Result.objects.filter(pk__in=records_ids)
         .select_related("event", "person", "competition")
-        .order_by("event_id", field)
+        .order_by(*order_by_fields)
     )
-    
-    return records
 
-def get_state_records(state='CMX', is_average=False):
-    if is_average:
-        field = "average"
-    else:
-        field = "best"
+    ordered_records = records.order_by('event__rank')
 
-    records_ids = (
-        Result.objects.filter(person__personstateteam__state_team__state__three_letter_code=state, **{f"{field}__gt": 0})
-        .exclude(event_id__in=['333ft', 'magic', 'mmagic'])
-        .order_by("event_id", field)
-        .distinct("event_id")
-        .values_list("id", flat=True)
-    )
-    
-    records = (
-        Result.objects.filter(pk__in=records_ids)
-        .select_related("event", "person", "competition")
-        .order_by("event_id", field)
-    )
-    
-    return records
+    return ordered_records
 
 def get_my_results(wca_id='', is_average=False):
     if is_average:

@@ -1,25 +1,25 @@
 {% extends 'base.html' %}
 
 {% block title %}
-{% if selected_state %}
-Ranking estatal
-{% else %}
-Ranking nacional
-{% endif %}
-{% for state in states %}
-    {% if state.three_letter_code == selected_state %}
-        {{ state.name }}
+    {% if selected_state %}
+        Ranking estatal
+        {% for state in states %}
+            {% if state.three_letter_code == selected_state %}
+                {{ state.name }}
+            {% endif %}
+        {% endfor %}
+        de
+        {% for event in events %}
+            {% if event.id == selected_event %}
+                {{ event.name }}
+                {% if event.id != '333mbf' %}
+                    {{ selected_ranking|title }}
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        Ranking nacional
     {% endif %}
-{% endfor %}
-de
-{% for event in events %}
-    {% if event.id == selected_event %}
-        {{ event.name }}
-        {% if event.id != '333mbf' %}
-            {{ selected_ranking|title }}
-        {% endif %}
-    {% endif %}
-{% endfor %}
 {% endblock %}
 
 {% load static %}
@@ -37,11 +37,8 @@ de
     <div class="row">
         <div class="col-12 col-sm-9">
             <h1 class="my-3">
-                {% if selected_state %}
+            {% if selected_state %}
                 Ranking estatal
-                {% else %}
-                Ranking nacional
-                {% endif %}
                 {% for state in states %}
                     {% if state.three_letter_code == selected_state %}
                         {{ state.name }}
@@ -56,6 +53,9 @@ de
                         {% endif %}
                     {% endif %}
                 {% endfor %}
+            {% else %}
+                Ranking nacional
+            {% endif %}
             </h1>
         
             <div class="mb-3">

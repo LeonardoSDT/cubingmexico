@@ -121,31 +121,25 @@ class RankingsView(ContentMixin, TemplateView):
         
         return context
     
-class NationalRecordsView(ContentMixin, TemplateView):
-    page = 'cubingmexico_web:national_records'
+class RecordsView(ContentMixin, TemplateView):
+    page = 'cubingmexico_web:records'
 
-    template_name = 'pages/records/national.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['single_records'] = get_records(is_average=False)
-        context['average_records'] = get_records(is_average=True)
-        context['events'] = Event.objects.all()
-        return context
-    
-class StateRecordsView(ContentMixin, TemplateView):
-    page = 'cubingmexico_web:state_records'
-
-    template_name = 'pages/records/state.html'
+    template_name = 'pages/records/records.html'
 
     def get_context_data(self, **kwargs):
-        state = self.kwargs.get('state', 'CMX')
+        state = self.kwargs.get('state')
         context = super().get_context_data(**kwargs)
-        context['single_records'] = get_state_records(state=state, is_average=False)
-        context['average_records'] = get_state_records(state=state, is_average=True)
         context['selected_state'] = state
         context['states'] = State.objects.all()
-        context['events'] = Event.objects.all()
+        context['events'] = Event.objects.exclude(id__in=['333ft', 'magic', 'mmagic', '333mbo'])
+
+        if state:
+            context['single_records'] = get_records(state=state, is_average=False)
+            context['average_records'] = get_records(state=state, is_average=True)
+        else:
+            context['single_records'] = get_records(is_average=False)
+            context['average_records'] = get_records(is_average=True)
+
         return context
 
 class StateTeamsView(ContentMixin, TemplateView):
