@@ -24,6 +24,9 @@
               <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink3">
                 <li><a class="dropdown-item" href="{% url 'cubingmexico_web:profile' %}"><i class="bi bi-person-lines-fill me-2"></i>Perfil</a></li>
                 <li><a class="dropdown-item" href="{% url 'cubingmexico_web:my_results' wca_id=request.user.wcaprofile.wca_id %}"><i class="bi bi-person-fill me-2"></i>Mis resultados</a></li>
+                {% if user.cubingmexicoprofile.person_state_team %}
+                <li><a class="dropdown-item" href="{% url 'cubingmexico_web:team' team_code=request.user.cubingmexicoprofile.person_state_team.state_team.state.three_letter_code %}"><i class="bi bi-people-fill me-2"></i>Mi team</a></li>
+                {% endif %}
                 <li><a class="dropdown-item" href="{% url 'cubingmexico_web:logout' %}"><i class="bi bi-box-arrow-right me-2"></i>Cerar sesión</a></li>
               </ul>
           </li>

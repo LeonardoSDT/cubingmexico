@@ -56,7 +56,7 @@ def get_rankings(event_type='333', ranking_type='single', state=None):
     results = Result.objects.filter(pk__in=result_ids).select_related("event", "person", "competition").order_by(filter_key)
     return results
 
-def get_records(state=None, is_average=False):
+def get_records(state=None, wca_id='', is_average=False):
     if is_average:
         field = "average"
     else:
@@ -69,45 +69,34 @@ def get_records(state=None, is_average=False):
     if state:
         filter_kwargs["person__personstateteam__state_team__state__three_letter_code"] = state
 
-    records_ids = (
-        Result.objects.filter(country_id='Mexico', **filter_kwargs)
-        .exclude(event_id__in=exclude_event_ids)
-        .order_by(*order_by_fields)
-        .distinct("event_id")
-        .values_list("id", flat=True)
-    )
-
-    records = (
-        Result.objects.filter(pk__in=records_ids)
-        .select_related("event", "person", "competition")
-        .order_by(*order_by_fields)
-    )
-
-    ordered_records = records.order_by('event__rank')
-
-    return ordered_records
-
-def get_my_results(wca_id='', is_average=False):
-    if is_average:
-        field = "average"
+    if wca_id:
+        filter_kwargs["person_id"] = wca_id
+        result_ids = (
+            Result.objects.filter(**filter_kwargs)
+            .exclude(event_id__in=exclude_event_ids)
+            .order_by("event_id", field)
+            .distinct("event_id")
+            .values_list("id")
+        )
     else:
-        field = "best"
-    
-    result_ids = (
-        Result.objects.filter(person_id=wca_id, **{f"{field}__gt": 0})
-        .exclude(event_id__in=['333ft', 'magic', 'mmagic'])
-        .order_by("event_id", field)
-        .distinct("event_id")
-        .values_list("id")
-    )
-    
+        filter_kwargs["country_id"] = 'Mexico'
+        result_ids = (
+            Result.objects.filter(**filter_kwargs)
+            .exclude(event_id__in=exclude_event_ids)
+            .order_by(*order_by_fields)
+            .distinct("event_id")
+            .values_list("id", flat=True)
+        )
+
     results = (
         Result.objects.filter(pk__in=result_ids)
         .select_related("event", "person", "competition")
-        .order_by(field)
+        .order_by(*order_by_fields)
     )
-    
-    return results
+
+    ordered_results = results.order_by('event__rank')
+
+    return ordered_results
 
 def get_wcaprofile(wca_id=''):
     return WCAProfile.objects.filter(wca_id=wca_id).first()

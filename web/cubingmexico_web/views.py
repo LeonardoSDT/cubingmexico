@@ -78,8 +78,8 @@ class MyResultsView(ContentMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super(MyResultsView, self).get_context_data(**kwargs)
         wca_id = self.kwargs['wca_id']
-        context['my_single_results'] = get_my_results(wca_id=wca_id, is_average=False)
-        context['my_average_results'] = get_my_results(wca_id=wca_id, is_average=True)
+        context['my_single_results'] = get_records(wca_id=wca_id, is_average=False)
+        context['my_average_results'] = get_records(wca_id=wca_id, is_average=True)
         context['wca_profile'] = get_wcaprofile(wca_id=wca_id)
         return context
 

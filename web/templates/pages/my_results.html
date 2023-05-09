@@ -39,6 +39,7 @@
                 <h4>Récords oficiales</h4>
             </div>
             <div class="card-body">
+                <h5>Single</h5>
                 <table class="table table-striped" style="width:100%">
                     <thead>
                         <tr>
@@ -52,41 +53,6 @@
                             <tr>
                                 <td>
                                     <span class="cubing-icon event-{{ record.event.id }} m-1 h4 text-dark"></span>
-                                    {% if record.event.id == '333' %}
-                                        3×3×3
-                                    {% elif record.event.id == '222' %}
-                                        2×2×2
-                                    {% elif record.event.id == '444' %}
-                                        4×4×4
-                                    {% elif record.event.id == '555' %}
-                                        5×5×5
-                                    {% elif record.event.id == '666' %}
-                                        6×6×6
-                                    {% elif record.event.id == '777' %}
-                                        7×7×7
-                                    {% elif record.event.id == '333bf' %}
-                                        3×3×3 A Ciegas
-                                    {% elif record.event.id == '333fm' %}
-                                        3×3×3 Menos Movimientos
-                                    {% elif record.event.id == '333oh' %}
-                                        3×3×3 Una Mano
-                                    {% elif record.event.id == 'clock' %}
-                                        Clock
-                                    {% elif record.event.id == 'minx' %}
-                                        Megaminx
-                                    {% elif record.event.id == 'pyram' %}
-                                        Pyraminx
-                                    {% elif record.event.id == 'skewb' %}
-                                        Skewb
-                                    {% elif record.event.id == 'sq1' %}
-                                        Square-1
-                                    {% elif record.event.id == '444bf' %}
-                                        4×4×4 A Ciegas
-                                    {% elif record.event.id == '555bf' %}
-                                        5×5×5 A Ciegas
-                                    {% elif record.event.id == '333mbf' %}
-                                        3×3×3 Múltiples A Ciegas
-                                    {% endif %}
                                 </td>
                                 {% if record.event.id == '333mbf' %}
                                 <td>{{ record.best|time_formatter_333mbf }}</td>
@@ -94,6 +60,35 @@
                                 <td>{{ record.best }}</td>
                                 {% else %}
                                 <td>{{ record.best|time_formatter }}</td>
+                                {% endif %}
+                                <td>{{ record.competition.name }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                </table>
+            </div>
+            <div class="card-body">
+                <h5>Average</h5>
+                <table class="table table-striped" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Evento</th>
+                            <th>Resultado</th>
+                            <th>Competencia</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for record in my_average_results %}
+                            <tr>
+                                <td>
+                                    <span class="cubing-icon event-{{ record.event.id }} m-1 h4 text-dark"></span>
+                                </td>
+                                {% if record.event.id == '333mbf' %}
+                                <td>{{ record.average|time_formatter_333mbf }}</td>
+                                {% elif record.event.id == '333fm' %}
+                                <td>{{ record.average }}</td>
+                                {% else %}
+                                <td>{{ record.average|time_formatter }}</td>
                                 {% endif %}
                                 <td>{{ record.competition.name }}</td>
                             </tr>
