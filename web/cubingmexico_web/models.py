@@ -52,7 +52,7 @@ class StateTeam(models.Model):
 
     name = models.CharField(_("Nombre del team"), max_length=255)
     description =  models.TextField(_("Descripción del team"), null=True, blank=True, default='')
-    state = models.ForeignKey(State, on_delete=models.CASCADE, verbose_name=_('Estado de la Republica Mexicana'))
+    state = models.OneToOneField(State, on_delete=models.CASCADE, verbose_name=_('Estado de la Republica Mexicana'))
     team_logo = models.ImageField(verbose_name=_("Logotipo del team"), upload_to='img/team_logos/', null=True, blank=True)
     facebook_link = models.URLField(_("Enlace de Facebook"), max_length=255, blank=True, default='')
     instagram_link = models.URLField(_("Enlace de Instagram"), max_length=255, blank=True, default='')
@@ -67,7 +67,7 @@ class StateTeam(models.Model):
         verbose_name_plural = _('Teams estatales')
 
 class PersonStateTeam(models.Model):
-    person = models.ForeignKey(Person, on_delete=models.CASCADE, verbose_name=_('Persona con WCAID'))
+    person = models.OneToOneField(Person, on_delete=models.CASCADE, verbose_name=_('Persona con WCAID'))
     state_team = models.ForeignKey(StateTeam, on_delete=models.CASCADE, verbose_name=_('Estado de la Republica Mexicana'))
 
     def __str__(self):

@@ -47,18 +47,6 @@ class ContentMixin:
 class UserLogoutView(LogoutView):
     next_page = 'cubingmexico_web:index'
 
-class CanEditStateTeamView(PermissionRequiredMixin):
-    permission_required = 'cubingmexico_web.edit_stateteam'
-
-    def has_permission(self):
-        if self.request.user.is_authenticated:
-            try:
-                profile = self.request.user.cubingmexicoprofile
-                return profile.is_state_team_leader
-            except CubingmexicoProfile.DoesNotExist:
-                return False
-        return False
-
 class IndexView(ContentMixin, TemplateView):
     template_name = 'pages/index.html'
     page = 'cubingmexico_web:index'
@@ -155,60 +143,74 @@ class IndividualStateTeamView(ContentMixin, DetailView):
     model = StateTeam
     template_name = 'pages/teams/team.html'
 
+    def get_object(self, queryset=None):
+        team_code = self.kwargs['team_code']
+        state = State.objects.get(three_letter_code=team_code)
+        state_team = StateTeam.objects.get(state=state)
+
+        return state_team
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
         wca_ids = WCAProfile.objects.filter(user__cubingmexicoprofile__person_state_team__state_team__id=self.object.pk).values_list('wca_id', flat=True)
-
         context['team_members'] = PersonStateTeam.objects.filter(state_team_id=self.object.pk).exclude(person__id__in=wca_ids)
         context['auth_team_members'] = User.objects.filter(cubingmexicoprofile__person_state_team__state_team__id=self.object.pk)
-        
+
         return context
     
-class EditStateTeamView(ContentMixin, CanEditStateTeamView, UpdateView):
+class EditStateTeamView(ContentMixin, UpdateView):
     model = StateTeam
-    template_name = 'pages/teams/edit_team.html'
     form_class = StateTeamForm
+    template_name = 'pages/teams/edit_team.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated or not (
+            request.user.cubingmexicoprofile.is_state_team_leader and 
+            request.user.cubingmexicoprofile.person_state_team.state_team_id == self.get_object().pk
+        ):
+            return redirect(reverse_lazy('cubingmexico_web:state_teams'))
+
+        return super().dispatch(request, *args, **kwargs)
 
     def get_success_url(self):
-        return reverse_lazy('cubingmexico_web:team', kwargs={'pk': self.object.pk})
+        return reverse('cubingmexico_web:team', args=[self.kwargs['team_code']])
 
-    def get(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        form_class = self.get_form_class()
-        form = self.get_form(form_class)
-        return self.render_to_response(self.get_context_data(form=form))
-    
-    def get_queryset(self):
-        qs = super().get_queryset()
-        profile = self.request.user.cubingmexicoprofile
-        if profile and profile.person_state_team.state_team:
-            qs = qs.filter(pk=profile.person_state_team.state_team.pk)
-        else:
-            qs = qs.none()
-        return qs
+    def get_object(self, queryset=None):
+        state = State.objects.get(three_letter_code=self.kwargs['team_code'])
+        obj, created = StateTeam.objects.get_or_create(state=state)
+        return obj
 
-class AddStateTeamMemberView(ContentMixin, CanEditStateTeamView, CreateView):
+class AddStateTeamMemberView(ContentMixin, CreateView):
+    model = PersonStateTeam
+    fields = ['person']
     template_name = 'pages/teams/add_member.html'
-    form_class = PersonStateTeamForm
+
+    def dispatch(self, request, *args, **kwargs):
+        state_team = get_object_or_404(StateTeam, state__three_letter_code=self.kwargs['team_code'])
+        if not request.user.is_authenticated or not (
+            request.user.cubingmexicoprofile.is_state_team_leader and 
+            request.user.cubingmexicoprofile.person_state_team.state_team_id == state_team.pk
+        ):
+            return redirect(reverse_lazy('cubingmexico_web:state_teams'))
+
+        return super().dispatch(request, *args, **kwargs)
 
     def get_success_url(self):
-        return reverse('cubingmexico_web:team', kwargs={'pk': self.kwargs['pk']})
+        state = get_object_or_404(State, three_letter_code=self.kwargs['team_code'])
+        return reverse('cubingmexico_web:team', args=[state.three_letter_code])
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['state_team'] = get_object_or_404(StateTeam, pk=self.kwargs['pk'])
+        state = get_object_or_404(State, three_letter_code=self.kwargs['team_code'])
+        context['state'] = state
         return context
 
     def form_valid(self, form):
-        # Get the StateTeam object based on the URL parameter pk
-        state_team = get_object_or_404(StateTeam, pk=self.kwargs['pk'])
-        
-        # Set the 'state_team' field of the PersonStateTeam instance
+        state_team = get_object_or_404(StateTeam, state__three_letter_code=self.kwargs['team_code'])
         person_state_team = form.save(commit=False)
         person_state_team.state_team = state_team
         person_state_team.save()
-        
         return super().form_valid(form)
     
 class WCACallbackView(RedirectView):

@@ -19,7 +19,7 @@ class CubingmexicoProfileForm(forms.ModelForm):
 class StateTeamForm(forms.ModelForm):
     class Meta:
         model = StateTeam
-        fields = ['name', 'description', 'state', 'team_logo', 'facebook_link', 'instagram_link',]
+        fields = ['name', 'description', 'team_logo', 'facebook_link', 'instagram_link',]
 
     name = forms.CharField(
         max_length=255,
@@ -30,11 +30,6 @@ class StateTeamForm(forms.ModelForm):
         label="Descripción del Team",
         widget=forms.Textarea(attrs={'class': 'form-control'}),
         required=False
-    )
-    state = forms.ModelChoiceField(
-        queryset=State.objects.all(),
-        label="Estado del Team *",
-        widget=forms.Select(attrs={'class': 'form-control'})
     )
     team_logo = forms.ImageField(
         widget=forms.FileInput(attrs={'class': 'form-control'}),
