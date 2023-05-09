@@ -1,6 +1,13 @@
 {% extends 'base.html' %}
 
-{% block title %}Récords nacionales{% endblock %}
+{% block title %}
+Récords estatales de
+{% for state in states %}
+    {% if state.three_letter_code == selected_state %}
+        {{ state.name }}
+    {% endif %}
+{% endfor %}
+{% endblock %}
 
 {% load static %}
 {% load divide_by_100 %}
@@ -8,11 +15,33 @@
 {% load time_formatter_333mbf %}
 
 {% block stylesheets %}
-<link rel="stylesheet" href="{% static 'css/cubing-icons.css' %}">
+    <link rel="stylesheet" href="{% static 'css/cubing-icons.css' %}">
 {% endblock stylesheets %}
 
 {% block content %}
-    <h1 class="my-3">Récords nacionales</h1>
+    <div class="row">
+        <div class="col-12 col-sm-9">
+            <h1 class="my-3">Récords estatales de
+                {% for state in states %}
+                    {% if state.three_letter_code == selected_state %}
+                        {{ state.name }}
+                    {% endif %}
+                {% endfor %}
+            </h1>
+        </div>
+        <div class="col-12 col-sm-3 d-flex justify-content-center my-3">
+            <form>
+                <label for="state-select"><strong>Selecciona un estado</strong></label>
+                <select class="form-select" id="state-select" onchange="location = this.value;">
+                  {% for state in states %}
+                    <option value="{% url 'cubingmexico_web:state_records' state=state.three_letter_code %}" {% if state.three_letter_code == selected_state %}selected{% endif %}>{{ state.name }}</option>
+                  {% endfor %}
+                </select>
+              </form>              
+        </div>
+    </div>
+
+    {% if single_records and average_records %}
     <h2 class="my-3">Single</h2>
     <table class="table table-striped" style="width:100%">
         <thead>
@@ -65,6 +94,9 @@
                     {% for event in events %}
                         {% if event.id == selected_event %}
                             {{ event.name }}
+                            {% if event.id != '333mbf' %}
+                                {{ ranking_type|title }}
+                            {% endif %}
                         {% endif %}
                     {% endfor %}
                 </td>
@@ -79,7 +111,33 @@
         {% endfor %}
         </tbody>
     </table>
+    {% else %}
+        <h3 class="my-3 text-center">
+            Parece que aún no hay gente de
+            {% for state in states %}
+                {% if state.three_letter_code == selected_state %}
+                    {{ state.name }}
+                {% endif %}
+            {% endfor %}
+            registrada en el sitio :(
+        </h3>
+    {% endif %}
     
 {% endblock %}
 
-{% block javascripts %}{% endblock javascripts %}
+{% block javascripts %}
+
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#rankings').DataTable({
+            "language": {
+                url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json',
+            }
+        });
+    });
+</script>
+{% endblock javascripts %}

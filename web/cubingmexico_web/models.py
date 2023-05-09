@@ -2,6 +2,7 @@ from django.db import models
 
 # Create your models here.
 
+from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractUser
 
 from cubingmexico_wca.models import Person
@@ -38,6 +39,10 @@ class State(models.Model):
     name = models.CharField(max_length=255)
     three_letter_code = models.CharField(max_length=3)
 
+    class Meta:
+        verbose_name = _('Estado de la Republica Mexicana')
+        verbose_name_plural = _('Estados de la Republica Mexicana')
+
     def __str__(self):
         return self.name
 
@@ -45,12 +50,12 @@ class StateTeam(models.Model):
     def __str__(self):
         return str(self.name)
 
-    name = models.CharField(max_length=255)
-    description =  models.TextField(null=True, blank=True, default='')
-    state = models.ForeignKey(State, on_delete=models.CASCADE)
-    team_logo = models.ImageField(upload_to='img/team_logos/', null=True, blank=True)
-    facebook_link = models.URLField(max_length=255, blank=True, default='')
-    instagram_link = models.URLField(max_length=255, blank=True, default='')
+    name = models.CharField(_("Nombre del team"), max_length=255)
+    description =  models.TextField(_("Descripción del team"), null=True, blank=True, default='')
+    state = models.ForeignKey(State, on_delete=models.CASCADE, verbose_name=_('Estado de la Republica Mexicana'))
+    team_logo = models.ImageField(verbose_name=_("Logotipo del team"), upload_to='img/team_logos/', null=True, blank=True)
+    facebook_link = models.URLField(_("Enlace de Facebook"), max_length=255, blank=True, default='')
+    instagram_link = models.URLField(_("Enlace de Instagram"), max_length=255, blank=True, default='')
 
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -58,16 +63,20 @@ class StateTeam(models.Model):
         permissions = (
             ('edit_stateteam', 'Can edit state team'),
         )
+        verbose_name = _('Team estatal')
+        verbose_name_plural = _('Teams estatales')
 
 class PersonStateTeam(models.Model):
-    person = models.ForeignKey(Person, on_delete=models.CASCADE)
-    state_team = models.ForeignKey(StateTeam, on_delete=models.CASCADE)
+    person = models.ForeignKey(Person, on_delete=models.CASCADE, verbose_name=_('Persona con WCAID'))
+    state_team = models.ForeignKey(StateTeam, on_delete=models.CASCADE, verbose_name=_('Estado de la Republica Mexicana'))
 
     def __str__(self):
         return str(f'{self.person.name}, {self.state_team.name}')
     
     class Meta:
         unique_together = ('person', 'state_team')
+        verbose_name = _('Miembro de team')
+        verbose_name_plural = _('Miembros de team')
 
 class CubingmexicoProfile(models.Model):
     def __str__(self):
@@ -81,3 +90,6 @@ class CubingmexicoProfile(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        verbose_name = _('Perfil de Cubingmexico')
+        verbose_name_plural = _('Perfiles de Cubingmexico')

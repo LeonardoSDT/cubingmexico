@@ -102,6 +102,28 @@ def get_records(is_average=False):
     
     return records
 
+def get_state_records(state='CMX', is_average=False):
+    if is_average:
+        field = "average"
+    else:
+        field = "best"
+
+    records_ids = (
+        Result.objects.filter(person__personstateteam__state_team__state__three_letter_code=state, **{f"{field}__gt": 0})
+        .exclude(event_id__in=['333ft', 'magic', 'mmagic'])
+        .order_by("event_id", field)
+        .distinct("event_id")
+        .values_list("id", flat=True)
+    )
+    
+    records = (
+        Result.objects.filter(pk__in=records_ids)
+        .select_related("event", "person", "competition")
+        .order_by("event_id", field)
+    )
+    
+    return records
+
 def get_my_results(wca_id='', is_average=False):
     if is_average:
         field = "average"

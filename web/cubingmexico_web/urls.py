@@ -13,8 +13,10 @@ urlpatterns = [
     path('national_records/', NationalRecordsView.as_view(), name='national_records'),
     path('rankings/<str:state>/<str:event_type>/single/', StateRankingsView.as_view(), name='state_rankings_single', kwargs={'ranking_type': 'single'}),
     path('rankings/<str:state>/<str:event_type>/average/', StateRankingsView.as_view(), name='state_rankings_average', kwargs={'ranking_type': 'average'}),
+    path('state_records/<str:state>/', StateRecordsView.as_view(), name='state_records'),
     path('teams/', StateTeamsView.as_view(), name='state_teams'),
     path('team/<int:pk>/', IndividualStateTeamView.as_view(), name='team'),
     path('team/<int:pk>/edit/', EditStateTeamView.as_view(), name='edit_team'),
+    path('team/<int:pk>/add_member/', AddStateTeamMemberView.as_view(), name='add_member'),
     path('cubingmexico_wca/callback/', WCACallbackView.as_view(), name='wca_callback'),
 ]

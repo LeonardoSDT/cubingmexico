@@ -5,16 +5,17 @@ from django.contrib.auth import login
 from django.contrib.auth.views import LogoutView
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.http import Http404
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.utils.crypto import get_random_string
 from django.views.generic import TemplateView, DetailView
 from django.views.generic.base import RedirectView
-from django.views.generic.edit import UpdateView
+from django.views.generic.edit import UpdateView, CreateView
 
 from django.core.files.storage import default_storage
 
 from .models import User, WCAProfile, CubingmexicoProfile, PersonStateTeam
+from cubingmexico_wca.models import Event
 from .forms import *
 from .utils import *
 
@@ -62,6 +63,11 @@ class IndexView(ContentMixin, TemplateView):
     template_name = 'pages/index.html'
     page = 'cubingmexico_web:index'
 
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_superuser:
+            return redirect(reverse_lazy('cubingmexico_web:logout'))
+        return super().dispatch(request, *args, **kwargs)
+
 class ProfileView(AuthenticateMixin, ContentMixin, TemplateView):
     template_name = 'pages/profile.html'
     page = 'cubingmexico_web:profile'
@@ -104,6 +110,7 @@ class NationalRankingsView(ContentMixin, TemplateView):
         context['rankings'] = get_rankings(event_type=event_type, ranking_type=self.ranking_type)
         context['selected_event'] = event_type
         context['ranking_type'] = self.ranking_type
+        context['events'] = Event.objects.all()
         return context
 
 class NationalRecordsView(ContentMixin, TemplateView):
@@ -115,6 +122,7 @@ class NationalRecordsView(ContentMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         context['single_records'] = get_records(is_average=False)
         context['average_records'] = get_records(is_average=True)
+        context['events'] = Event.objects.all()
         return context
 
 class StateRankingsView(ContentMixin, TemplateView):
@@ -135,6 +143,22 @@ class StateRankingsView(ContentMixin, TemplateView):
         context['selected_state'] = state
         context['ranking_type'] = self.ranking_type
         context['states'] = State.objects.all()
+        context['events'] = Event.objects.all()
+        return context
+    
+class StateRecordsView(ContentMixin, TemplateView):
+    page = 'cubingmexico_web:state_records'
+
+    template_name = 'pages/records/state.html'
+
+    def get_context_data(self, **kwargs):
+        state = self.kwargs.get('state', 'CMX')
+        context = super().get_context_data(**kwargs)
+        context['single_records'] = get_state_records(state=state, is_average=False)
+        context['average_records'] = get_state_records(state=state, is_average=True)
+        context['selected_state'] = state
+        context['states'] = State.objects.all()
+        context['events'] = Event.objects.all()
         return context
 
 class StateTeamsView(ContentMixin, TemplateView):
@@ -177,12 +201,35 @@ class EditStateTeamView(ContentMixin, CanEditStateTeamView, UpdateView):
     def get_queryset(self):
         qs = super().get_queryset()
         profile = self.request.user.cubingmexicoprofile
-        if profile and profile.state_team:
-            qs = qs.filter(pk=profile.state_team.pk)
+        if profile and profile.person_state_team.state_team:
+            qs = qs.filter(pk=profile.person_state_team.state_team.pk)
         else:
             qs = qs.none()
         return qs
 
+class AddStateTeamMemberView(ContentMixin, CanEditStateTeamView, CreateView):
+    template_name = 'pages/teams/add_member.html'
+    form_class = PersonStateTeamForm
+
+    def get_success_url(self):
+        return reverse('cubingmexico_web:team', kwargs={'pk': self.kwargs['pk']})
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['state_team'] = get_object_or_404(StateTeam, pk=self.kwargs['pk'])
+        return context
+
+    def form_valid(self, form):
+        # Get the StateTeam object based on the URL parameter pk
+        state_team = get_object_or_404(StateTeam, pk=self.kwargs['pk'])
+        
+        # Set the 'state_team' field of the PersonStateTeam instance
+        person_state_team = form.save(commit=False)
+        person_state_team.state_team = state_team
+        person_state_team.save()
+        
+        return super().form_valid(form)
+    
 class WCACallbackView(RedirectView):
     """
     Validates WCA user, creates a Cubingmexico user and a WCA profile
