@@ -95,24 +95,32 @@ class MyResultsView(ContentMixin, TemplateView):
         context['wca_profile'] = get_wcaprofile(wca_id=wca_id)
         return context
 
-class NationalRankingsView(ContentMixin, TemplateView):
-    page = 'cubingmexico_web:national_rankings'
+class RankingsView(ContentMixin, TemplateView):
+    template_name = 'pages/rankings/rankings.html'
 
     def dispatch(self, request, *args, **kwargs):
         self.ranking_type = kwargs.pop('ranking_type', 'single')
         return super().dispatch(request, *args, **kwargs)
 
-    template_name = 'pages/rankings/national.html'
-
     def get_context_data(self, **kwargs):
         event_type = self.kwargs.get('event_type', '333')
+        state = self.kwargs.get('state')
         context = super().get_context_data(**kwargs)
-        context['rankings'] = get_rankings(event_type=event_type, ranking_type=self.ranking_type)
+        
+        if state:
+            context['rankings'] = get_rankings(state=state, event_type=event_type, ranking_type=self.ranking_type)
+            context['selected_state'] = state
+        else:
+            context['rankings'] = get_rankings(event_type=event_type, ranking_type=self.ranking_type)
+            context['selected_state'] = None
+        
         context['selected_event'] = event_type
-        context['ranking_type'] = self.ranking_type
-        context['events'] = Event.objects.all()
+        context['selected_ranking'] = self.ranking_type
+        context['states'] = State.objects.all()
+        context['events'] = Event.objects.exclude(id__in=['333ft', 'magic', 'mmagic', '333mbo']).order_by('rank')
+        
         return context
-
+    
 class NationalRecordsView(ContentMixin, TemplateView):
     page = 'cubingmexico_web:national_records'
 
@@ -122,27 +130,6 @@ class NationalRecordsView(ContentMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         context['single_records'] = get_records(is_average=False)
         context['average_records'] = get_records(is_average=True)
-        context['events'] = Event.objects.all()
-        return context
-
-class StateRankingsView(ContentMixin, TemplateView):
-    page = 'cubingmexico_web:state_rankings'
-
-    def dispatch(self, request, *args, **kwargs):
-        self.ranking_type = kwargs.pop('ranking_type', 'single')
-        return super().dispatch(request, *args, **kwargs)
-
-    template_name = 'pages/rankings/state.html'
-
-    def get_context_data(self, **kwargs):
-        event_type = self.kwargs.get('event_type', '333')
-        state = self.kwargs.get('state', 'CMX')
-        context = super().get_context_data(**kwargs)
-        context['rankings'] = get_state_rankings(state=state, event_type=event_type, ranking_type=self.ranking_type)
-        context['selected_event'] = event_type
-        context['selected_state'] = state
-        context['ranking_type'] = self.ranking_type
-        context['states'] = State.objects.all()
         context['events'] = Event.objects.all()
         return context
     

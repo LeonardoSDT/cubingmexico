@@ -13,7 +13,7 @@
             <div class="card-body">
               <h5 class="card-title">Rankings nacionales oficiales</h5>
               <p class="card-text">Obtenidos directamente de la <a href="https://www.worldcubeassociation.org/">World Cube Association</a>.</p>
-              <a href="{% url 'cubingmexico_web:national_rankings_single' event_type='333' %}" class="btn btn-primary"><i class="bi bi-reception-4 me-2"></i>Ver rankings</a>
+              <a href="{% url 'cubingmexico_web:rankings' event_type='333' ranking_type='single' %}" class="btn btn-primary"><i class="bi bi-reception-4 me-2"></i>Ver rankings</a>
             </div>
         </div>
       </div>
@@ -42,7 +42,7 @@
             <div class="card-body">
               <h5 class="card-title">Rankings estatales</h5>
               <p class="card-text">Acorde a la información proporcionada por la <a href="https://www.worldcubeassociation.org/">World Cube Association</a>.</p>
-              <a href="{% url 'cubingmexico_web:state_rankings_single' event_type='333' state='CMX' %}" class="btn btn-primary"><i class="bi bi-reception-4 me-2"></i>Ver rankings</a>
+              <a href="{% url 'cubingmexico_web:rankings' event_type='333' state='JAL' ranking_type='single' %}" class="btn btn-primary"><i class="bi bi-reception-4 me-2"></i>Ver rankings</a>
             </div>
         </div>
       </div>

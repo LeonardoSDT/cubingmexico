@@ -6,12 +6,8 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
       <ul class="navbar-nav ms-auto">
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink1" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-reception-4 me-2"></i>Rankings</a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink1">
-              <li><a class="dropdown-item" href="{% url 'cubingmexico_web:national_rankings_single' event_type='333' %}">Nacionales</a></li>
-              <li><a class="dropdown-item" href="{% url 'cubingmexico_web:state_rankings_single' event_type='333' state='CMX' %}">Estatales</a></li>
-          </ul>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'cubingmexico_web:rankings' event_type='333' ranking_type='single' %}"><i class="bi bi-reception-4 me-2"></i>Rankings</a>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink2" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-trophy-fill me-2"></i>Récords</a>

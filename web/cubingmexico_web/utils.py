@@ -44,40 +44,16 @@ def wca_access_token_uri(code):
     - sq1 (Square-1)
     """
 
-def get_rankings(event_type='333', ranking_type='single'):
+def get_rankings(event_type='333', ranking_type='single', state=None):
     filter_key = 'best' if ranking_type == 'single' else 'average'
-    
-    result_ids = (
-        Result.objects.filter(country_id='Mexico', event=event_type, **{f"{filter_key}__gt": 0})
-        .exclude(event_id__in=['333ft', 'magic', 'mmagic'])
-        .order_by("person_id", filter_key)
-        .distinct("person_id")
-        .values_list("id")
-    )
-    results = (
-        Result.objects.filter(pk__in=result_ids)
-        .select_related("event", "person", "competition")
-        .order_by(filter_key)
-    )
 
-    return results
-
-def get_state_rankings(state='CMX', event_type='333', ranking_type='single'):
-    filter_key = 'best' if ranking_type == 'single' else 'average'
-    
-    result_ids = (
-        Result.objects.filter(person__personstateteam__state_team__state__three_letter_code=state, event=event_type, **{f"{filter_key}__gt": 0})
-        .exclude(event_id__in=['333ft', 'magic', 'mmagic'])
-        .order_by("person_id", filter_key)
-        .distinct("person_id")
-        .values_list("id")
-    )
-    results = (
-        Result.objects.filter(pk__in=result_ids)
-        .select_related("event", "person", "competition")
-        .order_by(filter_key)
-    )
-
+    result_filter = Result.objects.filter(event=event_type, **{f"{filter_key}__gt": 0})
+    if state:
+        result_filter = result_filter.filter(person__personstateteam__state_team__state__three_letter_code=state)
+    else:
+        result_filter = result_filter.filter(country_id='Mexico')
+    result_ids = result_filter.exclude(event_id__in=['333ft', 'magic', 'mmagic']).order_by("person_id", filter_key).distinct("person_id").values_list("id")
+    results = Result.objects.filter(pk__in=result_ids).select_related("event", "person", "competition").order_by(filter_key)
     return results
 
 def get_records(is_average=False):
