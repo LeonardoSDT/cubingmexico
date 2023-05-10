@@ -95,42 +95,74 @@
                     <option value="{% url 'cubingmexico_web:rankings' event_type=selected_event state=state.three_letter_code ranking_type=selected_ranking %}" {% if state.three_letter_code == selected_state %}selected{% endif %}>{{ state.name }}</option>
                   {% endfor %}
                 </select>
-              </form>              
+              </form>
         </div>        
     </div>
     
     <table id="rankings" class="table table-striped" style="width:100%">
         <thead>
             <tr>
-                <th>#</th>
+                {% if state %}
+                <th>SR</th>
+                <th>NR</th>
+                {% else %}
+                <th>NR</th>
+                {% endif %}
                 <th>Nombre</th>
                 <th>Resultado</th>
                 <th>Competencia</th>
             </tr>
         </thead>
         <tbody>
-            {% for result in rankings %}
-                <tr>
-                    <td scope="row">{{ forloop.counter }}</td>
-                    <td><a href="https://www.worldcubeassociation.org/persons/{{ result.person.id }}" class="text-decoration-none">{{ result.person_name }}</a></td>
-                    {% if selected_ranking == 'single' %}
-                        {% if selected_event == '333mbf' %}
-                            <td>{{ result.best|time_formatter_333mbf }}</td>
-                        {% elif selected_event == '333fm' %}
-                            <td>{{ result.best }}</td>
+            {% if selected_state %}
+                {% for result, sr in rankings %}
+                    <tr>
+                        <td scope="row">{{ forloop.counter }}</td>
+                        <td>{{ sr.country_rank }}</td>
+                        <td><a href="https://www.worldcubeassociation.org/persons/{{ result.person.id }}" class="text-decoration-none">{{ result.person_name }}</a></td>
+                        {% if selected_ranking == 'single' %}
+                            {% if selected_event == '333mbf' %}
+                                <td>{{ result.best|time_formatter_333mbf }}</td>
+                            {% elif selected_event == '333fm' %}
+                                <td>{{ result.best }}</td>
+                            {% else %}
+                                <td>{{ result.best|time_formatter }}</td>
+                            {% endif %}
                         {% else %}
-                            <td>{{ result.best|time_formatter }}</td>
+                        <td>{{ result.average|time_formatter }}</td>
                         {% endif %}
-                    {% else %}
-                    <td>{{ result.average|time_formatter }}</td>
-                    {% endif %}
-                    <td>{{ result.competition.name }}</td>
-                </tr>
-            {% endfor %}
+                        <td>{{ result.competition.name }}</td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                {% for result in rankings %}
+                    <tr>
+                        <td scope="row">{{ forloop.counter }}</td>
+                        <td><a href="https://www.worldcubeassociation.org/persons/{{ result.person.id }}" class="text-decoration-none">{{ result.person_name }}</a></td>
+                        {% if selected_ranking == 'single' %}
+                            {% if selected_event == '333mbf' %}
+                                <td>{{ result.best|time_formatter_333mbf }}</td>
+                            {% elif selected_event == '333fm' %}
+                                <td>{{ result.best }}</td>
+                            {% else %}
+                                <td>{{ result.best|time_formatter }}</td>
+                            {% endif %}
+                        {% else %}
+                        <td>{{ result.average|time_formatter }}</td>
+                        {% endif %}
+                        <td>{{ result.competition.name }}</td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
         </tbody>
         <tfoot>
             <tr>
-                <th>#</th>
+                {% if state %}
+                <th>SR</th>
+                <th>NR</th>
+                {% else %}
+                <th>NR</th>
+                {% endif %}
                 <th>Nombre</th>
                 <th>Resultado</th>
                 <th>Competencia</th>

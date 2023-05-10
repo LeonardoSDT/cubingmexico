@@ -95,6 +95,13 @@ class RankingsView(ContentMixin, TemplateView):
     template_name = 'pages/rankings/rankings.html'
 
     def dispatch(self, request, *args, **kwargs):
+        event_type = kwargs.get('event_type')
+        ranking_type = kwargs.get('ranking_type')
+        
+        if event_type == '333mbf' and ranking_type == 'average':
+            return redirect('cubingmexico_web:rankings', event_type='333mbf', ranking_type='single')
+
+        
         self.ranking_type = kwargs.pop('ranking_type', 'single')
         return super().dispatch(request, *args, **kwargs)
 
@@ -104,7 +111,16 @@ class RankingsView(ContentMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         
         if state:
-            context['rankings'] = get_rankings(state=state, event_type=event_type, ranking_type=self.ranking_type)
+            results = get_rankings(state=state, event_type=event_type, ranking_type=self.ranking_type)
+            persons = PersonStateTeam.objects.filter(state_team__state__three_letter_code=state)
+            person_ids = persons.values_list('person_id', flat=True)
+            if self.ranking_type == 'single':
+                rank_single = RanksSingle.objects.filter(event_id=event_type, person_id__in=person_ids).order_by('country_rank')
+                context['rankings'] = zip(results, rank_single)
+            else:
+                rank_average = RanksAverage.objects.filter(event_id=event_type, person_id__in=person_ids).order_by('country_rank')
+                context['rankings'] = zip(results, rank_average)
+
             context['selected_state'] = state
         else:
             context['rankings'] = get_rankings(event_type=event_type, ranking_type=self.ranking_type)
