@@ -14,9 +14,8 @@
 {% endblock %}
 
 {% load static %}
-{% load divide_by_100 %}
-{% load time_formatter %}
-{% load time_formatter_333mbf %}
+{% load filter_event %}
+{% load missing_rank_formatter %}
 
 {% block stylesheets %}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css">
@@ -40,18 +39,23 @@
             {% endif %}
             </h1>
         
-            <div class="mb-3">
-                <div class="flex flex-row flex-wrap">
-                </div>
-            </div>   
+            <div class="btn-group mb-3" role="group">
+                {% if state %}
+                    <a href="{% url 'cubingmexico_web:sor' state=selected_state ranking_type='single' %}" class="btn btn-primary {% if 'single' in selected_ranking %} disabled {% endif %}">Single</a>
+                    <a href="{% url 'cubingmexico_web:sor' state=selected_state ranking_type='average' %}" class="btn btn-primary {% if 'average' in selected_ranking %} disabled {% endif %}">Media</a>
+                {% else %}
+                    <a href="{% url 'cubingmexico_web:sor' ranking_type='single' %}" class="btn btn-primary {% if 'single' in selected_ranking %} disabled {% endif %}">Single</a>
+                    <a href="{% url 'cubingmexico_web:sor' ranking_type='average' %}" class="btn btn-primary {% if 'average' in selected_ranking %} disabled {% endif %}">Media</a>
+                {% endif %}
+            </div>  
         </div>
         <div class="col-12 col-sm-3 d-flex justify-content-center my-3">
             <form>
                 <label for="state-select"><strong>Selecciona un estado</strong></label>
                 <select class="form-select" id="state-select" onchange="location = this.value;">
-                    <option value="{% url 'cubingmexico_web:sor' %}">Todo el país</option>
+                    <option value="{% url 'cubingmexico_web:sor' ranking_type=selected_ranking %}">Todo el país</option>
                   {% for state in states %}
-                    <option value="{% url 'cubingmexico_web:sor' state=state.three_letter_code %}" {% if state.three_letter_code == selected_state %}selected{% endif %}>{{ state.name }}</option>
+                    <option value="{% url 'cubingmexico_web:sor' state=state.three_letter_code ranking_type=selected_ranking %}" {% if state.three_letter_code == selected_state %}selected{% endif %}>{{ state.name }}</option>
                   {% endfor %}
                 </select>
               </form>              
@@ -65,16 +69,38 @@
                 <th>Persona</th>
                 <th>Total</th>
                 {% for event in events %}
-                    <th><span class="cubing-icon event-{{ event.id }} h4"></span></th>
+                    {% if selected_ranking == 'single' %}
+                        <th><span class="cubing-icon event-{{ event.id }} h4"></span></th>
+                    {% else %}
+                        {% if event.id != '333mbf' %}
+                            <th><span class="cubing-icon event-{{ event.id }} h4"></span></th>
+                        {% endif %}
+                    {% endif %}
                 {% endfor %}
             </tr>
         </thead>
+        {% regroup sors by person.name as grouped_sors %}
         <tbody>
-            {% for rank in single_records %}
-                <tr>
-                    <td>{{ forloop.counter }}</td>
-                </tr>
-            {% endfor %}
+        {% for group in grouped_sors %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ group.grouper }}</td>
+                <td>0</td>
+                {% for event in events %}
+                    {% with event_match=group.list|filter_event:event %}
+                        {% if event_match %}
+                            <td>{{ event_match.0.country_rank }}</td>
+                        {% else %}
+                            {% for wcr in worst_country_ranks %}
+                                {% if wcr.event == event.id %}
+                                    <td><p class="text-danger">{{ wcr.worst_country_rank|missing_rank_formatter }}</p></td>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+                {% endfor %}
+            </tr>
+        {% endfor %}
         </tbody>
         <tfoot>
             <tr>
@@ -82,7 +108,13 @@
                 <th>Persona</th>
                 <th>Total</th>
                 {% for event in events %}
-                    <th><span class="cubing-icon event-{{ event.id }} h4"></span></th>
+                    {% if selected_ranking == 'single' %}
+                        <th><span class="cubing-icon event-{{ event.id }} h4"></span></th>
+                    {% else %}
+                        {% if event.id != '333mbf' %}
+                            <th><span class="cubing-icon event-{{ event.id }} h4"></span></th>
+                        {% endif %}
+                    {% endif %}
                 {% endfor %}
             </tr>
         </tfoot>

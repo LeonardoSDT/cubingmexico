@@ -14,6 +14,8 @@ from django.views.generic.edit import UpdateView, CreateView
 
 from django.core.files.storage import default_storage
 
+from django.db.models import Max
+
 from .models import User, WCAProfile, CubingmexicoProfile, PersonStateTeam
 from cubingmexico_wca.models import Event, RanksSingle, RanksAverage
 from .forms import *
@@ -100,7 +102,6 @@ class RankingsView(ContentMixin, TemplateView):
         
         if event_type == '333mbf' and ranking_type == 'average':
             return redirect('cubingmexico_web:rankings', event_type='333mbf', ranking_type='single')
-
         
         self.ranking_type = kwargs.pop('ranking_type', 'single')
         return super().dispatch(request, *args, **kwargs)
@@ -159,8 +160,34 @@ class SORView(ContentMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         state = self.kwargs.get('state')
+        ranking_type = self.kwargs.get('ranking_type')
         context = super().get_context_data(**kwargs)
-        context['selected_state'] = state
+
+        if state:
+            persons = PersonStateTeam.objects.filter(state_team__state__three_letter_code=state)
+            person_ids = persons.values_list('person_id', flat=True)
+            if ranking_type == 'single':
+                sors = RanksSingle.objects.filter(person_id__in=person_ids).select_related("event", "person").order_by('person_id')
+            else:
+                sors = RanksAverage.objects.filter(person_id__in=person_ids).select_related("event", "person").order_by('person_id')
+
+            context['selected_state'] = state
+        else:
+            if ranking_type == 'single':
+                sors = RanksSingle.objects.filter(person__country_id='Mexico').select_related("event", "person").order_by('person_id')
+            else:
+                sors = RanksAverage.objects.filter(person__country_id='Mexico').select_related("event", "person").order_by('person_id')
+
+            context['selected_state'] = None
+        
+        if ranking_type == 'single':
+            worst_country_ranks = RanksSingle.objects.values('event')
+        else:
+            worst_country_ranks = RanksAverage.objects.values('event')
+
+        context['worst_country_ranks'] = worst_country_ranks.exclude(event_id__in=['333ft', 'magic', 'mmagic', '333mbo']).annotate(worst_country_rank=Max('country_rank')).order_by('event__rank')
+        context['sors'] = sors
+        context['selected_ranking'] = ranking_type
         context['states'] = State.objects.all()
         context['events'] = Event.objects.exclude(id__in=['333ft', 'magic', 'mmagic', '333mbo']).order_by('rank')
 
