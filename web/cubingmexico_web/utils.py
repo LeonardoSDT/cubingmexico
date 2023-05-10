@@ -1,7 +1,7 @@
 from django.conf import settings
 
 from cubingmexico_wca.models import Result
-from .models import WCAProfile, StateTeam
+from .models import WCAProfile
 
 def wca_authorize_uri():
     authorize_uri = settings.WCA_OAUTH_URI + 'authorize/'
@@ -56,7 +56,7 @@ def get_rankings(event_type='333', ranking_type='single', state=None):
     results = Result.objects.filter(pk__in=result_ids).select_related("event", "person", "competition").order_by(filter_key)
     return results
 
-def get_records(state=None, wca_id='', is_average=False):
+def get_records(state=None, wca_id=None, is_average=False):
     if is_average:
         field = "average"
     else:

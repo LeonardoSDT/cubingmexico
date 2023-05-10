@@ -31,8 +31,8 @@
                 </p>
                 <p>
                     {% if user.is_authenticated and user.cubingmexicoprofile.is_state_team_leader and user.cubingmexicoprofile.person_state_team.state_team_id == object.pk %}
-                        <a href="{% url 'cubingmexico_web:edit_team' team_code=object.state.three_letter_code %}" class="btn btn-success mb-2"><i class="bi bi-pencil-fill me-2"></i>Editar información del Team</a>
-                        <a href="{% url 'cubingmexico_web:add_member' team_code=object.state.three_letter_code %}" class="btn btn-danger mb-2"><i class="bi bi-person-plus-fill me-2"></i>Añadir miembro al Team</a>
+                        <a href="{% url 'cubingmexico_web:edit_team' team_code=object.state.three_letter_code %}" class="btn btn-info mb-2"><i class="bi bi-pencil-fill me-2"></i>Editar información del Team</a>
+                        <a href="{% url 'cubingmexico_web:add_member' team_code=object.state.three_letter_code %}" class="btn btn-info mb-2"><i class="bi bi-person-plus-fill me-2"></i>Añadir miembro al Team</a>
                     {% endif %}
                     <a href="{% url 'cubingmexico_web:rankings' event_type='333' ranking_type='single' state=object.state.three_letter_code %}" class="btn btn-primary mb-2"><i class="bi bi-reception-4 me-2"></i>Ver rankings del team</a>
                     <a href="{% url 'cubingmexico_web:records' state=object.state.three_letter_code %}" class="btn btn-secondary mb-2"><i class="bi bi-trophy-fill me-2"></i>Ver récords del team</a>

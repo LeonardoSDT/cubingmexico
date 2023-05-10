@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {% if selected_state %}
+        Sum Of Ranks de
+        {% for state in states %}
+            {% if state.three_letter_code == selected_state %}
+                {{ state.name }}
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        Sum Of Ranks
+    {% endif %}
+{% endblock %}
+
+{% load static %}
+{% load divide_by_100 %}
+{% load time_formatter %}
+{% load time_formatter_333mbf %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="{% static 'css/cubing-icons.css' %}">
+{% endblock stylesheets %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-12 col-sm-9">
+            <h1 class="my-3">
+            {% if selected_state %}
+                Sum Of Ranks de
+                {% for state in states %}
+                    {% if state.three_letter_code == selected_state %}
+                        {{ state.name }}
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                Sum Of Ranks
+            {% endif %}
+            </h1>
+        
+            <div class="mb-3">
+                <div class="flex flex-row flex-wrap">
+                </div>
+            </div>   
+        </div>
+        <div class="col-12 col-sm-3 d-flex justify-content-center my-3">
+            <form>
+                <label for="state-select"><strong>Selecciona un estado</strong></label>
+                <select class="form-select" id="state-select" onchange="location = this.value;">
+                    <option value="{% url 'cubingmexico_web:sor' %}">Todo el país</option>
+                  {% for state in states %}
+                    <option value="{% url 'cubingmexico_web:sor' state=state.three_letter_code %}" {% if state.three_letter_code == selected_state %}selected{% endif %}>{{ state.name }}</option>
+                  {% endfor %}
+                </select>
+              </form>              
+        </div>        
+    </div>
+    
+    <table id="rankings" class="table table-striped" style="width:100%">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Persona</th>
+                <th>Total</th>
+                {% for event in events %}
+                    <th><span class="cubing-icon event-{{ event.id }} h4"></span></th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for rank in single_records %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <th>#</th>
+                <th>Persona</th>
+                <th>Total</th>
+                {% for event in events %}
+                    <th><span class="cubing-icon event-{{ event.id }} h4"></span></th>
+                {% endfor %}
+            </tr>
+        </tfoot>
+    </table>
+    
+{% endblock %}
+
+{% block javascripts %}
+
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#rankings').DataTable({
+            "language": {
+                url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json',
+            }
+        });
+    });
+</script>
+{% endblock javascripts %}

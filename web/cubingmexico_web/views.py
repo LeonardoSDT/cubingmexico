@@ -15,7 +15,7 @@ from django.views.generic.edit import UpdateView, CreateView
 from django.core.files.storage import default_storage
 
 from .models import User, WCAProfile, CubingmexicoProfile, PersonStateTeam
-from cubingmexico_wca.models import Event
+from cubingmexico_wca.models import Event, RanksSingle, RanksAverage
 from .forms import *
 from .utils import *
 
@@ -78,9 +78,17 @@ class MyResultsView(ContentMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super(MyResultsView, self).get_context_data(**kwargs)
         wca_id = self.kwargs['wca_id']
-        context['my_single_results'] = get_records(wca_id=wca_id, is_average=False)
-        context['my_average_results'] = get_records(wca_id=wca_id, is_average=True)
+
+        my_single_results = get_records(wca_id=wca_id, is_average=False)
+        my_rank_single = RanksSingle.objects.filter(person_id=wca_id).order_by('event__rank')
+        context['my_single_results'] = zip(my_single_results, my_rank_single)
+
+        my_average_results = get_records(wca_id=wca_id, is_average=True)
+        my_rank_average = RanksAverage.objects.filter(person_id=wca_id).order_by('event__rank')
+        context['my_average_results'] = zip(my_average_results, my_rank_average)
+
         context['wca_profile'] = get_wcaprofile(wca_id=wca_id)
+
         return context
 
 class RankingsView(ContentMixin, TemplateView):
@@ -127,6 +135,18 @@ class RecordsView(ContentMixin, TemplateView):
         else:
             context['single_records'] = get_records(is_average=False)
             context['average_records'] = get_records(is_average=True)
+
+        return context
+
+class SORView(ContentMixin, TemplateView):
+    template_name = 'pages/rankings/sor.html'
+
+    def get_context_data(self, **kwargs):
+        state = self.kwargs.get('state')
+        context = super().get_context_data(**kwargs)
+        context['selected_state'] = state
+        context['states'] = State.objects.all()
+        context['events'] = Event.objects.exclude(id__in=['333ft', 'magic', 'mmagic', '333mbo']).order_by('rank')
 
         return context
 
