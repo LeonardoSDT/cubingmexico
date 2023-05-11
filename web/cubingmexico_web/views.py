@@ -14,7 +14,9 @@ from django.views.generic.edit import UpdateView, CreateView
 
 from django.core.files.storage import default_storage
 
-from django.db.models import Max
+from django.db.models import Max, F
+
+from itertools import groupby
 
 from .models import User, WCAProfile, CubingmexicoProfile, PersonStateTeam
 from cubingmexico_wca.models import Event, RanksSingle, RanksAverage
@@ -167,26 +169,78 @@ class SORView(ContentMixin, TemplateView):
             persons = PersonStateTeam.objects.filter(state_team__state__three_letter_code=state)
             person_ids = persons.values_list('person_id', flat=True)
             if ranking_type == 'single':
-                sors = RanksSingle.objects.filter(person_id__in=person_ids).select_related("event", "person").order_by('person_id')
+                sors = RanksSingle.objects.filter(person_id__in=person_ids)
             else:
-                sors = RanksAverage.objects.filter(person_id__in=person_ids).select_related("event", "person").order_by('person_id')
+                sors = RanksAverage.objects.filter(person_id__in=person_ids)
 
             context['selected_state'] = state
         else:
             if ranking_type == 'single':
-                sors = RanksSingle.objects.filter(person__country_id='Mexico').select_related("event", "person").order_by('person_id')
+                sors = RanksSingle.objects.filter(person__country_id='Mexico')
             else:
-                sors = RanksAverage.objects.filter(person__country_id='Mexico').select_related("event", "person").order_by('person_id')
+                sors = RanksAverage.objects.filter(person__country_id='Mexico')
 
             context['selected_state'] = None
+
+        sors = sors.exclude(event_id__in=['333ft', 'magic', 'mmagic', '333mbo']).select_related("event", "person").order_by('person_id', 'event__rank').values('person_id', 'event_id', 'country_rank')
         
         if ranking_type == 'single':
             worst_country_ranks = RanksSingle.objects.values('event')
         else:
             worst_country_ranks = RanksAverage.objects.values('event')
 
-        context['worst_country_ranks'] = worst_country_ranks.exclude(event_id__in=['333ft', 'magic', 'mmagic', '333mbo']).annotate(worst_country_rank=Max('country_rank')).order_by('event__rank')
-        context['sors'] = sors
+        wcrs = worst_country_ranks.exclude(event_id__in=['333ft', 'magic', 'mmagic', '333mbo']).annotate(country_rank=Max('country_rank')).order_by('event__rank').annotate(country_rank=F('country_rank') + 1)
+
+        sors_dicts = list(sors)
+
+        wcrs = list(wcrs)
+
+        for item in wcrs:
+            item['event_id'] = item.pop('event')
+
+        event_country_rank = {w['event_id']: w['country_rank'] for w in wcrs}
+
+        combined_dicts = sors_dicts
+
+        unique_person_ids = set(sors_dict['person_id'] for sors_dict in sors_dicts)
+        for person_id in unique_person_ids:
+            for event_id, country_rank in event_country_rank.items():
+                if not any(d['person_id'] == person_id and d['event_id'] == event_id for d in combined_dicts):
+                    combined_dicts.append({
+                        'person_id': person_id,
+                        'event_id': event_id,
+                        'country_rank': country_rank
+                    })
+
+        def group_dictionaries_by_key(dictionaries, key):
+            grouped_dicts = sorted(dictionaries, key=lambda x: x[key])
+            grouped_dictionaries = []
+            
+            for _, group in groupby(grouped_dicts, key=lambda x: x[key]):
+                grouped_dictionaries.append(list(group))
+            
+            return grouped_dictionaries
+
+        grouped_dicts = group_dictionaries_by_key(combined_dicts, 'person_id')
+
+        overalls = []
+        totals = {}
+
+        for entry in combined_dicts:
+            person_id = entry['person_id']
+            country_rank = entry['country_rank']
+            
+            if person_id in totals:
+                totals[person_id] += country_rank
+            else:
+                totals[person_id] = country_rank
+
+        for person_id, total in totals.items():
+            overalls.append({'person_id': person_id, 'total': total})
+
+        overalls = sorted(overalls, key=lambda x: x['total'])
+
+        context['ranks'] = zip(grouped_dicts, overalls)
         context['selected_ranking'] = ranking_type
         context['states'] = State.objects.all()
         context['events'] = Event.objects.exclude(id__in=['333ft', 'magic', 'mmagic', '333mbo']).order_by('rank')

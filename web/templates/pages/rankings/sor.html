@@ -14,8 +14,6 @@
 {% endblock %}
 
 {% load static %}
-{% load filter_event %}
-{% load missing_rank_formatter %}
 
 {% block stylesheets %}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css">
@@ -79,25 +77,20 @@
                 {% endfor %}
             </tr>
         </thead>
-        {% regroup sors by person.name as grouped_sors %}
         <tbody>
-        {% for group in grouped_sors %}
+        {% for rank, overall in ranks %}
             <tr>
                 <td>{{ forloop.counter }}</td>
-                <td>{{ group.grouper }}</td>
-                <td>0</td>
+                <td>{{ overall.person_id }}</td>
+                <td>{{ overall.total }}</td>
                 {% for event in events %}
-                    {% with event_match=group.list|filter_event:event %}
-                        {% if event_match %}
-                            <td>{{ event_match.0.country_rank }}</td>
-                        {% else %}
-                            {% for wcr in worst_country_ranks %}
-                                {% if wcr.event == event.id %}
-                                    <td><p class="text-danger">{{ wcr.worst_country_rank|missing_rank_formatter }}</p></td>
-                                {% endif %}
-                            {% endfor %}
-                        {% endif %}
-                    {% endwith %}
+                    {% if selected_ranking == 'single' or event.id != '333mbf' %}
+                        {% for r in rank %}
+                            {% if r.event_id == event.id %}
+                                <td>{{ r.country_rank }}</td>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
                 {% endfor %}
             </tr>
         {% endfor %}
