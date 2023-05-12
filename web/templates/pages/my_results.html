@@ -61,7 +61,7 @@
                                         {% else %}
                                         <td>{{ record.best|time_formatter }}</td>
                                         {% endif %}
-                                        <td></td>
+                                        <td>#</td>
                                         {% if rankssingle.country_rank == 1 %}
                                             <td><i class="bi bi-trophy-fill me-2"></i>{{ rankssingle.country_rank }}</td>
                                         {% else %}
@@ -95,7 +95,7 @@
                                         {% else %}
                                         <td>{{ record.average|time_formatter }}</td>
                                         {% endif %}
-                                        <td></td>
+                                        <td>#</td>
                                         {% if ranksaverage.country_rank == 1 %}
                                             <td><i class="bi bi-trophy-fill me-2"></i>{{ ranksaverage.country_rank }}</td>
                                         {% else %}

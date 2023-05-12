@@ -78,19 +78,13 @@
             </tr>
         </thead>
         <tbody>
-        {% for rank, overall in ranks %}
+            {% for sor_person, sor_events in sor_overall_results %}
             <tr>
                 <td>{{ forloop.counter }}</td>
-                <td>{{ overall.person_id }}</td>
-                <td>{{ overall.total }}</td>
-                {% for event in events %}
-                    {% if selected_ranking == 'single' or event.id != '333mbf' %}
-                        {% for r in rank %}
-                            {% if r.event_id == event.id %}
-                                <td>{{ r.country_rank }}</td>
-                            {% endif %}
-                        {% endfor %}
-                    {% endif %}
+                <td><a href="https://www.worldcubeassociation.org/persons/{{ sor_person.0 }}">{{ sor_person.1 }}</a></td>
+                <td><strong>{{ sor_person.2 }}</strong></td>
+                {% for event in sor_events %}
+                    <td><p class="{% if event.has_rank == False %} text-danger fw-bold {% elif event.country_rank <= 10 %} text-success fw-bold {% endif %}">{{ event.country_rank }}</p></td>
                 {% endfor %}
             </tr>
         {% endfor %}
