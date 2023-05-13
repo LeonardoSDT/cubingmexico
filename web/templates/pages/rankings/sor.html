@@ -1,15 +1,15 @@
 {% extends 'base.html' %}
 
 {% block title %}
+    Sum Of Ranks 
+    ({{ selected_ranking|title }})
     {% if selected_state %}
-        Sum Of Ranks de
+        de
         {% for state in states %}
             {% if state.three_letter_code == selected_state %}
                 {{ state.name }}
             {% endif %}
         {% endfor %}
-    {% else %}
-        Sum Of Ranks
     {% endif %}
 {% endblock %}
 
@@ -18,6 +18,7 @@
 {% block stylesheets %}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.1/css/responsive.bootstrap5.min.css">
     <link rel="stylesheet" href="{% static 'css/cubing-icons.css' %}">
 {% endblock stylesheets %}
 
@@ -25,17 +26,20 @@
     <div class="row">
         <div class="col-12 col-sm-9">
             <h1 class="my-3">
+            Sum Of Ranks 
+            ({{ selected_ranking|title }})
             {% if selected_state %}
-                Sum Of Ranks de
+                de
                 {% for state in states %}
                     {% if state.three_letter_code == selected_state %}
                         {{ state.name }}
                     {% endif %}
                 {% endfor %}
-            {% else %}
-                Sum Of Ranks
             {% endif %}
             </h1>
+
+            <p><span class="fst-italic">Sum Of Ranks</span> (SOR) o "suma de rangos" se refiere a un método de clasificación de cuberos basado en su desempeño en todos los eventos oficiales de la WCA. La suma de rangos se calcula sumando el rango nacional obtenido por un cubero en cada evento.</p>
+            <p>Se utiliza a menudo como una medida del rendimiento general o la consistencia en varios eventos. Una suma de rangos más baja indica un mejor rendimiento general, ya que significa que el cubero logró consistentemente rangos más altos en los eventos.</p>
         
             <div class="btn-group mb-3" role="group">
                 {% if state %}
@@ -60,7 +64,7 @@
         </div>        
     </div>
     
-    <table id="rankings" class="table table-striped" style="width:100%">
+    <table id="sor" class="table table-striped" style="width:100%">
         <thead>
             <tr>
                 <th>#</th>
@@ -114,10 +118,12 @@
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.4.1/js/responsive.bootstrap5.min.js"></script>
 
 <script>
     $(document).ready(function () {
-        $('#rankings').DataTable({
+        $('#sor').DataTable({
             "language": {
                 url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json',
             }
