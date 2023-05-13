@@ -2,23 +2,23 @@
 
 {% block title %}
     {% if selected_state %}
-        Ranking estatal
+        Ranking estatal de
         {% for state in states %}
             {% if state.three_letter_code == selected_state %}
                 {{ state.name }}
             {% endif %}
         {% endfor %}
-        de
-        {% for event in events %}
-            {% if event.id == selected_event %}
-                {{ event.name }}
-                {% if event.id != '333mbf' %}
-                    {{ selected_ranking|title }}
-                {% endif %}
-            {% endif %}
-        {% endfor %}
     {% else %}
         Ranking nacional
+    {% endif %}
+        de
+    {% for event in events %}
+        {% if event.id == selected_event %}
+            {{ event.name }}
+        {% endif %}
+    {% endfor %}
+    {% if event.id != '333mbf' %}
+        ({{ selected_ranking|title }})
     {% endif %}
 {% endblock %}
 
@@ -38,23 +38,23 @@
         <div class="col-12 col-sm-9">
             <h1 class="my-3">
             {% if selected_state %}
-                Ranking estatal
+                Ranking estatal de
                 {% for state in states %}
                     {% if state.three_letter_code == selected_state %}
                         {{ state.name }}
                     {% endif %}
                 {% endfor %}
-                de
-                {% for event in events %}
-                    {% if event.id == selected_event %}
-                        {{ event.name }}
-                        {% if event.id != '333mbf' %}
-                            {{ selected_ranking|title }}
-                        {% endif %}
-                    {% endif %}
-                {% endfor %}
             {% else %}
                 Ranking nacional
+            {% endif %}
+            de
+            {% for event in events %}
+                {% if event.id == selected_event %}
+                    {{ event.name }}
+                {% endif %}
+            {% endfor %}
+            {% if event.id != '333mbf' %}
+                ({{ selected_ranking|title }})
             {% endif %}
             </h1>
         

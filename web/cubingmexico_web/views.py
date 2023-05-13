@@ -167,6 +167,8 @@ class SORView(ContentMixin, TemplateView):
         ranking_type = self.kwargs.get('ranking_type')
         context = super().get_context_data(**kwargs)
 
+        excluded_event_ids = ['333ft', 'magic', 'mmagic', '333mbo']
+
         if state:
             persons = PersonStateTeam.objects.filter(state_team__state__three_letter_code=state)
             person_ids = persons.values_list('person_id', flat=True)
@@ -184,16 +186,14 @@ class SORView(ContentMixin, TemplateView):
 
             context['selected_state'] = None
 
-        sors = sors.exclude(event_id__in=['333ft', 'magic', 'mmagic', '333mbo']).select_related("event", "person").order_by('person_id', 'event__rank').values('person__name', 'person_id', 'event_id', 'country_rank')
+        sors = sors.exclude(event_id__in=excluded_event_ids).select_related("event", "person").order_by('person_id', 'event__rank').values('person__name', 'person_id', 'event_id', 'country_rank')
         
         if ranking_type == 'single':
             worst_country_ranks = RanksSingle.objects.values('event')
         else:
             worst_country_ranks = RanksAverage.objects.values('event')
 
-        wcrs = worst_country_ranks.exclude(event_id__in=['333ft', 'magic', 'mmagic', '333mbo']).annotate(country_rank=Max('country_rank')).order_by('event__rank').annotate(country_rank=F('country_rank') + 1)
-
-        wcrs = wcrs.annotate(has_rank=Value(False))
+        wcrs = worst_country_ranks.exclude(event_id__in=excluded_event_ids).annotate(country_rank=Max('country_rank')).order_by('event__rank').annotate(country_rank=F('country_rank') + 1).annotate(has_rank=Value(False))
 
         wcrs = list(wcrs)
 
@@ -237,7 +237,7 @@ class SORView(ContentMixin, TemplateView):
         context['sor_overall_results'] = sorted(sor_overall_results.items(), key=lambda x: x[0][2])
         context['selected_ranking'] = ranking_type
         context['states'] = State.objects.all()
-        context['events'] = Event.objects.exclude(id__in=['333ft', 'magic', 'mmagic', '333mbo']).order_by('rank')
+        context['events'] = Event.objects.exclude(id__in=excluded_event_ids).order_by('rank')
 
         return context
 
