@@ -21,7 +21,7 @@ fi
 
 if [ "$1" = "runserver_prod" ]
 then
-    gunicorn -k gevent cubingmexico.wsgi -b 0.0.0.0:8080 --access-logfile - --error-logfile -
+    gunicorn --bind 0.0.0.0:$PORT --reload --workers 1 --threads 8 --timeout 0 cubingmexico.wsgi:application
     exit 0
 fi
 
