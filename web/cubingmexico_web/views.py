@@ -372,11 +372,17 @@ class RemoveStateTeamMemberView(DeleteView):
             return redirect(reverse_lazy('cubingmexico_web:logout'))
 
         state_team = get_object_or_404(StateTeam, state__three_letter_code=self.kwargs['team_code'])
-        if not request.user.is_authenticated or not (
-            request.user.cubingmexicoprofile.is_state_team_leader and
-            request.user.cubingmexicoprofile.person_state_team.state_team_id == state_team.pk
-        ):
+
+        if not request.user.is_authenticated:
             return redirect(reverse_lazy('cubingmexico_web:state_teams'))
+
+        # Check if the user is a state team leader and belongs to the same state_team
+        user_profile = request.user.cubingmexicoprofile
+        if not (user_profile.is_state_team_leader and user_profile.person_state_team.state_team_id == state_team.pk):
+            return redirect(reverse_lazy('cubingmexico_web:state_teams'))
+
+        # Restrict the queryset to the current state_team
+        self.queryset = PersonStateTeam.objects.filter(state_team=state_team)
 
         return super().dispatch(request, *args, **kwargs)
     
