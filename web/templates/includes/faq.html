@@ -1,0 +1,47 @@
+<div class="accordion mt-3" id="accordionExample">
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingOne">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+          <strong>¿Por qué no aparezco como miembro del Team? :(</strong>
+        </button>
+      </h2>
+      <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+        <div class="accordion-body">
+          Si no apareces como miembro del Team es porque no has sido agregado por algún administrador, recuerda que todos pueden ser parte de un Team, el único requisito es que vivas en el mismo estado, si cumples con lo anterior mencionado envía un mensaje a alguna de las <a href="{% url 'cubingmexico_web:team' team_code=selected_state %}">redes sociales</a> para que puedan agregarte.
+        </div>
+      </div>
+    </div>
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingTwo">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+          <strong>¿Por qué aparece tal persona en este Team si ni siquiere vive en este estado?</strong>
+        </button>
+      </h2>
+      <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+        <div class="accordion-body">
+          Puede deberse a que la persona se cambió recientemente de residencia o simplemente algún error del administrador del Team, puedes enviar un mensaje a alguna de sus <a href="{% url 'cubingmexico_web:team' team_code=selected_state %}">redes sociales</a> para que puedan revisarlo.
+        </div>
+      </div>
+    </div>
+    <!-- <div class="accordion-item">
+      <h2 class="accordion-header" id="headingThree">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+          <strong>¿Vives en {{ object.state }} pero no quieres pertenecer al Team?</strong>
+        </button>
+      </h2>
+      <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+        <div class="accordion-body">
+          Para poder aparecer en los rankings y récords estatales sin tener que ser miembro de un team tienes que hacer lo siguiente:
+          <ol>
+            <li>Haber participado en una competencia oficial avalada por la <a href="https://www.worldcubeassociation.org/">World Cube Association</a>.</li>
+            <li>Iniciar sesión en Cubingmexico utilizando tus credenciales de la WCA.</li>
+            {% if user.cubingmexicoprofile.person_state_team %}
+            <li>Ir a tu <a href="{% url 'cubingmexico_web:my_results' wca_id=request.user.wcaprofile.wca_id %}">Perfil</a> y seleccionar tu estado.</li>
+            {% else %}
+            <li>Ir a tu Perfil y seleccionar tu estado.</li>
+            {% endif %}
+          </ol>
+        </div>
+      </div>
+    </div> -->
+</div>

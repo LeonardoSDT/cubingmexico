@@ -132,6 +132,11 @@
             registrada en el sitio :(
         </h3>
     {% endif %}
+
+    
+    {% if selected_state %}
+        {% include "includes/faq.html" %}
+    {% endif %}
     
 {% endblock %}
 

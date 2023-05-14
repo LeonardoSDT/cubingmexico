@@ -169,6 +169,10 @@
             </tr>
         </tfoot>
     </table>
+
+    {% if selected_state %}
+        {% include "includes/faq.html" %}
+    {% endif %}
     
 {% endblock %}
 
