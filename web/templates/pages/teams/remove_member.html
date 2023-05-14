@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}¿Desea eliminar a {{ object.person.name }} de {{ object.state_team }}?{% endblock %}
+
+{% block stylesheets %}
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+{% endblock stylesheets %}
+
+{% block content %}
+
+<h1 class="my-3">Eliminar miembro</h1>
+
+<div class="row">
+    <div class="col-12 mb-3">
+        <div class="card">
+            <div class="card-header text-center">
+                <h4>¿Desea eliminar a {{ object.person.name }} de {{ object.state_team }}?</h4>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-success"><i class="bi bi-check-lg me-2"></i>Confirmar</button>
+                    <a href="{% url 'cubingmexico_web:team' team_code=state.three_letter_code %}" class="btn btn-danger"><i class="bi bi-x-lg me-2"></i>Cancelar</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+<script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#id_person').select2();
+    });
+</script>
+{% endblock javascripts %}

@@ -56,6 +56,9 @@
                         <tr>
                             <th>WCAID</th>
                             <th>Nombre</th>
+                            {% if user.is_authenticated and user.cubingmexicoprofile.is_state_team_leader and user.cubingmexicoprofile.person_state_team.state_team_id == object.pk %}
+                                <th>Acciones</th>
+                            {% endif %}
                         </tr>
                     </thead>
                     <tbody>
@@ -68,12 +71,18 @@
                                     - <strong>Administrador del Team</strong>
                                     {% endif %}
                                 </td>
+                                {% if user.is_authenticated and user.cubingmexicoprofile.is_state_team_leader and user.cubingmexicoprofile.person_state_team.state_team_id == object.pk %}
+                                    <td><a href="{% url 'cubingmexico_web:remove_member' team_code=object.state.three_letter_code pk=auth_member.cubingmexicoprofile.person_state_team_id %}" class="link-danger text-decoration-none">Quitar miembro <i class="bi bi-x-circle-fill"></i></a></td>
+                                {% endif %}
                             </tr>
                         {% endfor %}
                         {% for member in team_members %}
                             <tr>
                                 <td><a href="https://www.worldcubeassociation.org/persons/{{ member.person.id }}" class="link-secondary">{{ member.person.id }}</a></td>
                                 <td>{{ member.person.name }}</td>
+                                {% if user.is_authenticated and user.cubingmexicoprofile.is_state_team_leader and user.cubingmexicoprofile.person_state_team.state_team_id == object.pk %}
+                                    <td><a href="{% url 'cubingmexico_web:remove_member' team_code=object.state.three_letter_code pk=member.pk %}" class="link-danger text-decoration-none">Quitar miembro <i class="bi bi-x-circle-fill"></i></a></td>
+                                {% endif %}
                             </tr>
                         {% endfor %}
                     </tbody>
@@ -81,6 +90,9 @@
                         <tr>
                             <th>WCAID</th>
                             <th>Nombre</th>
+                            {% if user.is_authenticated and user.cubingmexicoprofile.is_state_team_leader and user.cubingmexicoprofile.person_state_team.state_team_id == object.pk %}
+                                <th>Acciones</th>
+                            {% endif %}
                         </tr>
                     </tfoot>
                 </table>

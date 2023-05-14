@@ -8,7 +8,7 @@ from django.http import Http404
 from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.utils.crypto import get_random_string
-from django.views.generic import TemplateView, DetailView
+from django.views.generic import TemplateView, DetailView, DeleteView
 from django.views.generic.base import RedirectView
 from django.views.generic.edit import UpdateView, CreateView
 
@@ -66,6 +66,11 @@ class ProfileView(AuthenticateMixin, ContentMixin, TemplateView):
     template_name = 'pages/profile.html'
     page = 'cubingmexico_web:profile'
 
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_superuser:
+            return redirect(reverse_lazy('cubingmexico_web:logout'))
+        return super().dispatch(request, *args, **kwargs)
+
     def post(self, request, *args, **kwargs):
         form = CubingmexicoProfileForm(request.POST, instance=request.user.cubingmexicoprofile)
         if form.is_valid():
@@ -80,6 +85,11 @@ class ProfileView(AuthenticateMixin, ContentMixin, TemplateView):
 class MyResultsView(ContentMixin, TemplateView):
     template_name = 'pages/my_results.html'
     page = 'cubingmexico_web:my_results'
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_superuser:
+            return redirect(reverse_lazy('cubingmexico_web:logout'))
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super(MyResultsView, self).get_context_data(**kwargs)
@@ -103,6 +113,9 @@ class RankingsView(ContentMixin, TemplateView):
     def dispatch(self, request, *args, **kwargs):
         event_type = kwargs.get('event_type')
         ranking_type = kwargs.get('ranking_type')
+
+        if request.user.is_superuser:
+            return redirect(reverse_lazy('cubingmexico_web:logout'))
         
         if event_type == '333mbf' and ranking_type == 'average':
             return redirect('cubingmexico_web:rankings', event_type='333mbf', ranking_type='single')
@@ -143,6 +156,11 @@ class RecordsView(ContentMixin, TemplateView):
 
     template_name = 'pages/records/records.html'
 
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_superuser:
+            return redirect(reverse_lazy('cubingmexico_web:logout'))
+        return super().dispatch(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         state = self.kwargs.get('state')
         context = super().get_context_data(**kwargs)
@@ -161,6 +179,11 @@ class RecordsView(ContentMixin, TemplateView):
 
 class SORView(ContentMixin, TemplateView):
     template_name = 'pages/rankings/sor.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_superuser:
+            return redirect(reverse_lazy('cubingmexico_web:logout'))
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         state = self.kwargs.get('state')
@@ -245,6 +268,11 @@ class StateTeamsView(ContentMixin, TemplateView):
     template_name = 'pages/teams/teams.html'
     page = 'cubingmexico_web:state_teams'
 
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_superuser:
+            return redirect(reverse_lazy('cubingmexico_web:logout'))
+        return super().dispatch(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['state_teams'] = StateTeam.objects.all()
@@ -253,6 +281,11 @@ class StateTeamsView(ContentMixin, TemplateView):
 class IndividualStateTeamView(ContentMixin, DetailView):
     model = StateTeam
     template_name = 'pages/teams/team.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_superuser:
+            return redirect(reverse_lazy('cubingmexico_web:logout'))
+        return super().dispatch(request, *args, **kwargs)
 
     def get_object(self, queryset=None):
         team_code = self.kwargs['team_code']
@@ -276,6 +309,9 @@ class EditStateTeamView(ContentMixin, UpdateView):
     template_name = 'pages/teams/edit_team.html'
 
     def dispatch(self, request, *args, **kwargs):
+        if request.user.is_superuser:
+            return redirect(reverse_lazy('cubingmexico_web:logout'))
+
         if not request.user.is_authenticated or not (
             request.user.cubingmexicoprofile.is_state_team_leader and 
             request.user.cubingmexicoprofile.person_state_team.state_team_id == self.get_object().pk
@@ -298,6 +334,9 @@ class AddStateTeamMemberView(ContentMixin, CreateView):
     template_name = 'pages/teams/add_member.html'
 
     def dispatch(self, request, *args, **kwargs):
+        if request.user.is_superuser:
+            return redirect(reverse_lazy('cubingmexico_web:logout'))
+        
         state_team = get_object_or_404(StateTeam, state__three_letter_code=self.kwargs['team_code'])
         if not request.user.is_authenticated or not (
             request.user.cubingmexicoprofile.is_state_team_leader and 
@@ -324,6 +363,33 @@ class AddStateTeamMemberView(ContentMixin, CreateView):
         person_state_team.save()
         return super().form_valid(form)
     
+class RemoveStateTeamMemberView(DeleteView):
+    model = PersonStateTeam
+    template_name = 'pages/teams/remove_member.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_superuser:
+            return redirect(reverse_lazy('cubingmexico_web:logout'))
+
+        state_team = get_object_or_404(StateTeam, state__three_letter_code=self.kwargs['team_code'])
+        if not request.user.is_authenticated or not (
+            request.user.cubingmexicoprofile.is_state_team_leader and
+            request.user.cubingmexicoprofile.person_state_team.state_team_id == state_team.pk
+        ):
+            return redirect(reverse_lazy('cubingmexico_web:state_teams'))
+
+        return super().dispatch(request, *args, **kwargs)
+    
+    def get_success_url(self):
+        state = get_object_or_404(State, three_letter_code=self.kwargs['team_code'])
+        return reverse('cubingmexico_web:team', args=[state.three_letter_code])
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        state = get_object_or_404(State, three_letter_code=self.kwargs['team_code'])
+        context['state'] = state
+        return context
+
 class WCACallbackView(RedirectView):
     """
     Validates WCA user, creates a Cubingmexico user and a WCA profile
