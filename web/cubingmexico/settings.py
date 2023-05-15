@@ -83,6 +83,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_extensions',
     'storages',
+    "phonenumber_field",
     'cubingmexico_web',
     'cubingmexico_wca',
 ]

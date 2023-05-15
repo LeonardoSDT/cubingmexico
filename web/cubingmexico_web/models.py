@@ -6,6 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractUser
 
 from cubingmexico_wca.models import Person
+from phonenumber_field.modelfields import PhoneNumberField
 
 class User(AbstractUser):
     has_default_password = models.BooleanField(default=True)
@@ -56,6 +57,7 @@ class StateTeam(models.Model):
     team_logo = models.ImageField(verbose_name=_("Logotipo del team"), upload_to='img/team_logos/', null=True, blank=True)
     facebook_link = models.URLField(_("Enlace de Facebook"), max_length=255, blank=True, default='')
     instagram_link = models.URLField(_("Enlace de Instagram"), max_length=255, blank=True, default='')
+    phone_number = PhoneNumberField(_("Número de teléfono"), null=False, blank=False, default='')
 
     created_at = models.DateTimeField(auto_now_add=True)
 

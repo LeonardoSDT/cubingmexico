@@ -3,6 +3,7 @@ from django import forms
 
 from .models import CubingmexicoProfile, State, StateTeam, PersonStateTeam
 from cubingmexico_wca.models import Person
+from phonenumber_field.formfields import PhoneNumberField
 
 
 class CubingmexicoProfileForm(forms.ModelForm):
@@ -19,7 +20,7 @@ class CubingmexicoProfileForm(forms.ModelForm):
 class StateTeamForm(forms.ModelForm):
     class Meta:
         model = StateTeam
-        fields = ['name', 'description', 'team_logo', 'facebook_link', 'instagram_link',]
+        fields = ['name', 'description', 'team_logo', 'facebook_link', 'instagram_link', 'phone_number',]
 
     name = forms.CharField(
         max_length=255,
@@ -46,6 +47,11 @@ class StateTeamForm(forms.ModelForm):
         max_length=255,
         label="Enlace a Instagram",
         widget=forms.URLInput(attrs={'class': 'form-control'}),
+        required=False
+    )
+    phone_number = PhoneNumberField(
+        label="Número de teléfono",
+        widget=forms.TextInput(attrs={'class': 'form-control'}),
         required=False
     )
 
