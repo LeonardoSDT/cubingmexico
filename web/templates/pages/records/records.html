@@ -112,7 +112,7 @@
                 </td>
                 <td><a href="https://www.worldcubeassociation.org/persons/{{ record.person.id }}" class="text-decoration-none">{{ record.person_name }}</a></td>
                 {% if record.event.id == '333fm' %}
-                <td>{{ record.average }}</td>
+                <td>{{ record.average|divide_by_100 }}</td>
                 {% else %}
                 <td>{{ record.average|time_formatter }}</td>
                 {% endif %}
