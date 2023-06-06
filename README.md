@@ -24,9 +24,11 @@ Ningún récord oficial ha sido modificado/alterado.
 
 ### Instalación
 
-1. Configurar variables de entorno y deploy en Google Cloud Platform, enlace de referencia:
+1. Configurar variables de entorno y deploy en Google Cloud Platform, enlaces de referencia:
 
 https://sebastien-peterson.medium.com/build-a-dockerized-django-app-on-google-cloud-run-with-ci-cd-a511ba707053
+
+https://medium.com/@rahulxsharma/django-on-google-cloud-run-3f2f93ae0917
 
 2. Construir y ejecutar:
 
