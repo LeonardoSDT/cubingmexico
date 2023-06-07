@@ -184,8 +184,8 @@ AUTH_USER_MODEL = 'cubingmexico_web.User'
 WCA_OAUTH_URI = 'https://www.worldcubeassociation.org/oauth/'
 WCA_API_URI = 'https://www.worldcubeassociation.org/api/v0/'
 
-WCA_CLIENT_ID = 'Mq3iaMGMdkO4GkVWpy2Wza70gCZPDwVcHSssjScr-xk'
-WCA_CLIENT_SECRET = 'wqGIOkBxjyio3gSNQwrqkiEOutZCBLrGncYvu4cfCYM'
+WCA_CLIENT_ID = env("WCA_CLIENT_ID")
+WCA_CLIENT_SECRET = env("WCA_CLIENT_SECRET")
 if os.getenv("PYTHON_ENV") == "dev":
     WCA_CALLBACK = 'http://localhost:8080/cubingmexico_wca/callback/'
 else:
