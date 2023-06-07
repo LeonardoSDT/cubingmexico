@@ -20,7 +20,7 @@ class CubingmexicoProfileForm(forms.ModelForm):
 class StateTeamForm(forms.ModelForm):
     class Meta:
         model = StateTeam
-        fields = ['name', 'description', 'team_logo', 'facebook_link', 'instagram_link', 'phone_number',]
+        fields = ['name', 'description', 'team_logo', 'facebook_link', 'instagram_link', 'phone_number', 'email']
 
     name = forms.CharField(
         max_length=255,
@@ -54,6 +54,13 @@ class StateTeamForm(forms.ModelForm):
         widget=forms.TextInput(attrs={'class': 'form-control'}),
         required=False
     )
+    email = forms.EmailField(
+        max_length=255,
+        label="Dirección de correo electrónico",
+        widget=forms.EmailInput(attrs={'class': 'form-control'}),
+        required=False
+    )
+
 
 class PersonStateTeamForm(forms.ModelForm):
     class Meta:

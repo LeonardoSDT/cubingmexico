@@ -22,7 +22,10 @@
                 {% endif %}
                 <p>{{ object.description }}</p>
                 {% if object.phone_number != '' %}
-                    <i class="bi bi-whatsapp m-1"></i>{{ object.phone_number }}
+                    <p><a href="https://wa.me/{{ object.phone_number }}" class="text-decoration-none link-dark"><i class="bi bi-whatsapp m-1"></i>{{ object.phone_number }}</a></p>
+                {% endif %}
+                {% if object.email != '' %}
+                    <p><a href="mailto:{{ object.email }}" class="text-decoration-none link-dark"><i class="bi bi-envelope-fill m-1"></i>{{ object.email }}</a></p>
                 {% endif %}
                 <p class="h3">
                     {% if object.facebook_link != '' %}

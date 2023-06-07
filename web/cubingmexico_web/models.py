@@ -4,6 +4,7 @@ from django.db import models
 
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractUser
+from django.core.validators import EmailValidator
 
 from cubingmexico_wca.models import Person
 from phonenumber_field.modelfields import PhoneNumberField
@@ -58,6 +59,7 @@ class StateTeam(models.Model):
     facebook_link = models.URLField(_("Enlace de Facebook"), max_length=255, blank=True, default='')
     instagram_link = models.URLField(_("Enlace de Instagram"), max_length=255, blank=True, default='')
     phone_number = PhoneNumberField(_("Número de teléfono"), blank=True, default='')
+    email = models.EmailField(_("Dirección de correo electrónico"), max_length=255, blank=True, default='', validators=[EmailValidator()])
 
     created_at = models.DateTimeField(auto_now_add=True)
 
