@@ -13,3 +13,4 @@ requests
 pandas
 numpy
 Pillow
+django-phonenumber-field[phonenumberslite]

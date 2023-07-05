@@ -1,0 +1,194 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {% if selected_state %}
+        Ranking estatal de
+        {% for state in states %}
+            {% if state.three_letter_code == selected_state %}
+                {{ state.name }}
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        Ranking nacional
+    {% endif %}
+        de
+    {% for event in events %}
+        {% if event.id == selected_event %}
+            {{ event.name }}
+        {% endif %}
+    {% endfor %}
+    {% if event.id != '333mbf' %}
+        ({{ selected_ranking|title }})
+    {% endif %}
+{% endblock %}
+
+{% load static %}
+{% load divide_by_100 %}
+{% load time_formatter %}
+{% load time_formatter_333mbf %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="{% static 'css/cubing-icons.css' %}">
+{% endblock stylesheets %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-12 col-sm-9">
+            <h1 class="my-3">
+            {% if selected_state %}
+                Ranking estatal de
+                {% for state in states %}
+                    {% if state.three_letter_code == selected_state %}
+                        {{ state.name }}
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                Ranking nacional
+            {% endif %}
+            de
+            {% for event in events %}
+                {% if event.id == selected_event %}
+                    {{ event.name }}
+                {% endif %}
+            {% endfor %}
+            {% if event.id != '333mbf' %}
+                ({{ selected_ranking|title }})
+            {% endif %}
+            </h1>
+        
+            <div class="mb-3">
+                <div class="flex flex-row flex-wrap">
+                        {% for event in events %}
+                            {% if state %}
+                                <a href="{% url 'cubingmexico_web:rankings' event_type=event.id state=selected_state ranking_type=selected_ranking %}" class="text-decoration-none">
+                                    <span class="cubing-icon event-{{ event.id }} m-1 h4 {% if event.id == selected_event %} text-dark {% else %} text-black-50 {% endif %}"></span>
+                                </a>
+                            {% else %}
+                                <a href="{% url 'cubingmexico_web:rankings' event_type=event.id ranking_type=selected_ranking %}" class="text-decoration-none">
+                                    <span class="cubing-icon event-{{ event.id }} m-1 h4 {% if event.id == selected_event %} text-dark {% else %} text-black-50 {% endif %}"></span>
+                                </a>
+                            {% endif %}
+                        {% endfor %}
+                </div>
+            </div>
+        
+            {% if selected_event != '333mbf' %}
+            <div class="btn-group mb-3" role="group">
+                {% if state %}
+                    <a href="{% url 'cubingmexico_web:rankings' event_type=selected_event state=selected_state ranking_type='single' %}" class="btn btn-primary {% if 'single' in selected_ranking %} disabled {% endif %}">Single</a>
+                    <a href="{% url 'cubingmexico_web:rankings' event_type=selected_event state=selected_state ranking_type='average' %}" class="btn btn-primary {% if 'average' in selected_ranking %} disabled {% endif %}">Media</a>
+                {% else %}
+                    <a href="{% url 'cubingmexico_web:rankings' event_type=selected_event ranking_type='single' %}" class="btn btn-primary {% if 'single' in selected_ranking %} disabled {% endif %}">Single</a>
+                    <a href="{% url 'cubingmexico_web:rankings' event_type=selected_event ranking_type='average' %}" class="btn btn-primary {% if 'average' in selected_ranking %} disabled {% endif %}">Media</a>
+                {% endif %}
+            </div>
+            {% endif %}        
+        </div>
+        <div class="col-12 col-sm-3 d-flex justify-content-center my-3">
+            <form>
+                <label for="state-select"><strong>Selecciona un estado</strong></label>
+                <select class="form-select" id="state-select" onchange="location = this.value;">
+                    <option value="{% url 'cubingmexico_web:rankings' event_type=selected_event ranking_type=selected_ranking %}">Todo el país</option>
+                  {% for state in states %}
+                    <option value="{% url 'cubingmexico_web:rankings' event_type=selected_event state=state.three_letter_code ranking_type=selected_ranking %}" {% if state.three_letter_code == selected_state %}selected{% endif %}>{{ state.name }}</option>
+                  {% endfor %}
+                </select>
+              </form>
+        </div>        
+    </div>
+    
+    <table id="rankings" class="table table-striped" style="width:100%">
+        <thead>
+            <tr>
+                {% if state %}
+                <th>SR</th>
+                <th>NR</th>
+                {% else %}
+                <th>NR</th>
+                {% endif %}
+                <th>Nombre</th>
+                <th>Resultado</th>
+                <th>Competencia</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if selected_state %}
+                {% for result, sr in rankings %}
+                    <tr>
+                        <td scope="row">{{ forloop.counter }}</td>
+                        <td>{{ sr.country_rank }}</td>
+                        <td><a href="https://www.worldcubeassociation.org/persons/{{ result.person.id }}" class="text-decoration-none">{{ result.person_name }}</a></td>
+                        {% if selected_ranking == 'single' %}
+                            {% if selected_event == '333mbf' %}
+                                <td>{{ result.best|time_formatter_333mbf }}</td>
+                            {% elif selected_event == '333fm' %}
+                                <td>{{ result.best }}</td>
+                            {% else %}
+                                <td>{{ result.best|time_formatter }}</td>
+                            {% endif %}
+                        {% else %}
+                        <td>{{ result.average|time_formatter }}</td>
+                        {% endif %}
+                        <td>{{ result.competition.name }}</td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                {% for result in rankings %}
+                    <tr>
+                        <td scope="row">{{ forloop.counter }}</td>
+                        <td><a href="https://www.worldcubeassociation.org/persons/{{ result.person.id }}" class="text-decoration-none">{{ result.person_name }}</a></td>
+                        {% if selected_ranking == 'single' %}
+                            {% if selected_event == '333mbf' %}
+                                <td>{{ result.best|time_formatter_333mbf }}</td>
+                            {% elif selected_event == '333fm' %}
+                                <td>{{ result.best }}</td>
+                            {% else %}
+                                <td>{{ result.best|time_formatter }}</td>
+                            {% endif %}
+                        {% else %}
+                        <td>{{ result.average|time_formatter }}</td>
+                        {% endif %}
+                        <td>{{ result.competition.name }}</td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+        </tbody>
+        <tfoot>
+            <tr>
+                {% if state %}
+                <th>SR</th>
+                <th>NR</th>
+                {% else %}
+                <th>NR</th>
+                {% endif %}
+                <th>Nombre</th>
+                <th>Resultado</th>
+                <th>Competencia</th>
+            </tr>
+        </tfoot>
+    </table>
+
+    {% if selected_state %}
+        {% include "includes/faq.html" %}
+    {% endif %}
+    
+{% endblock %}
+
+{% block javascripts %}
+
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#rankings').DataTable({
+            "language": {
+                url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json',
+            }
+        });
+    });
+</script>
+{% endblock javascripts %}

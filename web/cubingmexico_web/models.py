@@ -4,8 +4,10 @@ from django.db import models
 
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractUser
+from django.core.validators import EmailValidator
 
 from cubingmexico_wca.models import Person
+from phonenumber_field.modelfields import PhoneNumberField
 
 class User(AbstractUser):
     has_default_password = models.BooleanField(default=True)
@@ -52,10 +54,12 @@ class StateTeam(models.Model):
 
     name = models.CharField(_("Nombre del team"), max_length=255)
     description =  models.TextField(_("Descripción del team"), null=True, blank=True, default='')
-    state = models.ForeignKey(State, on_delete=models.CASCADE, verbose_name=_('Estado de la Republica Mexicana'))
+    state = models.OneToOneField(State, on_delete=models.CASCADE, verbose_name=_('Estado de la Republica Mexicana'))
     team_logo = models.ImageField(verbose_name=_("Logotipo del team"), upload_to='img/team_logos/', null=True, blank=True)
     facebook_link = models.URLField(_("Enlace de Facebook"), max_length=255, blank=True, default='')
     instagram_link = models.URLField(_("Enlace de Instagram"), max_length=255, blank=True, default='')
+    phone_number = PhoneNumberField(_("Número de teléfono"), blank=True, default='')
+    email = models.EmailField(_("Dirección de correo electrónico"), max_length=255, blank=True, default='', validators=[EmailValidator()])
 
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -67,7 +71,7 @@ class StateTeam(models.Model):
         verbose_name_plural = _('Teams estatales')
 
 class PersonStateTeam(models.Model):
-    person = models.ForeignKey(Person, on_delete=models.CASCADE, verbose_name=_('Persona con WCAID'))
+    person = models.OneToOneField(Person, on_delete=models.CASCADE, verbose_name=_('Persona con WCAID'))
     state_team = models.ForeignKey(StateTeam, on_delete=models.CASCADE, verbose_name=_('Estado de la Republica Mexicana'))
 
     def __str__(self):

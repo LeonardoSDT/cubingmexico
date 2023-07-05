@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Añadir miembro a {{ state_team.name }}{% endblock %}
+{% block title %}¿Desea eliminar a {{ object.person.name }} de {{ object.state_team }}?{% endblock %}
 
 {% block stylesheets %}
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
@@ -8,19 +8,19 @@
 
 {% block content %}
 
-<h1 class="my-3">Añadir miembro a {{ state_team.name }}</h1>
+<h1 class="my-3">Eliminar miembro</h1>
 
 <div class="row">
     <div class="col-12 mb-3">
         <div class="card">
             <div class="card-header text-center">
-                <h4>Añadir miembro</h4>
+                <h4>¿Desea eliminar a {{ object.person.name }} de {{ object.state_team }}?</h4>
             </div>
             <div class="card-body">
                 <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     {{ form.as_p }}
-                    <button type="submit" class="btn btn-success"><i class="bi bi-check-lg me-2"></i>Añadir</button>
+                    <button type="submit" class="btn btn-success"><i class="bi bi-check-lg me-2"></i>Confirmar</button>
                     <a href="{% url 'cubingmexico_web:team' team_code=state.three_letter_code %}" class="btn btn-danger"><i class="bi bi-x-lg me-2"></i>Cancelar</a>
                 </form>
             </div>

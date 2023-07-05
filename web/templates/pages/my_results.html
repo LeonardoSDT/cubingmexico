@@ -21,12 +21,9 @@
 <div class="row">
     <div class="col-12 mb-3">
         <div class="card text-center">
-            <div class="card-header">
-                {% if wca_profile.wca_id != None %}
-                    <a href="https://www.worldcubeassociation.org/persons/{{ wca_profile.wca_id }}" class="text-decoration-none h4">{{ wca_profile.wca_id }}</a>
-                  {% else %}
-                    Este usuario todavía no tiene un WCA ID
-                  {% endif %}
+            <div class="card-header d-flex align-items-center justify-content-center">
+                <img src="https://www.worldcubeassociation.org/files/WCAlogo_notext.svg" alt="WCA" width="30" class="me-2">
+                <a href="https://www.worldcubeassociation.org/persons/{{ wca_profile.wca_id }}" class="text-decoration-none my-auto h4">{{ wca_profile.wca_id }}</a>
             </div>
             <div class="card-body">
                 <img src="{{ wca_profile.avatar_url }}" class="rounded mx-auto d-block mb-3" height="300px">
@@ -39,67 +36,77 @@
                 <h4>Récords oficiales</h4>
             </div>
             <div class="card-body">
-                <table class="table table-striped" style="width:100%">
-                    <thead>
-                        <tr>
-                            <th>Evento</th>
-                            <th>Resultado</th>
-                            <th>Competencia</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for record in my_single_results %}
-                            <tr>
-                                <td>
-                                    <span class="cubing-icon event-{{ record.event.id }} m-1 h4 text-dark"></span>
-                                    {% if record.event.id == '333' %}
-                                        3×3×3
-                                    {% elif record.event.id == '222' %}
-                                        2×2×2
-                                    {% elif record.event.id == '444' %}
-                                        4×4×4
-                                    {% elif record.event.id == '555' %}
-                                        5×5×5
-                                    {% elif record.event.id == '666' %}
-                                        6×6×6
-                                    {% elif record.event.id == '777' %}
-                                        7×7×7
-                                    {% elif record.event.id == '333bf' %}
-                                        3×3×3 A Ciegas
-                                    {% elif record.event.id == '333fm' %}
-                                        3×3×3 Menos Movimientos
-                                    {% elif record.event.id == '333oh' %}
-                                        3×3×3 Una Mano
-                                    {% elif record.event.id == 'clock' %}
-                                        Clock
-                                    {% elif record.event.id == 'minx' %}
-                                        Megaminx
-                                    {% elif record.event.id == 'pyram' %}
-                                        Pyraminx
-                                    {% elif record.event.id == 'skewb' %}
-                                        Skewb
-                                    {% elif record.event.id == 'sq1' %}
-                                        Square-1
-                                    {% elif record.event.id == '444bf' %}
-                                        4×4×4 A Ciegas
-                                    {% elif record.event.id == '555bf' %}
-                                        5×5×5 A Ciegas
-                                    {% elif record.event.id == '333mbf' %}
-                                        3×3×3 Múltiples A Ciegas
-                                    {% endif %}
-                                </td>
-                                {% if record.event.id == '333mbf' %}
-                                <td>{{ record.best|time_formatter_333mbf }}</td>
-                                {% elif record.event.id == '333fm' %}
-                                <td>{{ record.best }}</td>
-                                {% else %}
-                                <td>{{ record.best|time_formatter }}</td>
-                                {% endif %}
-                                <td>{{ record.competition.name }}</td>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                </table>
+                <div class="row">
+                    <div class="col">
+                        <h5 class="text-center">Single</h5>
+                        <table class="table table-striped" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Evento</th>
+                                    <th>Resultado</th>
+                                    <th>SR</th>
+                                    <th>NR</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for record, rankssingle in my_single_results %}
+                                    <tr>
+                                        <td>
+                                            <span class="cubing-icon event-{{ record.event.id }} m-1 h4 text-dark"></span>
+                                        </td>
+                                        {% if record.event.id == '333mbf' %}
+                                        <td>{{ record.best|time_formatter_333mbf }}</td>
+                                        {% elif record.event.id == '333fm' %}
+                                        <td>{{ record.best }}</td>
+                                        {% else %}
+                                        <td>{{ record.best|time_formatter }}</td>
+                                        {% endif %}
+                                        <td>#</td>
+                                        {% if rankssingle.country_rank == 1 %}
+                                            <td><i class="bi bi-trophy-fill me-2"></i>{{ rankssingle.country_rank }}</td>
+                                        {% else %}
+                                            <td>{{ rankssingle.country_rank }}</td>
+                                        {% endif %}
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                        </table>
+
+                    </div>
+                    <div class="col">
+                        <h5 class="text-center">Average</h5>
+                        <table class="table table-striped" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Evento</th>
+                                    <th>Resultado</th>
+                                    <th>SR</th>
+                                    <th>NR</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for record, ranksaverage in my_average_results %}
+                                    <tr>
+                                        <td>
+                                            <span class="cubing-icon event-{{ record.event.id }} m-1 h4 text-dark"></span>
+                                        </td>
+                                        {% if record.event.id == '333fm' %}
+                                        <td>{{ record.average|divide_by_100 }}</td>
+                                        {% else %}
+                                        <td>{{ record.average|time_formatter }}</td>
+                                        {% endif %}
+                                        <td>#</td>
+                                        {% if ranksaverage.country_rank == 1 %}
+                                            <td><i class="bi bi-trophy-fill me-2"></i>{{ ranksaverage.country_rank }}</td>
+                                        {% else %}
+                                            <td>{{ ranksaverage.country_rank }}</td>
+                                        {% endif %}
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
