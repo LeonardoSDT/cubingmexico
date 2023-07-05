@@ -8,7 +8,7 @@ services:
         - "8080:8080"
     volumes:
         - ./web:/code
-        - ./gcp/cubingmexico-dev-bd15a5adb915.json:/secrets/credentials.json
+        - ./gcp/creds.json:/secrets/credentials.json
     env_file:
       - ./.env
     restart: always
@@ -19,8 +19,8 @@ services:
     container_name: cloudsql-proxy
     image: gcr.io/cloudsql-docker/gce-proxy:1.19.1
     volumes:
-      - ./gcp/cubingmexico-dev-bd15a5adb915.json:/secrets/cloudsql/credentials.json
+      - ./gcp/creds.json:/secrets/cloudsql/credentials.json
     ports:
       - 127.0.0.1:5432:5432
-    command: /cloud_sql_proxy -instances="cubingmexico-dev:us-central1:cubingmexico-postgresql-dev"=tcp:0.0.0.0:5432 -credential_file=/secrets/cloudsql/credentials.json
+    command: /cloud_sql_proxy -instances="cubingmexico-391901:us-central1:cubignmexico-dev-db"=tcp:0.0.0.0:5432 -credential_file=/secrets/cloudsql/credentials.json
     restart: always

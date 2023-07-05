@@ -51,7 +51,7 @@ elif os.getenv("GOOGLE_CLOUD_PROJECT", None):
     project_id = os.getenv("GOOGLE_CLOUD_PROJECT")
 
     client = secretmanager.SecretManagerServiceClient()
-    settings_name = os.getenv("SETTINGS_NAME", "cubingmexico_settings")
+    settings_name = os.getenv("SETTINGS_NAME", "cubingmexico_app_settings")
     name = f"projects/{project_id}/secrets/{settings_name}/versions/latest"
     payload = client.access_secret_version(name=name).payload.data.decode(
         "UTF-8"
@@ -70,7 +70,7 @@ if os.getenv("PYTHON_ENV") == "dev":
 else:
     ALLOWED_HOSTS = ['cubingmexico-p3uk45s5ka-uc.a.run.app']
 
-CSRF_TRUSTED_ORIGINS = ['https://cubingmexico-p3uk45s5ka-uc.a.run.app']
+CSRF_TRUSTED_ORIGINS = ['https://cubingmexico-iciu3gaswa-uc.a.run.app']
 
 # Application definition
 
@@ -189,4 +189,4 @@ WCA_CLIENT_SECRET = env("WCA_CLIENT_SECRET")
 if os.getenv("PYTHON_ENV") == "dev":
     WCA_CALLBACK = 'http://localhost:8080/cubingmexico_wca/callback/'
 else:
-    WCA_CALLBACK = 'https://cubingmexico-p3uk45s5ka-uc.a.run.app/cubingmexico_wca/callback/'
+    WCA_CALLBACK = 'https://cubingmexico-iciu3gaswa-uc.a.run.app/cubingmexico_wca/callback/'
