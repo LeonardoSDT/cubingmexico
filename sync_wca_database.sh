@@ -8,8 +8,7 @@ dump_dir="$data_dir/extracted"
 echo "Downloading WCA Database"
 curl https://www.worldcubeassociation.org/export/results/WCA_export.tsv.zip -o "$data_dir/WCA_export.tsv.zip"
 
-if [ -e "$dump_dir/metadata.json" ]
-then
+if [ -e "$dump_dir/metadata.json" ]; then
     mv "$dump_dir/metadata.json" "$dump_dir/previous_metadata.json"
 fi
 
