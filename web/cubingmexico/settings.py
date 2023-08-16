@@ -68,9 +68,9 @@ SECRET_KEY = env("SECRET_KEY")
 if os.getenv("PYTHON_ENV") == "dev":
     ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 else:
-    ALLOWED_HOSTS = ['cubingmexico-iciu3gaswa-uc.a.run.app']
+    ALLOWED_HOSTS = ['cubingmexico-iciu3gaswa-uc.a.run.app', 'cubingmexico.com', 'cubingmexico.org']
 
-CSRF_TRUSTED_ORIGINS = ['https://cubingmexico-iciu3gaswa-uc.a.run.app']
+CSRF_TRUSTED_ORIGINS = ['https://cubingmexico-iciu3gaswa-uc.a.run.app', 'https://cubingmexico.com', 'https://cubingmexico.org']
 
 # Application definition
 
@@ -189,4 +189,4 @@ WCA_CLIENT_SECRET = env("WCA_CLIENT_SECRET")
 if os.getenv("PYTHON_ENV") == "dev":
     WCA_CALLBACK = 'http://localhost:8080/cubingmexico_wca/callback/'
 else:
-    WCA_CALLBACK = 'https://cubingmexico-iciu3gaswa-uc.a.run.app/cubingmexico_wca/callback/'
+    WCA_CALLBACK = ['https://cubingmexico-iciu3gaswa-uc.a.run.app/cubingmexico_wca/callback/', 'https://cubingmexico.com/cubingmexico_wca/callback/', 'https://cubingmexico.org/cubingmexico_wca/callback/']
