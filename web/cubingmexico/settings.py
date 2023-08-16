@@ -68,9 +68,21 @@ SECRET_KEY = env("SECRET_KEY")
 if os.getenv("PYTHON_ENV") == "dev":
     ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 else:
-    ALLOWED_HOSTS = ['cubingmexico-iciu3gaswa-uc.a.run.app', 'cubingmexico.com', 'cubingmexico.org']
+    ALLOWED_HOSTS = [
+        'cubingmexico-p3uk45s5ka-uc.a.run.app',
+        'cubingmexico.com',
+        'www.cubingmexico.com',
+        'cubingmexico.org',
+        'www.cubingmexico.org',
+    ]
 
-CSRF_TRUSTED_ORIGINS = ['https://cubingmexico-iciu3gaswa-uc.a.run.app', 'https://cubingmexico.com', 'https://cubingmexico.org']
+CSRF_TRUSTED_ORIGINS = [
+    'https://cubingmexico-p3uk45s5ka-uc.a.run.app',
+    'https://cubingmexico.com',
+    'https://www.cubingmexico.com',
+    'https://cubingmexico.org',
+    'https://www.cubingmexico.org',
+]
 
 # Application definition
 
