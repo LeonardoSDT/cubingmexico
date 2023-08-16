@@ -11,7 +11,12 @@
     {% else %}
         Récords nacionales
     {% endif %}
+     - Cubingmexico
 {% endblock %}
+
+{% block meta_description %}{% if selected_state %}{% for state in states %}{% if state.three_letter_code == selected_state %}Explora los récords estatales de {{ state.name }} en el mundo del cubo Rubik en México.{% endif %}{% endfor %}{% else %}Descubre los récords nacionales en el mundo del cubo Rubik en México.{% endif %}{% endblock %}
+
+{% block meta_keywords %}{% if selected_state %}{% for state in states %}{% if state.three_letter_code == selected_state %}récords estatales, {{ state.name }}, cubo Rubik, México, SR, State Record{% endif %}{% endfor %}{% else %}récords nacionales, cubo Rubik, México, NR, National Record{% endif %}{% endblock %}
 
 {% load static %}
 {% load divide_by_100 %}

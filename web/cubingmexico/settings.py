@@ -86,6 +86,8 @@ CSRF_TRUSTED_ORIGINS = [
 
 # Application definition
 
+SITE_ID = 1
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -93,6 +95,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+	'django.contrib.sites',
+	'django.contrib.sitemaps',
     'django_extensions',
     'storages',
     "phonenumber_field",

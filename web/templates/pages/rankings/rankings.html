@@ -20,7 +20,12 @@
     {% if event.id != '333mbf' %}
         ({{ selected_ranking|title }})
     {% endif %}
+     - Cubingmexico
 {% endblock %}
+
+{% block meta_description %}{% if selected_state %}{% for state in states %}{% if state.three_letter_code == selected_state %}Explora el ranking estatal de {{ state.name }} para la categoría {% for event in events %}{% if event.id == selected_event %}{{ event.name }}{% endif %}{% endfor %}{% if event.id != '333mbf' %} ({{ selected_ranking|title }}){% endif %} en el mundo del cubo Rubik en México.{% endif %}{% endfor %}{% else %}Descubre el ranking nacional para la categoría {% for event in events %}{% if event.id == selected_event %}{{ event.name }}{% endif %}{% endfor %}{% if event.id != '333mbf' %} ({{ selected_ranking|title }}){% endif %} en el mundo del cubo Rubik en México.{% endif %}{% endblock %}
+
+{% block meta_keywords %}{% if selected_state %}{% for state in states %}{% if state.three_letter_code == selected_state %}ranking estatal, {{ state.name }}, {% for event in events %}{% if event.id == selected_event %}{{ event.name }}{% endif %}{% endfor %}, {% if event.id != '333mbf' %}{{ selected_ranking|title }}{% endif %}, cubo Rubik, México{% endif %}{% endfor %}{% else %}ranking nacional, {% for event in events %}{% if event.id == selected_event %}{{ event.name }}{% endif %}{% endfor %}, {% if event.id != '333mbf' %}{{ selected_ranking|title }}{% endif %}, cubo Rubik, México{% endif %}{% endblock %}
 
 {% load static %}
 {% load divide_by_100 %}
