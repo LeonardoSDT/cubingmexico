@@ -196,7 +196,7 @@ def import_persons():
 def import_ranks_average():
     log.info("  importing ranks average")
     print("  importing ranks average")
-    persons_df = get_persons_df()
+    persons_df = get_persons_df(include_specific_cases=True)
 
     df = pd.read_csv(DUMP_DIR.joinpath("WCA_export_RanksAverage.tsv"), sep="\t", dtype={1:str})
     ph_df = df[df["personId"].isin(persons_df["id"])]
@@ -219,7 +219,7 @@ def import_ranks_average():
 def import_ranks_single():
     log.info("  importing ranks single")
     print("  importing ranks single")
-    persons_df = get_persons_df()
+    persons_df = get_persons_df(include_specific_cases=True)
 
     df = pd.read_csv(DUMP_DIR.joinpath("WCA_export_RanksSingle.tsv"), sep="\t", dtype={1:str})
     ph_df = df[df["personId"].isin(persons_df["id"])]

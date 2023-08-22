@@ -124,7 +124,14 @@
                     <tr>
                         <td scope="row">{{ forloop.counter }}</td>
                         <td>{{ sr.country_rank }}</td>
-                        <td><a href="https://www.worldcubeassociation.org/persons/{{ result.person.id }}" class="text-decoration-none">{{ result.person_name }}</a></td>
+                        <td>
+                            <a href="https://www.worldcubeassociation.org/persons/{{ result.person.id }}" class="text-decoration-none">
+                                {{ result.person_name }}
+                            </a>
+                            {% if result.person.country_id != 'Mexico' %}
+                             - Extranjero ({{ result.person.country_id }})
+                            {% endif %}
+                        </td>
                         {% if selected_ranking == 'single' %}
                             {% if selected_event == '333mbf' %}
                                 <td>{{ result.best|time_formatter_333mbf }}</td>

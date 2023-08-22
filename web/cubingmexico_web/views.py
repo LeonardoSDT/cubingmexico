@@ -133,10 +133,10 @@ class RankingsView(ContentMixin, TemplateView):
             persons = PersonStateTeam.objects.filter(state_team__state__three_letter_code=state)
             person_ids = persons.values_list('person_id', flat=True)
             if self.ranking_type == 'single':
-                rank_single = RanksSingle.objects.filter(event_id=event_type, person_id__in=person_ids).order_by('country_rank')
+                rank_single = RanksSingle.objects.filter(event_id=event_type, person_id__in=person_ids).order_by('best')
                 context['rankings'] = zip(results, rank_single)
             else:
-                rank_average = RanksAverage.objects.filter(event_id=event_type, person_id__in=person_ids).order_by('country_rank')
+                rank_average = RanksAverage.objects.filter(event_id=event_type, person_id__in=person_ids).order_by('best')
                 context['rankings'] = zip(results, rank_average)
 
             context['selected_state'] = state

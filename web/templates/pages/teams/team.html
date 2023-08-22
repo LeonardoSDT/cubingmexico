@@ -75,6 +75,9 @@
                                 <td><a href="{% url 'cubingmexico_web:my_results' wca_id=auth_member.wcaprofile.wca_id %}">{{ auth_member.wcaprofile.wca_id }}</a></td>
                                 <td>
                                     {{ auth_member.wcaprofile.name }}
+                                    {% if auth_member.wcaprofile.country_iso2 != 'MX' %}
+                                     - Extranjero ({{ auth_member.wcaprofile.country_iso2 }})
+                                    {% endif %}
                                     {% if auth_member.cubingmexicoprofile.is_state_team_leader %}
                                     - <strong>Administrador del Team</strong>
                                     {% endif %}
@@ -87,7 +90,12 @@
                         {% for member in team_members %}
                             <tr>
                                 <td><a href="https://www.worldcubeassociation.org/persons/{{ member.person.id }}" class="link-secondary">{{ member.person.id }}</a></td>
-                                <td>{{ member.person.name }}</td>
+                                <td>
+                                    {{ member.person.name }}
+                                    {% if member.person.country_id != 'Mexico' %}
+                                     - Extranjero ({{ member.person.country_id }})
+                                    {% endif %}
+                                </td>
                                 {% if user.is_authenticated and user.cubingmexicoprofile.is_state_team_leader and user.cubingmexicoprofile.person_state_team.state_team_id == object.pk %}
                                     <td><a href="{% url 'cubingmexico_web:remove_member' team_code=object.state.three_letter_code pk=member.pk %}" class="link-danger text-decoration-none">Quitar miembro <i class="bi bi-x-circle-fill"></i></a></td>
                                 {% endif %}
