@@ -6,6 +6,7 @@ app_name = 'cubingmexico_web'
 urlpatterns = [
     path('', IndexView.as_view(), name='index'),
     path('logout/', UserLogoutView.as_view(), name='logout'),
+    path('competitions/', CompetitionsView.as_view(), name='competitions'),
     path('profile/', ProfileView.as_view(), name='profile'),
     path('person/<str:wca_id>/', MyResultsView.as_view(), name='my_results'),
     path('rankings/<str:event_type>/<str:ranking_type>/', RankingsView.as_view(), name='rankings'),

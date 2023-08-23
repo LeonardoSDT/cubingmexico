@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+
+{% block title %}Competencias - Cubingmexico{% endblock %}
+{% block meta_description %}Próximas competencias oficiales en México para entusiastas del cubo de Rubik. Mantente actualizado con fechas de competencias, ubicaciones y detalles importantes.{% endblock %}
+{% block meta_keywords %}competencias oficiales próximas, competencias próximas, México, cubo de Rubik, speedcubing, eventos de rompecabezas, fechas de competencias, detalles de ubicación{% endblock %}
+
+{% load static %}
+{% load split_events %}
+{% load date_formatter %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="{% static 'css/cubing-icons.css' %}">
+{% endblock stylesheets %}
+
+{% block content %}
+
+<h1 class="text-center my-3">Próximas competencias oficiales en México</h1>
+
+<div class="container">
+    {% if upcoming_competitions %}
+    <p class="card-text">Para obtener información más detallada sobre cada competencia, como la fecha de inscripción, cupo, cuota, y otros detalles, te invitamos a visitar el sitio web de la competencia en cuestión.</p>
+    <table id="upcoming_competitions" class="table table-striped" style="width:100%">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Nombre de la competencia</th>
+                <th>Categorías</th>
+                <th>Fecha(s)</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for competition in upcoming_competitions %}
+            <tr>
+                <td scope="row">{{ forloop.counter }}</td>
+                <td><a href="https://www.worldcubeassociation.org/competitions/{{ competition.id }}" class="text-decoration-none">{{ competition.name }}</a></td>
+                <td>
+                    {% for spec in competition.event_specs|split_string_and_sort %}
+                        <span class="cubing-icon event-{{ spec }}"></span>
+                    {% endfor %}
+                </td>
+                <td>{{ competition|format_competition_date_spanish }}</td>
+                <td>{{ competition.competition_state }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <th>#</th>
+                <th>Nombre de la competencia</th>
+                <th>Categorías</th>
+                <th>Fecha(s)</th>
+                <th>Estado</th>
+            </tr>
+        </tfoot>
+    </table>
+    {% else %}
+        <p class="alert alert-info">No hay competencias próximas en México por el momento.</p>
+    {% endif %}
+    
+    <h1 class="text-center my-3">Competencias oficiales previas en México</h1>
+    <p class="card-text">Estas competencias ya fueron celebradas, puedes consultar la información de los ganadores y resultados visitando el sitio web de la competencia en cuestión.</p>
+
+    <table id="past_competitions" class="table table-striped" style="width:100%">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Nombre de la competencia</th>
+                <th>Categorías</th>
+                <th>Fecha(s)</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for competition in past_competitions %}
+            <tr>
+                <td scope="row">{{ forloop.counter }}</td>
+                <td><a href="https://www.worldcubeassociation.org/competitions/{{ competition.id }}" class="text-decoration-none">{{ competition.name }}</a></td>
+                <td>
+                    {% for spec in competition.event_specs|split_string_and_sort %}
+                        <span class="cubing-icon event-{{ spec }}"></span>
+                    {% endfor %}
+                </td>
+                <td>{{ competition|format_competition_date_spanish }}</td>
+                <td>{{ competition.competition_state }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <th>#</th>
+                <th>Nombre de la competencia</th>
+                <th>Categorías</th>
+                <th>Fecha(s)</th>
+                <th>Estado</th>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#upcoming_competitions, #past_competitions').DataTable({
+            "language": {
+                url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json',
+            }
+        });
+    });
+</script>
+{% endblock javascripts %}

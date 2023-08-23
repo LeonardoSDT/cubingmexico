@@ -7,10 +7,13 @@
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
       <ul class="navbar-nav ms-auto">
         <li class="nav-item">
+          <a class="nav-link" href="{% url 'cubingmexico_web:competitions' %}"><i class="bi bi-trophy-fill me-2"></i>Competencias</a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link" href="{% url 'cubingmexico_web:rankings' event_type='333' ranking_type='single' %}"><i class="bi bi-reception-4 me-2"></i>Rankings</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'cubingmexico_web:records' %}"><i class="bi bi-trophy-fill me-2"></i>Récords</a>
+          <a class="nav-link" href="{% url 'cubingmexico_web:records' %}"><i class="bi bi bi-award-fill me-2"></i>Récords</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{% url 'cubingmexico_web:sor' ranking_type='single' %}"><i class="bi bi-plus-circle-fill me-2"></i>SOR</a>

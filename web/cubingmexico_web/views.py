@@ -14,16 +14,17 @@ from django.views.generic.edit import UpdateView, CreateView
 
 from django.core.files.storage import default_storage
 
-from django.db.models import Max, F, Value
+from django.db.models import Max, F, Value, Q
 
 from itertools import groupby
 
 import copy
 
 from .models import User, WCAProfile, CubingmexicoProfile, PersonStateTeam
-from cubingmexico_wca.models import Event, RanksSingle, RanksAverage
+from cubingmexico_wca.models import Event, RanksSingle, RanksAverage, Competition
 from .forms import *
 from .utils import *
+from datetime import date
 
 # Create your views here.
 
@@ -61,6 +62,42 @@ class IndexView(ContentMixin, TemplateView):
         if request.user.is_superuser:
             return redirect(reverse_lazy('cubingmexico_web:logout'))
         return super().dispatch(request, *args, **kwargs)
+    
+class CompetitionsView(ContentMixin, TemplateView):
+    template_name = 'pages/competitions.html'
+    page = 'cubingmexico_web:competitions'
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_superuser:
+            return redirect(reverse_lazy('cubingmexico_web:logout'))
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        today = date.today()
+        
+        upcoming_competitions = Competition.objects.filter(
+            Q(country__name='Mexico') & Q(year__gte=today.year) & (
+                Q(month__gt=today.month) | (Q(month=today.month) & Q(day__gte=today.day))
+            )
+        ).annotate(
+            competition_state=F('competitionstate__state__name')
+        ).order_by('year', 'month', 'day')[:10]
+
+        past_competitions = Competition.objects.filter(
+            Q(country__name='Mexico') & (
+                Q(year__lt=today.year) | (Q(year=today.year) & Q(month__lt=today.month)) |
+                (Q(year=today.year) & Q(month=today.month) & Q(day__lt=today.day))
+            )
+        ).annotate(
+            competition_state=F('competitionstate__state__name')
+        ).order_by('-year', '-month', '-day')
+        
+        context['upcoming_competitions'] = upcoming_competitions
+        context['past_competitions'] = past_competitions
+        
+        return context
 
 class ProfileView(AuthenticateMixin, ContentMixin, TemplateView):
     template_name = 'pages/profile.html'

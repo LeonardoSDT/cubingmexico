@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import EmailValidator
 
-from cubingmexico_wca.models import Person
+from cubingmexico_wca.models import Person, Competition
 from phonenumber_field.modelfields import PhoneNumberField
 
 class User(AbstractUser):
@@ -81,6 +81,18 @@ class PersonStateTeam(models.Model):
         unique_together = ('person', 'state_team')
         verbose_name = _('Miembro de team')
         verbose_name_plural = _('Miembros de team')
+
+class CompetitionState(models.Model):
+    competition = models.OneToOneField(Competition, on_delete=models.CASCADE, verbose_name=_('Competencia oficial'))
+    state = models.ForeignKey(State, on_delete=models.CASCADE, verbose_name=_('Estado de la Republica Mexicana'))
+
+    def __str__(self):
+        return f'{self.competition.name}, {self.state.name}'
+    
+    class Meta:
+        unique_together = ('competition', 'state')
+        verbose_name = _('Estado de la competencia')
+        verbose_name_plural = _('Estado de las competencias')
 
 class CubingmexicoProfile(models.Model):
     def __str__(self):

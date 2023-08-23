@@ -9,6 +9,17 @@
 <h1 class="text-center my-3">Bienvenido a Cubingmexico</h1>
 
 <div class="container">
+  <div class="row">
+    <div class="col mb-3">
+      <div class="card text-center">
+        <div class="card-body">
+          <h5 class="card-title">Próximas competencias oficiales en México</h5>
+          <p class="card-text">Competencias oficiales avaladas por la <a href="https://www.worldcubeassociation.org/">World Cube Association</a>.</p>
+          <a href="{% url 'cubingmexico_web:competitions' %}" class="btn btn-primary"><i class="bi bi-trophy-fill me-2"></i>Ver competencias</a>
+        </div>
+      </div>
+    </div>
+  </div>
     <div class="row">
       <div class="col mb-3">
         <div class="card text-center">
@@ -24,7 +35,7 @@
             <div class="card-body">
               <h5 class="card-title">Récords nacionales oficiales</h5>
               <p class="card-text">Obtenidos directamente de la <a href="https://www.worldcubeassociation.org/">World Cube Association</a>.</p>
-              <a href="{% url 'cubingmexico_web:records' %}" class="btn btn-primary"><i class="bi bi-trophy-fill me-2"></i>Ver récords</a>
+              <a href="{% url 'cubingmexico_web:records' %}" class="btn btn-primary"><i class="bi bi bi-award-fill me-2"></i>Ver récords</a>
             </div>
         </div>
       </div>
@@ -53,7 +64,7 @@
             <div class="card-body">
               <h5 class="card-title">Récords estatales</h5>
               <p class="card-text">Acorde a la información proporcionada por la <a href="https://www.worldcubeassociation.org/">World Cube Association</a>.</p>
-              <a href="{% url 'cubingmexico_web:records' state='JAL' %}" class="btn btn-primary"><i class="bi bi-trophy-fill me-2"></i>Ver récords</a>
+              <a href="{% url 'cubingmexico_web:records' state='JAL' %}" class="btn btn-primary"><i class="bi bi bi-award-fill me-2"></i>Ver récords</a>
             </div>
         </div>
       </div>
