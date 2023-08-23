@@ -11,6 +11,8 @@
 {% block stylesheets %}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.1/css/responsive.bootstrap5.min.css">
+
     <link rel="stylesheet" href="{% static 'css/cubing-icons.css' %}">
 {% endblock stylesheets %}
 
@@ -21,7 +23,7 @@
 <div class="container">
     {% if upcoming_competitions %}
     <p class="card-text">Para obtener información más detallada sobre cada competencia, como la fecha de inscripción, cupo, cuota, y otros detalles, te invitamos a visitar el sitio web de la competencia en cuestión.</p>
-    <table id="upcoming_competitions" class="table table-striped" style="width:100%">
+    <table id="upcoming_competitions" class="table table-striped nowrap" style="width:100%">
         <thead>
             <tr>
                 <th>#</th>
@@ -63,7 +65,7 @@
     <h1 class="text-center my-3">Competencias oficiales previas en México</h1>
     <p class="card-text">Estas competencias ya fueron celebradas, puedes consultar la información de los ganadores y resultados visitando el sitio web de la competencia en cuestión.</p>
 
-    <table id="past_competitions" class="table table-striped" style="width:100%">
+    <table id="past_competitions" class="table table-striped nowrap" style="width:100%">
         <thead>
             <tr>
                 <th>#</th>
@@ -107,10 +109,13 @@
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.4.1/js/responsive.bootstrap5.min.js"></script>
 
 <script>
     $(document).ready(function () {
         $('#upcoming_competitions, #past_competitions').DataTable({
+            responsive: true,
             "language": {
                 url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json',
             }

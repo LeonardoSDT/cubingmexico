@@ -7,6 +7,7 @@
 {% block stylesheets %}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.1/css/responsive.bootstrap5.min.css">
 {% endblock stylesheets %}
 
 {% block content %}
@@ -72,7 +73,7 @@
                     <tbody>
                         {% for auth_member in auth_team_members %}
                             <tr>
-                                <td><a href="{% url 'cubingmexico_web:my_results' wca_id=auth_member.wcaprofile.wca_id %}">{{ auth_member.wcaprofile.wca_id }}</a></td>
+                                <td scope="row"><a href="{% url 'cubingmexico_web:my_results' wca_id=auth_member.wcaprofile.wca_id %}">{{ auth_member.wcaprofile.wca_id }}</a></td>
                                 <td>
                                     {{ auth_member.wcaprofile.name }}
                                     {% if auth_member.wcaprofile.country_iso2 != 'MX' %}
@@ -89,7 +90,7 @@
                         {% endfor %}
                         {% for member in team_members %}
                             <tr>
-                                <td><a href="https://www.worldcubeassociation.org/persons/{{ member.person.id }}" class="link-secondary">{{ member.person.id }}</a></td>
+                                <td scope="row"><a href="https://www.worldcubeassociation.org/persons/{{ member.person.id }}" class="link-secondary">{{ member.person.id }}</a></td>
                                 <td>
                                     {{ member.person.name }}
                                     {% if member.person.country_id != 'Mexico' %}
@@ -207,13 +208,17 @@
 {% endblock %}
 
 {% block javascripts %}
+
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.4.1/js/responsive.bootstrap5.min.js"></script>
 
 <script>
     $(document).ready(function () {
         $('#members').DataTable({
+            responsive: true,
             "language": {
                 url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json',
             }
