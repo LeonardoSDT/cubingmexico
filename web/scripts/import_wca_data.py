@@ -25,7 +25,6 @@ from cubingmexico_wca.models import (
 log = logging.getLogger(__name__)
 
 PH_ID = "Mexico"
-specific_person_ids = ["2023VARG20", "2023ACOS07"]
 DUMP_DIR = settings.BASE_DIR.joinpath("data/extracted/")
 
 
@@ -163,23 +162,19 @@ def import_competitions():
                 )
 
 
-def get_persons_df(include_specific_cases=False):
+def get_persons_df():
     df = pd.read_csv(DUMP_DIR.joinpath("WCA_export_Persons.tsv"), sep="\t")
     ph_df = df[df["countryId"] == PH_ID]
     ph_df = ph_df.replace({np.nan: None})
-    
-    if include_specific_cases:
-        specific_df = df[df["id"].isin(specific_person_ids)]
-        ph_df = pd.concat([ph_df, specific_df])
-    
     return ph_df
+
 
 @transaction.atomic
 def import_persons():
     log.info("  importing persons")
     print("  importing persons")
-    df = get_persons_df(include_specific_cases=True)
-    
+    df = get_persons_df()
+
     for row in df.itertuples():
         Person.objects.update_or_create(
             id=row.id,
@@ -196,7 +191,7 @@ def import_persons():
 def import_ranks_average():
     log.info("  importing ranks average")
     print("  importing ranks average")
-    persons_df = get_persons_df(include_specific_cases=True)
+    persons_df = get_persons_df()
 
     df = pd.read_csv(DUMP_DIR.joinpath("WCA_export_RanksAverage.tsv"), sep="\t", dtype={1:str})
     ph_df = df[df["personId"].isin(persons_df["id"])]
@@ -219,7 +214,7 @@ def import_ranks_average():
 def import_ranks_single():
     log.info("  importing ranks single")
     print("  importing ranks single")
-    persons_df = get_persons_df(include_specific_cases=True)
+    persons_df = get_persons_df()
 
     df = pd.read_csv(DUMP_DIR.joinpath("WCA_export_RanksSingle.tsv"), sep="\t", dtype={1:str})
     ph_df = df[df["personId"].isin(persons_df["id"])]
@@ -237,27 +232,17 @@ def import_ranks_single():
             country_rank=row.countryRank,
         )
 
-def get_results_df(include_specific_persons=False):
-    df = pd.read_csv(DUMP_DIR.joinpath("WCA_export_Results.tsv"), sep="\t")
-    ph_df = df[df["personCountryId"] == PH_ID]
-    ph_df = ph_df.replace({np.nan: None})
-    
-    if include_specific_persons:
-        specific_df = df[df["personId"].isin(specific_person_ids)]
-        ph_df = pd.concat([ph_df, specific_df])
-    
-    return ph_df
 
 @transaction.atomic
 def import_results():
-    df = get_results_df(include_specific_persons=True)
-    total_chunks = math.ceil(len(df) / 1000)
+    df = pd.read_csv(DUMP_DIR.joinpath("WCA_export_Results.tsv"), sep="\t")
+    ph_df = df[df["personCountryId"] == PH_ID]
+    ph_df = ph_df.replace({np.nan: None})
+    total_chunks = math.ceil(len(ph_df) / 1000)
 
     Result.objects.all().delete()
 
-    print(np.arange(len(df)))
-
-    for index, group in df.groupby(np.arange(len(df)) // 1000):
+    for index, group in ph_df.groupby(np.arange(len(ph_df)) // 1000):
         log.info(f"  importing results chunk {index + 1}/{total_chunks}")
         print(f"  importing results chunk {index + 1}/{total_chunks}")
         with transaction.atomic():
