@@ -407,7 +407,7 @@ class KinchView(ContentMixin, TemplateView):
         #         personal_single_records[person] = psr
         #         personal_average_records[person] = par
                 
-        #       context['selected_state'] = None
+        #     context['selected_state'] = None
 
         # Filter and order data, select related fields
         single_records = list(single_records.select_related("event").order_by("event__rank").values("event_id", "best"))
@@ -438,11 +438,40 @@ class KinchView(ContentMixin, TemplateView):
             personal_average_records[person].sort(key=lambda x: event_ids.index(x['event_id']))
 
         # Create a dictionary to store the calculated kinch ranks for each person
-        kinch_ranks = {}
+        single_kinch_ranks = {}
+        average_kinch_ranks = {}
 
-        # Iterate through each person's records
+        # Iterate through each person's single records
+        for person_id, person_records in personal_single_records.items():
+            # person_name = person_records[0]['person__name']
+            
+            # Initialize a list to store the calculated kinch ranks for the person's events
+            person_kinch_ranks = []
+            
+            # Iterate through each event's records for the person
+            for record in person_records:
+                event_id = record['event_id']
+                personal_single = record['best']
+                
+                # Find the corresponding single from full_single_records
+                corresponding_single = next(item['best'] for item in full_single_records if item['event_id'] == event_id)
+                
+                # Calculate the kinch rank and append to the person_kinch_ranks list
+                if personal_single != 0:  # Avoid division by zero
+                    kinch_rank = (corresponding_single / personal_single) * 100
+                else:
+                    kinch_rank = 0  # Set kinch rank to 0 if personal single is 0
+                person_kinch_ranks.append({'event_id': event_id, 'kinch_rank': kinch_rank})
+            
+            # Calculate the overall kinch rank for the person
+            overall_kinch_rank = sum(event_kinch_rank['kinch_rank'] for event_kinch_rank in person_kinch_ranks) / len(person_kinch_ranks)
+            
+            # Add the person's kinch ranks and overall kinch rank to the dictionary
+            single_kinch_ranks[person_id] = {'event_kinch_ranks': person_kinch_ranks, 'overall_kinch_rank': overall_kinch_rank}
+
+        # Iterate through each person's average records
         for person_id, person_records in personal_average_records.items():
-            person_name = person_records[0]['person__name']
+            # person_name = person_records[0]['person__name']
             
             # Initialize a list to store the calculated kinch ranks for the person's events
             person_kinch_ranks = []
@@ -466,14 +495,76 @@ class KinchView(ContentMixin, TemplateView):
             overall_kinch_rank = sum(event_kinch_rank['kinch_rank'] for event_kinch_rank in person_kinch_ranks) / len(person_kinch_ranks)
             
             # Add the person's kinch ranks and overall kinch rank to the dictionary
-            kinch_ranks[person_name] = {'event_kinch_ranks': person_kinch_ranks, 'overall_kinch_rank': overall_kinch_rank}
+            average_kinch_ranks[person_id] = {'event_kinch_ranks': person_kinch_ranks, 'overall_kinch_rank': overall_kinch_rank}
 
-        sorted_kinch_ranks = dict(sorted(kinch_ranks.items(), key=lambda item: item[1]['overall_kinch_rank'], reverse=True))
-        
-        context['personal_single_records'] = personal_single_records
-        context['personal_average_records'] = personal_average_records
+        single_sorted_kinch_ranks = dict(sorted(single_kinch_ranks.items(), key=lambda item: item[1]['overall_kinch_rank'], reverse=True))
+        average_sorted_kinch_ranks = dict(sorted(average_kinch_ranks.items(), key=lambda item: item[1]['overall_kinch_rank'], reverse=True))
 
-        context['kinch_ranks'] = sorted_kinch_ranks
+        # Initialize the new dictionary
+        final_kinch_ranks = {}
+
+        # Define the list of events for each category
+        average_events = ["333", "222", "444", "555", "666", "777", "333oh", "clock", "minx", "pyram", "skewb", "sq1"]
+        single_events = ["444bf", "555bf", "333mbf"]
+        max_events = ["333bf", "333fm"]
+
+        # Iterate through each person's records in average_sorted_kinch_ranks
+        for person_name, person_data in average_sorted_kinch_ranks.items():
+            new_event_kinch_ranks = []
+
+            # Iterate through each event in average_events
+            for event in average_events:
+                event_data = next((item for item in person_data['event_kinch_ranks'] if item['event_id'] == event), None)
+                if event_data:
+                    new_event_kinch_ranks.append(event_data)
+
+            # Add the corresponding single event data from single_sorted_kinch_ranks
+            for event in single_events:
+                single_event_data = next((item for item in single_sorted_kinch_ranks[person_name]['event_kinch_ranks'] if item['event_id'] == event), None)
+                if single_event_data:
+                    new_event_kinch_ranks.append(single_event_data)
+
+            # Choose the maximum value for the max_events from both single and average data
+            for event in max_events:
+                average_event_data = next((item for item in person_data['event_kinch_ranks'] if item['event_id'] == event), None)
+                single_event_data = next((item for item in single_sorted_kinch_ranks[person_name]['event_kinch_ranks'] if item['event_id'] == event), None)
+                
+                if average_event_data and single_event_data:
+                    max_kinch_rank = max(average_event_data['kinch_rank'], single_event_data['kinch_rank'])
+                    new_event_kinch_ranks.append({'event_id': event, 'kinch_rank': max_kinch_rank})
+
+
+            # Calculate the overall kinch rank for the person
+            overall_kinch_rank = sum(event_kinch_rank['kinch_rank'] for event_kinch_rank in new_event_kinch_ranks) / len(new_event_kinch_ranks)
+
+            # Add the person's kinch ranks and overall kinch rank to the final dictionary
+            final_kinch_ranks[person_name] = {'event_kinch_ranks': new_event_kinch_ranks, 'overall_kinch_rank': overall_kinch_rank}
+
+            print(final_kinch_ranks)
+
+        # Iterate through each person's records in average_sorted_kinch_ranks
+        for person_name, person_data in final_kinch_ranks.items():
+            new_event_kinch_ranks = []
+
+            # Reorder events according to the desired order
+            for event in event_ids:
+                event_data = next((item for item in person_data['event_kinch_ranks'] if item['event_id'] == event), None)
+                if event_data:
+                    new_event_kinch_ranks.append(event_data)
+
+            # Calculate the overall kinch rank for the person
+            overall_kinch_rank = sum(event_kinch_rank['kinch_rank'] for event_kinch_rank in new_event_kinch_ranks) / len(new_event_kinch_ranks)
+
+            # Add the person's kinch ranks and overall kinch rank to the final dictionary
+            final_kinch_ranks[person_name] = {'event_kinch_ranks': new_event_kinch_ranks, 'overall_kinch_rank': overall_kinch_rank}
+
+        # Sort the final_kinch_ranks dictionary by overall_kinch_rank
+        final_sorted_kinch_ranks = dict(sorted(final_kinch_ranks.items(), key=lambda item: item[1]['overall_kinch_rank'], reverse=True))
+
+        context['single_sorted_kinch_ranks'] = single_sorted_kinch_ranks
+        context['average_sorted_kinch_ranks'] = average_sorted_kinch_ranks
+
+        context['final_sorted_kinch_ranks'] = final_sorted_kinch_ranks
 
         # Populate the context dictionary with processed data
         context['states'] = State.objects.all()

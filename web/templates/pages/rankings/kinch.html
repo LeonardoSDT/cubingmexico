@@ -71,12 +71,13 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for person, kinch_data in kinch_ranks.items %}
+                    {% for person, kinch_data in final_sorted_kinch_ranks.items %}
                         <tr>
                             <td>{{ forloop.counter }}</td>
                             <td>{{ person }}</td>
                             <td>{{ kinch_data.overall_kinch_rank|floatformat:2 }}</td>
                             {% for event_kinch_rank in kinch_data.event_kinch_ranks %}
+                                <!-- <td>{{ event_kinch_rank }}</td> -->
                                 <td>{{ event_kinch_rank.kinch_rank|floatformat:2 }}</td>
                             {% endfor %}
                         </tr>
