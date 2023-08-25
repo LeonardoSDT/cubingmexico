@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Kinch Ranks 
+    {% if selected_state %}
+        de
+        {% for state in states %}
+            {% if state.three_letter_code == selected_state %}
+                {{ state.name }}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+     - Cubingmexico
+{% endblock %}
+
+{% block meta_description %}{% endblock %}
+
+{% block meta_keywords %}{% endblock %}
+
+{% load static %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+
+    <link rel="stylesheet" href="{% static 'css/cubing-icons.css' %}">
+{% endblock stylesheets %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-12 col-sm-9">
+            <h1 class="my-3">
+            Kinch Ranks 
+            {% if selected_state %}
+                de
+                {% for state in states %}
+                    {% if state.three_letter_code == selected_state %}
+                        {{ state.name }}
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            </h1>
+
+            <p>Kinch Ranks se refiere a </p>
+        
+        </div>
+        <div class="col-12 col-sm-3 d-flex justify-content-center my-3">
+            <form>
+                <label for="state-select"><strong>Selecciona un estado</strong></label>
+                <select class="form-select" id="state-select" onchange="location = this.value;">
+                    <option value="{% url 'cubingmexico_web:kinch' %}">Todo el país</option>
+                  {% for state in states %}
+                    <option value="{% url 'cubingmexico_web:kinch' state=state.three_letter_code %}" {% if state.three_letter_code == selected_state %}selected{% endif %}>{{ state.name }}</option>
+                  {% endfor %}
+                </select>
+              </form>              
+        </div>        
+    </div>
+
+    <div class="table-responsive">
+        <div class="scrollable-table-container" style="width: 100%;">
+            <table id="kinch" class="table table-striped nowrap" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Persona</th>
+                        <th>Total</th>
+                        {% for event in events %}
+                            <th><span class="cubing-icon event-{{ event.id }} h4"></span></th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for person, kinch_data in kinch_ranks.items %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ person }}</td>
+                            <td>{{ kinch_data.overall_kinch_rank|floatformat:2 }}</td>
+                            {% for event_kinch_rank in kinch_data.event_kinch_ranks %}
+                                <td>{{ event_kinch_rank.kinch_rank|floatformat:2 }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>#</th>
+                        <th>Persona</th>
+                        <th>Total</th>
+                        {% for event in events %}
+                            <th><span class="cubing-icon event-{{ event.id }} h4"></span></th>
+                        {% endfor %}
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+
+    {% if selected_state %}
+        {% include "includes/faq.html" %}
+    {% endif %}
+    
+{% endblock %}
+
+{% block javascripts %}
+
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#kinch').DataTable({
+            "language": {
+                url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json',
+            }
+        });
+    });
+</script>
+{% endblock javascripts %}

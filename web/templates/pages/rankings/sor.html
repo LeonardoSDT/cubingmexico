@@ -23,7 +23,6 @@
 {% block stylesheets %}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.1/css/responsive.bootstrap5.min.css">
 
     <link rel="stylesheet" href="{% static 'css/cubing-icons.css' %}">
 {% endblock stylesheets %}
@@ -69,53 +68,57 @@
               </form>              
         </div>        
     </div>
-    
-    <table id="sor" class="table table-striped nowrap" style="width:100%">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Persona</th>
-                <th>Total</th>
-                {% for event in events %}
-                    {% if selected_ranking == 'single' %}
-                        <th><span class="cubing-icon event-{{ event.id }} h4"></span></th>
-                    {% else %}
-                        {% if event.id != '333mbf' %}
-                            <th><span class="cubing-icon event-{{ event.id }} h4"></span></th>
-                        {% endif %}
-                    {% endif %}
-                {% endfor %}
-            </tr>
-        </thead>
-        <tbody>
-            {% for sor_person, sor_events in sor_overall_results %}
-            <tr>
-                <td>{{ forloop.counter }}</td>
-                <td><a href="https://www.worldcubeassociation.org/persons/{{ sor_person.0 }}">{{ sor_person.1 }}</a></td>
-                <td><strong>{{ sor_person.2 }}</strong></td>
-                {% for event in sor_events %}
-                    <td><p class="{% if event.has_rank == False %} text-danger fw-bold {% elif event.country_rank <= 10 %} text-success fw-bold {% endif %}">{{ event.country_rank }}</p></td>
-                {% endfor %}
-            </tr>
-        {% endfor %}
-        </tbody>
-        <tfoot>
-            <tr>
-                <th>#</th>
-                <th>Persona</th>
-                <th>Total</th>
-                {% for event in events %}
-                    {% if selected_ranking == 'single' %}
-                        <th><span class="cubing-icon event-{{ event.id }} h4"></span></th>
-                    {% else %}
-                        {% if event.id != '333mbf' %}
-                            <th><span class="cubing-icon event-{{ event.id }} h4"></span></th>
-                        {% endif %}
-                    {% endif %}
-                {% endfor %}
-            </tr>
-        </tfoot>
-    </table>
+
+    <div class="table-responsive">
+        <div class="scrollable-table-container" style="width: 100%;">
+            <table id="sor" class="table table-striped nowrap" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Persona</th>
+                        <th>Total</th>
+                        {% for event in events %}
+                            {% if selected_ranking == 'single' %}
+                                <th><span class="cubing-icon event-{{ event.id }} h4"></span></th>
+                            {% else %}
+                                {% if event.id != '333mbf' %}
+                                    <th><span class="cubing-icon event-{{ event.id }} h4"></span></th>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for sor_person, sor_events in sor_overall_results %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td><a href="https://www.worldcubeassociation.org/persons/{{ sor_person.0 }}">{{ sor_person.1 }}</a></td>
+                            <td><strong>{{ sor_person.2 }}</strong></td>
+                            {% for event in sor_events %}
+                                <td><p class="{% if event.has_rank == False %} text-danger fw-bold {% elif event.country_rank <= 10 %} text-success fw-bold {% endif %}">{{ event.country_rank }}</p></td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>#</th>
+                        <th>Persona</th>
+                        <th>Total</th>
+                        {% for event in events %}
+                            {% if selected_ranking == 'single' %}
+                                <th><span class="cubing-icon event-{{ event.id }} h4"></span></th>
+                            {% else %}
+                                {% if event.id != '333mbf' %}
+                                    <th><span class="cubing-icon event-{{ event.id }} h4"></span></th>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
 
     {% if selected_state %}
         {% include "includes/faq.html" %}
@@ -128,13 +131,10 @@
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
-<script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
-<script src="https://cdn.datatables.net/responsive/2.4.1/js/responsive.bootstrap5.min.js"></script>
 
 <script>
     $(document).ready(function () {
         $('#sor').DataTable({
-            responsive: true,
             "language": {
                 url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json',
             }

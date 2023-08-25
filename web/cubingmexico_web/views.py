@@ -223,6 +223,7 @@ class SORView(ContentMixin, TemplateView):
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
+        # Extract 'state' and 'ranking_type' from URL keyword arguments
         state = self.kwargs.get('state')
         ranking_type = self.kwargs.get('ranking_type')
         context = super().get_context_data(**kwargs)
@@ -230,6 +231,7 @@ class SORView(ContentMixin, TemplateView):
         excluded_event_ids = ['333ft', 'magic', 'mmagic', '333mbo']
 
         if state:
+            # Fetch data for a specific state
             persons = PersonStateTeam.objects.filter(state_team__state__three_letter_code=state)
             person_ids = persons.values_list('person_id', flat=True)
             if ranking_type == 'single':
@@ -239,6 +241,7 @@ class SORView(ContentMixin, TemplateView):
 
             context['selected_state'] = state
         else:
+            # Fetch data for the entire country
             if ranking_type == 'single':
                 sors = RanksSingle.objects.filter(person__country_id='Mexico')
             else:
@@ -246,6 +249,7 @@ class SORView(ContentMixin, TemplateView):
 
             context['selected_state'] = None
 
+        # Filter and order data, select related fields
         sors = sors.exclude(event_id__in=excluded_event_ids).select_related("event", "person").order_by('person_id', 'event__rank').values('person__name', 'person_id', 'event_id', 'country_rank')
         
         if ranking_type == 'single':
@@ -257,12 +261,14 @@ class SORView(ContentMixin, TemplateView):
 
         wcrs = list(wcrs)
 
+        # Sort data and group by person
         sors = sorted(sors, key=lambda x: (x['person_id'], x['person__name']))
 
         grouped_sors = groupby(sors, key=lambda x: (x['person_id'], x['person__name']))
 
         grouped_results = {}
 
+        # Process data and group by person for ranks association
         for (person_id, person__name), group in grouped_sors:
             group_list = list(group)
             
@@ -272,14 +278,18 @@ class SORView(ContentMixin, TemplateView):
 
         sor_results = {}
 
+        # Associate worst country ranks with actual ranks
         for (person_id, person__name), group in grouped_results.items():
             wcrs_copy = copy.deepcopy(wcrs)
             new_list = []
             for wcr in wcrs_copy:
                 for grp in group:
                     if wcr['event'] == grp['event_id']:
-                        wcr['country_rank'] = grp['country_rank']
-                        wcr['has_rank'] = True
+                        if grp['country_rank'] == 0:
+                            wcr['has_rank'] = False
+                        else:
+                            wcr['country_rank'] = grp['country_rank']
+                            wcr['has_rank'] = True
                         break
                 new_list.append(wcr)
 
@@ -287,6 +297,7 @@ class SORView(ContentMixin, TemplateView):
 
         sor_overall_results = {}
 
+        # Calculate overall ranks for each person
         for (person_id, person__name), group in sor_results.items():
             overall = 0
             for item in group:
@@ -294,8 +305,177 @@ class SORView(ContentMixin, TemplateView):
 
             sor_overall_results[(person_id, person__name, overall)] = group
 
+        # Populate the context dictionary with processed data
         context['sor_overall_results'] = sorted(sor_overall_results.items(), key=lambda x: x[0][2])
         context['selected_ranking'] = ranking_type
+        context['states'] = State.objects.all()
+        context['events'] = Event.objects.exclude(id__in=excluded_event_ids).order_by('rank')
+
+        return context
+    
+class KinchView(ContentMixin, TemplateView):
+    template_name = 'pages/rankings/kinch.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_superuser:
+            return redirect(reverse_lazy('cubingmexico_web:logout'))
+        return super().dispatch(request, *args, **kwargs)
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_superuser:
+            return redirect(reverse_lazy('cubingmexico_web:logout'))
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        # Extract 'state' and 'ranking_type' from URL keyword arguments
+        state = self.kwargs.get('state')
+        context = super().get_context_data(**kwargs)
+
+        excluded_event_ids = ['333ft', 'magic', 'mmagic', '333mbo']
+
+        event_ids = ["333", "222", "444", "555", "666", "777", "333bf", "333fm", "333oh", "clock", "minx", "pyram", "skewb", "sq1", "444bf", "555bf", "333mbf"]
+
+        personal_single_records = {}
+        personal_average_records = {}
+
+        if state:
+            # Fetch data for a specific state
+            persons = PersonStateTeam.objects.filter(state_team__state__three_letter_code=state)
+            person_ids = persons.values_list('person_id', flat=True)
+
+            single_records = get_records(state=state, is_average=False)
+            average_records = get_records(state=state, is_average=True)
+            
+            for person in person_ids:
+                psr = get_records(state=state, wca_id=person, is_average=False)
+                par = get_records(state=state, wca_id=person, is_average=True)
+
+                psr = list(psr.select_related("event", "person").order_by("person_id", "event__rank").values("person__name", "event_id", "best"))
+                par = list(par.select_related("event", "person").order_by("person_id", "event__rank").values("person__name", "event_id", "average"))
+
+                for event_id in event_ids:
+                    # Check if a record exists for this event and person
+                    if not any(record['event_id'] == event_id for record in psr):
+                        # If no record exists, add a default record with best = 0
+                        psr.append({
+                            "event_id": event_id,
+                            "best": 0
+                        })
+                    
+                    if not any(record['event_id'] == event_id for record in par):
+                        # If no record exists, add a default record with best = 0
+                        par.append({
+                            "event_id": event_id,
+                            "average": 0
+                        })
+
+                personal_single_records[person] = psr
+                personal_average_records[person] = par
+
+            context['selected_state'] = state
+        # else:
+        #     # Fetch data for the entire country
+        #     persons = Person.objects.all()
+        #     person_ids = persons.values_list('id', flat=True)
+
+        #     single_records = get_records(is_average=False)
+        #     average_records = get_records(is_average=True)
+
+        #     for person in person_ids:
+        #         psr = get_records(wca_id=person, is_average=False)
+        #         par = get_records(wca_id=person, is_average=True)
+
+        #         psr = list(psr.select_related("event", "person").order_by("person_id", "event__rank").values("person__name", "event_id", "best"))
+        #         par = list(par.select_related("event", "person").order_by("person_id", "event__rank").values("person__name", "event_id", "average"))
+
+        #         for event_id in event_ids:
+        #             # Check if a record exists for this event and person
+        #             if not any(record['event_id'] == event_id for record in psr):
+        #                 # If no record exists, add a default record with best = 0
+        #                 psr.append({
+        #                     "event_id": event_id,
+        #                     "best": 0
+        #                 })
+                    
+        #             if not any(record['event_id'] == event_id for record in par):
+        #                 # If no record exists, add a default record with best = 0
+        #                 par.append({
+        #                     "event_id": event_id,
+        #                     "average": 0
+        #                 })
+
+        #         personal_single_records[person] = psr
+        #         personal_average_records[person] = par
+                
+        #       context['selected_state'] = None
+
+        # Filter and order data, select related fields
+        single_records = list(single_records.select_related("event").order_by("event__rank").values("event_id", "best"))
+        average_records = list(average_records.select_related("event").order_by("event__rank").values("event_id", "average"))
+
+        full_single_records = {}
+        full_average_records = {}
+
+        # Create a dictionary to map event IDs to their averages
+        full_single_records = {record['event_id']: record['best'] for record in single_records}
+        full_average_records = {record['event_id']: record['average'] for record in average_records}
+
+        # Create the final list with ordered event averages
+        full_single_records = [
+            {'event_id': event_id, 'best': full_single_records.get(event_id, 0)}
+            for event_id in event_ids
+        ]
+        full_average_records = [
+            {'event_id': event_id, 'average': full_average_records.get(event_id, 0)}
+            for event_id in event_ids
+        ]
+
+        # Sort records within personal_single_records and personal_average_records by event_id_order
+        for person in personal_single_records:
+            personal_single_records[person].sort(key=lambda x: event_ids.index(x['event_id']))
+
+        for person in personal_average_records:
+            personal_average_records[person].sort(key=lambda x: event_ids.index(x['event_id']))
+
+        # Create a dictionary to store the calculated kinch ranks for each person
+        kinch_ranks = {}
+
+        # Iterate through each person's records
+        for person_id, person_records in personal_average_records.items():
+            person_name = person_records[0]['person__name']
+            
+            # Initialize a list to store the calculated kinch ranks for the person's events
+            person_kinch_ranks = []
+            
+            # Iterate through each event's records for the person
+            for record in person_records:
+                event_id = record['event_id']
+                personal_average = record['average']
+                
+                # Find the corresponding average from full_average_records
+                corresponding_average = next(item['average'] for item in full_average_records if item['event_id'] == event_id)
+                
+                # Calculate the kinch rank and append to the person_kinch_ranks list
+                if personal_average != 0:  # Avoid division by zero
+                    kinch_rank = (corresponding_average / personal_average) * 100
+                else:
+                    kinch_rank = 0  # Set kinch rank to 0 if personal average is 0
+                person_kinch_ranks.append({'event_id': event_id, 'kinch_rank': kinch_rank})
+            
+            # Calculate the overall kinch rank for the person
+            overall_kinch_rank = sum(event_kinch_rank['kinch_rank'] for event_kinch_rank in person_kinch_ranks) / len(person_kinch_ranks)
+            
+            # Add the person's kinch ranks and overall kinch rank to the dictionary
+            kinch_ranks[person_name] = {'event_kinch_ranks': person_kinch_ranks, 'overall_kinch_rank': overall_kinch_rank}
+
+        sorted_kinch_ranks = dict(sorted(kinch_ranks.items(), key=lambda item: item[1]['overall_kinch_rank'], reverse=True))
+        
+        context['personal_single_records'] = personal_single_records
+        context['personal_average_records'] = personal_average_records
+
+        context['kinch_ranks'] = sorted_kinch_ranks
+
+        # Populate the context dictionary with processed data
         context['states'] = State.objects.all()
         context['events'] = Event.objects.exclude(id__in=excluded_event_ids).order_by('rank')
 
