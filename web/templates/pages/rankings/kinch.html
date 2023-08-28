@@ -41,7 +41,21 @@
             {% endif %}
             </h1>
 
-            <p>Kinch Ranks se refiere a </p>
+            <p>Los KinchRanks son un sistema de clasificación innovador diseñado para evaluar la habilidad de un cubero en los 17 eventos oficiales de la WCA. Este sistema utiliza un enfoque único para calcular la puntuación de cada competidor en función de sus resultados en cada evento. Cada evento se puntúa en una escala del 0 al 100, considerando tanto los 
+            {% if selected_state %}
+            <a href="{% url 'cubingmexico_web:records' state=selected_state %}" class="text-decoration-none">récords estatales (SR)</a>
+            {% else %}
+            <a href="{% url 'cubingmexico_web:records' %}" class="text-decoration-none">récords nacionales (NR)</a>
+            {% endif %}
+            como los récords personales (PR) de los competidores. A través de este enfoque, se busca equilibrar la clasificación entre todos los eventos, eliminando las desventajas percibidas en sistemas tradicionales como el
+            {% if selected_state %}
+            <a href="{% url 'cubingmexico_web:sor' state=selected_state ranking_type='single' %}" class="text-decoration-none">SOR</a>
+            {% else %}
+            <a href="{% url 'cubingmexico_web:sor' ranking_type='single' %}" class="text-decoration-none">SOR</a>
+            {% endif %} 
+            y promoviendo una visión más integral de las habilidades en la resolución de rompecabezas.</p>
+
+            <p>Para obtener más información sobre cómo funcionan los KinchRanks puedes consultar el <a href="https://www.speedsolving.com/threads/all-round-rankings-kinchranks.53353/">siguiente enlace</a>.</p>
         
         </div>
         <div class="col-12 col-sm-3 d-flex justify-content-center my-3">
@@ -78,7 +92,7 @@
                             <td>{{ kinch_data.overall_kinch_rank|floatformat:2 }}</td>
                             {% for event_kinch_rank in kinch_data.event_kinch_ranks %}
                                 <!-- <td>{{ event_kinch_rank }}</td> -->
-                                <td>{{ event_kinch_rank.kinch_rank|floatformat:2 }}</td>
+                                <td><p class="{% if event_kinch_rank.kinch_rank == 0 %} text-danger fw-bold {% elif event_kinch_rank.kinch_rank == 100 %} text-success fw-bold {% endif %}">{{ event_kinch_rank.kinch_rank|floatformat:2 }}</p></td>
                             {% endfor %}
                         </tr>
                     {% endfor %}

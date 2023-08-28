@@ -321,11 +321,6 @@ class KinchView(ContentMixin, TemplateView):
             return redirect(reverse_lazy('cubingmexico_web:logout'))
         return super().dispatch(request, *args, **kwargs)
 
-    def dispatch(self, request, *args, **kwargs):
-        if request.user.is_superuser:
-            return redirect(reverse_lazy('cubingmexico_web:logout'))
-        return super().dispatch(request, *args, **kwargs)
-
     def get_context_data(self, **kwargs):
         # Extract 'state' and 'ranking_type' from URL keyword arguments
         state = self.kwargs.get('state')
@@ -373,41 +368,41 @@ class KinchView(ContentMixin, TemplateView):
                 personal_average_records[person] = par
 
             context['selected_state'] = state
-        # else:
-        #     # Fetch data for the entire country
-        #     persons = Person.objects.all()
-        #     person_ids = persons.values_list('id', flat=True)
+        else:
+            # Fetch data for the entire country
+            persons = Person.objects.filter(country_id='Mexico')
+            person_ids = persons.values_list('id', flat=True)
 
-        #     single_records = get_records(is_average=False)
-        #     average_records = get_records(is_average=True)
+            single_records = get_records(is_average=False)
+            average_records = get_records(is_average=True)
 
-        #     for person in person_ids:
-        #         psr = get_records(wca_id=person, is_average=False)
-        #         par = get_records(wca_id=person, is_average=True)
+            for person in person_ids:
+                psr = get_records(wca_id=person, is_average=False)
+                par = get_records(wca_id=person, is_average=True)
 
-        #         psr = list(psr.select_related("event", "person").order_by("person_id", "event__rank").values("person__name", "event_id", "best"))
-        #         par = list(par.select_related("event", "person").order_by("person_id", "event__rank").values("person__name", "event_id", "average"))
+                psr = list(psr.select_related("event", "person").order_by("person_id", "event__rank").values("person__name", "event_id", "best"))
+                par = list(par.select_related("event", "person").order_by("person_id", "event__rank").values("person__name", "event_id", "average"))
 
-        #         for event_id in event_ids:
-        #             # Check if a record exists for this event and person
-        #             if not any(record['event_id'] == event_id for record in psr):
-        #                 # If no record exists, add a default record with best = 0
-        #                 psr.append({
-        #                     "event_id": event_id,
-        #                     "best": 0
-        #                 })
+                for event_id in event_ids:
+                    # Check if a record exists for this event and person
+                    if not any(record['event_id'] == event_id for record in psr):
+                        # If no record exists, add a default record with best = 0
+                        psr.append({
+                            "event_id": event_id,
+                            "best": 0
+                        })
                     
-        #             if not any(record['event_id'] == event_id for record in par):
-        #                 # If no record exists, add a default record with best = 0
-        #                 par.append({
-        #                     "event_id": event_id,
-        #                     "average": 0
-        #                 })
+                    if not any(record['event_id'] == event_id for record in par):
+                        # If no record exists, add a default record with best = 0
+                        par.append({
+                            "event_id": event_id,
+                            "average": 0
+                        })
 
-        #         personal_single_records[person] = psr
-        #         personal_average_records[person] = par
-                
-        #     context['selected_state'] = None
+                personal_single_records[person] = psr
+                personal_average_records[person] = par
+
+            context['selected_state'] = None
 
         # Filter and order data, select related fields
         single_records = list(single_records.select_related("event").order_by("event__rank").values("event_id", "best"))
@@ -443,7 +438,7 @@ class KinchView(ContentMixin, TemplateView):
 
         # Iterate through each person's single records
         for person_id, person_records in personal_single_records.items():
-            # person_name = person_records[0]['person__name']
+            person_name = person_records[0]['person__name']
             
             # Initialize a list to store the calculated kinch ranks for the person's events
             person_kinch_ranks = []
@@ -467,11 +462,11 @@ class KinchView(ContentMixin, TemplateView):
             overall_kinch_rank = sum(event_kinch_rank['kinch_rank'] for event_kinch_rank in person_kinch_ranks) / len(person_kinch_ranks)
             
             # Add the person's kinch ranks and overall kinch rank to the dictionary
-            single_kinch_ranks[person_id] = {'event_kinch_ranks': person_kinch_ranks, 'overall_kinch_rank': overall_kinch_rank}
+            single_kinch_ranks[person_name] = {'event_kinch_ranks': person_kinch_ranks, 'overall_kinch_rank': overall_kinch_rank}
 
         # Iterate through each person's average records
         for person_id, person_records in personal_average_records.items():
-            # person_name = person_records[0]['person__name']
+            person_name = person_records[0]['person__name']
             
             # Initialize a list to store the calculated kinch ranks for the person's events
             person_kinch_ranks = []
@@ -495,7 +490,7 @@ class KinchView(ContentMixin, TemplateView):
             overall_kinch_rank = sum(event_kinch_rank['kinch_rank'] for event_kinch_rank in person_kinch_ranks) / len(person_kinch_ranks)
             
             # Add the person's kinch ranks and overall kinch rank to the dictionary
-            average_kinch_ranks[person_id] = {'event_kinch_ranks': person_kinch_ranks, 'overall_kinch_rank': overall_kinch_rank}
+            average_kinch_ranks[person_name] = {'event_kinch_ranks': person_kinch_ranks, 'overall_kinch_rank': overall_kinch_rank}
 
         single_sorted_kinch_ranks = dict(sorted(single_kinch_ranks.items(), key=lambda item: item[1]['overall_kinch_rank'], reverse=True))
         average_sorted_kinch_ranks = dict(sorted(average_kinch_ranks.items(), key=lambda item: item[1]['overall_kinch_rank'], reverse=True))
@@ -539,8 +534,6 @@ class KinchView(ContentMixin, TemplateView):
 
             # Add the person's kinch ranks and overall kinch rank to the final dictionary
             final_kinch_ranks[person_name] = {'event_kinch_ranks': new_event_kinch_ranks, 'overall_kinch_rank': overall_kinch_rank}
-
-            print(final_kinch_ranks)
 
         # Iterate through each person's records in average_sorted_kinch_ranks
         for person_name, person_data in final_kinch_ranks.items():
