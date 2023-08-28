@@ -22,6 +22,16 @@ from cubingmexico_wca.models import (
     RoundType,
 )
 
+from cubingmexico_web.models import (
+    State,
+    PersonStateTeam,
+    CubingmexicoProfile,
+    StateRanksAverage,
+    StateRanksSingle,
+)
+
+from collections import defaultdict
+
 log = logging.getLogger(__name__)
 
 PH_ID = "Mexico"
@@ -285,6 +295,70 @@ def import_championships():
         )
 
 
+@transaction.atomic
+def determine_state_ranks():
+    log.info("  determining state ranks")
+    print("  determining state ranks")
+
+    StateRanksAverage.objects.all().delete()
+    StateRanksSingle.objects.all().delete()
+
+    people_by_state = defaultdict(list)
+    wcaids_by_state = defaultdict(list)
+
+    personstateteam = PersonStateTeam.objects.all()
+    for person in personstateteam:
+        state_code = person.state_team.state.three_letter_code
+        people_by_state[state_code].append(person)
+
+    cubingmexicoprofile = CubingmexicoProfile.objects.all()
+    for profile in cubingmexicoprofile:
+        if not profile.person_state_team and profile.state:
+            state_code = profile.state.three_letter_code
+            people_by_state[state_code].append(profile)
+
+    for state_code, people in people_by_state.items():
+        for p in people:
+            if isinstance(p, PersonStateTeam):
+                wcaids_by_state[state_code].append(p.person.id)
+            elif isinstance(p, CubingmexicoProfile):
+                wcaids_by_state[state_code].append(p.user.wcaprofile.wca_id)
+
+    mexican_states = State.objects.values_list('three_letter_code', flat=True)
+    for state in mexican_states:
+        if state in wcaids_by_state:
+            ids = wcaids_by_state[state]
+            rank_single = RanksSingle.objects.filter(person_id__in=ids).exclude(event_id__in=['333ft', 'magic', 'mmagic']).order_by('event_id', 'country_rank')
+            rank_average = RanksAverage.objects.filter(person_id__in=ids).exclude(event_id__in=['333ft', 'magic', 'mmagic']).order_by('event_id', 'country_rank')
+
+            event_state_ranks_single = {}
+            event_state_ranks_average = {}
+
+            print(f'Determining rankings for {state}')
+            for rs in rank_single:
+                event_id = rs.event_id
+
+                current_state_rank = event_state_ranks_single.get(event_id, 0) + 1
+
+                event_state_ranks_single[event_id] = current_state_rank
+
+                StateRanksSingle.objects.create(rankssingle=rs, state=state, state_rank=current_state_rank)
+
+            for ra in rank_average:
+                event_id = ra.event_id
+
+                current_state_rank = event_state_ranks_average.get(event_id, 0) + 1
+
+                event_state_ranks_average[event_id] = current_state_rank
+
+                StateRanksAverage.objects.create(ranksaverage=ra, state=state, state_rank=current_state_rank)
+
+        else:
+            print(f'No IDs found for {state}')
+
+    
+    
+
 def start_import():
     import_continents()
     import_countries()
@@ -297,6 +371,7 @@ def start_import():
     import_ranks_single()
     import_results()
     import_championships()
+    determine_state_ranks()
     log.info("Data import successful!")
     print("Data import successful!")
 

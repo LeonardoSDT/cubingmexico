@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import EmailValidator
 
-from cubingmexico_wca.models import Person, Competition
+from cubingmexico_wca.models import Person, Competition, RanksSingle, RanksAverage
 from phonenumber_field.modelfields import PhoneNumberField
 
 class User(AbstractUser):
@@ -35,7 +35,6 @@ class WCAProfile(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
 
 class State(models.Model):
     name = models.CharField(max_length=255)
@@ -109,3 +108,13 @@ class CubingmexicoProfile(models.Model):
     class Meta:
         verbose_name = _('Perfil de Cubingmexico')
         verbose_name_plural = _('Perfiles de Cubingmexico')
+
+class StateRanksSingle(models.Model):
+    rankssingle = models.ForeignKey(RanksSingle, on_delete=models.DO_NOTHING)
+    state = models.CharField(max_length=3)
+    state_rank = models.IntegerField()
+
+class StateRanksAverage(models.Model):
+    ranksaverage = models.ForeignKey(RanksAverage, on_delete=models.DO_NOTHING)
+    state = models.CharField(max_length=3)
+    state_rank = models.IntegerField()

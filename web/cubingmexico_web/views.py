@@ -20,7 +20,7 @@ from itertools import groupby
 
 import copy
 
-from .models import User, WCAProfile, CubingmexicoProfile, PersonStateTeam
+from .models import User, WCAProfile, CubingmexicoProfile, PersonStateTeam, StateRanksSingle, StateRanksAverage
 from cubingmexico_wca.models import Event, RanksSingle, RanksAverage, Competition
 from .forms import *
 from .utils import *
@@ -131,13 +131,12 @@ class MyResultsView(ContentMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super(MyResultsView, self).get_context_data(**kwargs)
         wca_id = self.kwargs['wca_id']
-
         my_single_results = get_records(wca_id=wca_id, is_average=False)
-        my_rank_single = RanksSingle.objects.filter(person_id=wca_id).order_by('event__rank')
+        my_rank_single = StateRanksSingle.objects.filter(rankssingle__person_id=wca_id).order_by('rankssingle__event__rank')
         context['my_single_results'] = zip(my_single_results, my_rank_single)
 
         my_average_results = get_records(wca_id=wca_id, is_average=True)
-        my_rank_average = RanksAverage.objects.filter(person_id=wca_id).order_by('event__rank')
+        my_rank_average = StateRanksAverage.objects.filter(ranksaverage__person_id=wca_id).order_by('ranksaverage__event__rank')
         context['my_average_results'] = zip(my_average_results, my_rank_average)
 
         context['wca_profile'] = get_wcaprofile(wca_id=wca_id)
@@ -167,13 +166,14 @@ class RankingsView(ContentMixin, TemplateView):
         
         if state:
             results = get_rankings(state=state, event_type=event_type, ranking_type=self.ranking_type)
-            persons = PersonStateTeam.objects.filter(state_team__state__three_letter_code=state)
-            person_ids = persons.values_list('person_id', flat=True)
+            persons = StateRanksSingle.objects.filter(state=state)
+            person_ids = persons.values_list('rankssingle__person_id', flat=True)
+            unique_person_ids = list(set(person_ids))
             if self.ranking_type == 'single':
-                rank_single = RanksSingle.objects.filter(event_id=event_type, person_id__in=person_ids).order_by('best')
+                rank_single = RanksSingle.objects.filter(event_id=event_type, person_id__in=unique_person_ids).order_by('best')
                 context['rankings'] = zip(results, rank_single)
             else:
-                rank_average = RanksAverage.objects.filter(event_id=event_type, person_id__in=person_ids).order_by('best')
+                rank_average = RanksAverage.objects.filter(event_id=event_type, person_id__in=unique_person_ids).order_by('best')
                 context['rankings'] = zip(results, rank_average)
 
             context['selected_state'] = state
@@ -223,7 +223,6 @@ class SORView(ContentMixin, TemplateView):
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
-        # Extract 'state' and 'ranking_type' from URL keyword arguments
         state = self.kwargs.get('state')
         ranking_type = self.kwargs.get('ranking_type')
         context = super().get_context_data(**kwargs)
@@ -231,13 +230,13 @@ class SORView(ContentMixin, TemplateView):
         excluded_event_ids = ['333ft', 'magic', 'mmagic', '333mbo']
 
         if state:
-            # Fetch data for a specific state
-            persons = PersonStateTeam.objects.filter(state_team__state__three_letter_code=state)
-            person_ids = persons.values_list('person_id', flat=True)
+            persons = StateRanksSingle.objects.filter(state=state)
+            person_ids = persons.values_list('rankssingle__person_id', flat=True)
+            unique_person_ids = list(set(person_ids))
             if ranking_type == 'single':
-                sors = RanksSingle.objects.filter(person_id__in=person_ids)
+                sors = RanksSingle.objects.filter(person_id__in=unique_person_ids)
             else:
-                sors = RanksAverage.objects.filter(person_id__in=person_ids)
+                sors = RanksAverage.objects.filter(person_id__in=unique_person_ids)
 
             context['selected_state'] = state
         else:

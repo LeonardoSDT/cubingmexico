@@ -1,7 +1,7 @@
 from django.conf import settings
 
 from cubingmexico_wca.models import Result
-from .models import WCAProfile
+from .models import WCAProfile, StateRanksSingle, StateRanksAverage
 
 def wca_authorize_uri():
     authorize_uri = settings.WCA_OAUTH_URI + 'authorize/'
@@ -49,7 +49,10 @@ def get_rankings(event_type='333', ranking_type='single', state=None):
 
     result_filter = Result.objects.filter(event=event_type, **{f"{filter_key}__gt": 0})
     if state:
-        result_filter = result_filter.filter(person__personstateteam__state_team__state__three_letter_code=state)
+        persons = StateRanksSingle.objects.filter(state=state)
+        person_ids = persons.values_list('rankssingle__person_id', flat=True)
+        unique_person_ids = list(set(person_ids))
+        result_filter = result_filter.filter(person_id__in=unique_person_ids)
     else:
         result_filter = result_filter.filter(country_id='Mexico')
     result_ids = result_filter.exclude(event_id__in=['333ft', 'magic', 'mmagic']).order_by("person_id", filter_key).distinct("person_id").values_list("id")
@@ -67,7 +70,10 @@ def get_records(state=None, wca_id=None, is_average=False):
     order_by_fields = ["event_id", field]
 
     if state:
-        filter_kwargs["person__personstateteam__state_team__state__three_letter_code"] = state
+        persons = StateRanksSingle.objects.filter(state=state)
+        person_ids = persons.values_list('rankssingle__person_id', flat=True)
+        unique_person_ids = list(set(person_ids))
+        filter_kwargs["person_id__in"] = unique_person_ids
 
     if wca_id:
         filter_kwargs["person_id"] = wca_id
