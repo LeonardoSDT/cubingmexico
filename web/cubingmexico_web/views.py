@@ -18,7 +18,7 @@ from django.db.models import Max, F, Value, Q
 
 from itertools import groupby
 
-import copy
+import copy, json
 
 from .models import User, WCAProfile, CubingmexicoProfile, PersonStateTeam, StateRanksSingle, StateRanksAverage
 from cubingmexico_wca.models import Event, RanksSingle, RanksAverage, Competition
@@ -93,6 +93,9 @@ class CompetitionsView(ContentMixin, TemplateView):
         ).annotate(
             competition_state=F('competitionstate__state__name')
         ).order_by('-year', '-month', '-day')
+
+        context['upcoming_competitions_list_json'] = json.dumps(list(upcoming_competitions.values('name', 'latitude', 'longitude', 'competitionstate__state__name')))
+        context['past_competitions_list_json'] = json.dumps(list(past_competitions.values('name', 'latitude', 'longitude', 'competitionstate__state__name')))
         
         context['upcoming_competitions'] = upcoming_competitions
         context['past_competitions'] = past_competitions

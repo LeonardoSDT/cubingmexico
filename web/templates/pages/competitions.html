@@ -12,94 +12,102 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.1/css/responsive.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 
     <link rel="stylesheet" href="{% static 'css/cubing-icons.css' %}">
 {% endblock stylesheets %}
 
 {% block content %}
 
-<h1 class="text-center my-3">Próximas competencias oficiales en México</h1>
-
 <div class="container">
-    {% if upcoming_competitions %}
-    <p class="card-text">Para obtener información más detallada sobre cada competencia, como la fecha de inscripción, cupo, cuota, y otros detalles, te invitamos a visitar el sitio web de la competencia en cuestión.</p>
-    <table id="upcoming_competitions" class="table table-striped nowrap" style="width:100%">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Nombre de la competencia</th>
-                <th>Categorías</th>
-                <th>Fecha(s)</th>
-                <th>Estado</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for competition in upcoming_competitions %}
-            <tr>
-                <td scope="row">{{ forloop.counter }}</td>
-                <td><a href="https://www.worldcubeassociation.org/competitions/{{ competition.id }}" class="text-decoration-none">{{ competition.name }}</a></td>
-                <td>
-                    {% for spec in competition.event_specs|split_string_and_sort %}
-                        <span class="cubing-icon event-{{ spec }}"></span>
+    <div class="row">
+        <h1 class="text-center my-3">Próximas competencias oficiales en México</h1>
+        {% if upcoming_competitions %}
+            <p class="card-text">Para obtener información más detallada sobre cada competencia, como la fecha de inscripción, cupo, cuota, y otros detalles, te invitamos a visitar el sitio web de la competencia en cuestión.</p>
+            <table id="upcoming_competitions" class="table table-striped nowrap" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nombre de la competencia</th>
+                        <th>Categorías</th>
+                        <th>Fecha(s)</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for competition in upcoming_competitions %}
+                    <tr>
+                        <td scope="row">{{ forloop.counter }}</td>
+                        <td><a href="https://www.worldcubeassociation.org/competitions/{{ competition.id }}" class="text-decoration-none">{{ competition.name }}</a></td>
+                        <td>
+                            {% for spec in competition.event_specs|split_string_and_sort %}
+                                <span class="cubing-icon event-{{ spec }}"></span>
+                            {% endfor %}
+                        </td>
+                        <td>{{ competition|format_competition_date_spanish }}</td>
+                        <td>{{ competition.competition_state }}</td>
+                    </tr>
                     {% endfor %}
-                </td>
-                <td>{{ competition|format_competition_date_spanish }}</td>
-                <td>{{ competition.competition_state }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-        <tfoot>
-            <tr>
-                <th>#</th>
-                <th>Nombre de la competencia</th>
-                <th>Categorías</th>
-                <th>Fecha(s)</th>
-                <th>Estado</th>
-            </tr>
-        </tfoot>
-    </table>
-    {% else %}
-        <p class="alert alert-info">No hay competencias próximas en México por el momento.</p>
-    {% endif %}
-    
-    <h1 class="text-center my-3">Competencias oficiales previas en México</h1>
-    <p class="card-text">Estas competencias ya fueron celebradas, puedes consultar la información de los ganadores y resultados visitando el sitio web de la competencia en cuestión.</p>
-
-    <table id="past_competitions" class="table table-striped nowrap" style="width:100%">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Nombre de la competencia</th>
-                <th>Categorías</th>
-                <th>Fecha(s)</th>
-                <th>Estado</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for competition in past_competitions %}
-            <tr>
-                <td scope="row">{{ forloop.counter }}</td>
-                <td><a href="https://www.worldcubeassociation.org/competitions/{{ competition.id }}" class="text-decoration-none">{{ competition.name }}</a></td>
-                <td>
-                    {% for spec in competition.event_specs|split_string_and_sort %}
-                        <span class="cubing-icon event-{{ spec }}"></span>
-                    {% endfor %}
-                </td>
-                <td>{{ competition|format_competition_date_spanish }}</td>
-                <td>{{ competition.competition_state }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-        <tfoot>
-            <tr>
-                <th>#</th>
-                <th>Nombre de la competencia</th>
-                <th>Categorías</th>
-                <th>Fecha(s)</th>
-                <th>Estado</th>
-            </tr>
-        </tfoot>
-    </table>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>#</th>
+                        <th>Nombre de la competencia</th>
+                        <th>Categorías</th>
+                        <th>Fecha(s)</th>
+                        <th>Estado</th>
+                    </tr>
+                </tfoot>
+            </table>
+        {% else %}
+            <p class="alert alert-info">No hay competencias próximas en México por el momento.</p>
+        {% endif %}
+    </div>
+    <div class="row">
+        <div id="upcoming_map" style="height: 300px;" class="my-3"></div>
+    </div>
+    <div class="row">
+        <h1 class="text-center my-3">Competencias oficiales previas en México</h1>
+        <p class="card-text">Estas competencias ya fueron celebradas, puedes consultar la información de los ganadores y resultados visitando el sitio web de la competencia en cuestión.</p>
+        <table id="past_competitions" class="table table-striped nowrap" style="width:100%">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Nombre de la competencia</th>
+                    <th>Categorías</th>
+                    <th>Fecha(s)</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for competition in past_competitions %}
+                <tr>
+                    <td scope="row">{{ forloop.counter }}</td>
+                    <td><a href="https://www.worldcubeassociation.org/competitions/{{ competition.id }}" class="text-decoration-none">{{ competition.name }}</a></td>
+                    <td>
+                        {% for spec in competition.event_specs|split_string_and_sort %}
+                            <span class="cubing-icon event-{{ spec }}"></span>
+                        {% endfor %}
+                    </td>
+                    <td>{{ competition|format_competition_date_spanish }}</td>
+                    <td>{{ competition.competition_state }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>#</th>
+                    <th>Nombre de la competencia</th>
+                    <th>Categorías</th>
+                    <th>Fecha(s)</th>
+                    <th>Estado</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    <div class="row">
+        <div id="past_map" style="height: 300px;" class="my-3"></div>
+    </div>
 </div>
 
 {% endblock %}
@@ -122,4 +130,59 @@
         });
     });
 </script>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+<script type="text/javascript">
+    var upcoming_map = L.map('upcoming_map').setView([23.634501, -102.552784], 5); // Set initial view to Mexico
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(upcoming_map);
+
+    var isFirstIterationUp = true;
+    
+    var upcomingCompetitionsList = {{ upcoming_competitions_list_json|safe }};
+
+    upcomingCompetitionsList.forEach(function (competition) {
+        var latitude = parseFloat(competition.latitude) / 1000000;
+        var longitude = parseFloat(competition.longitude) / 1000000;
+
+        var marker = L.marker([latitude, longitude]).addTo(upcoming_map)
+            .bindPopup(`<b>${competition.name}</b><br>${competition.competitionstate__state__name}`)
+
+        if (isFirstIterationUp) {
+            marker.openPopup();
+            isFirstIterationUp = false;
+        }
+    });
+</script>
+
+<script type="text/javascript">
+    var past_map = L.map('past_map').setView([23.634501, -102.552784], 5); // Set initial view to Mexico
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(past_map);
+    
+    var isFirstIterationPast = true;
+    
+    var pastCompetitionsList = {{ past_competitions_list_json|safe }};
+
+    pastCompetitionsList.forEach(function (competition) {
+        var latitude = parseFloat(competition.latitude) / 1000000;
+        var longitude = parseFloat(competition.longitude) / 1000000;
+
+        var marker = L.marker([latitude, longitude]).addTo(past_map)
+            .bindPopup(`<b>${competition.name}</b><br>${competition.competitionstate__state__name}`)
+            
+        if (isFirstIterationPast) {
+            marker.openPopup();
+            isFirstIterationPast = false;
+        }
+    });
+</script>
+
 {% endblock javascripts %}

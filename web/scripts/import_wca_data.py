@@ -207,6 +207,7 @@ def import_ranks_average():
     ph_df = df[df["personId"].isin(persons_df["id"])]
     ph_df = ph_df.replace({np.nan: None})
 
+    StateRanksAverage.objects.all().delete()
     RanksAverage.objects.all().delete()
 
     for row in ph_df.itertuples():
@@ -230,6 +231,7 @@ def import_ranks_single():
     ph_df = df[df["personId"].isin(persons_df["id"])]
     ph_df = ph_df.replace({np.nan: None})
 
+    StateRanksSingle.objects.all().delete()
     RanksSingle.objects.all().delete()
 
     for row in ph_df.itertuples():
@@ -299,9 +301,6 @@ def import_championships():
 def determine_state_ranks():
     log.info("  determining state ranks")
     print("  determining state ranks")
-
-    StateRanksAverage.objects.all().delete()
-    StateRanksSingle.objects.all().delete()
 
     people_by_state = defaultdict(list)
     wcaids_by_state = defaultdict(list)
