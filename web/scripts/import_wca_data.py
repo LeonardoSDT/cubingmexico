@@ -35,7 +35,7 @@ from collections import defaultdict
 log = logging.getLogger(__name__)
 
 PH_ID = "Mexico"
-DUMP_DIR = settings.BASE_DIR.joinpath("data/extracted/")
+DUMP_DIR = settings.BASE_DIR.joinpath("/tmp")
 
 
 @transaction.atomic
