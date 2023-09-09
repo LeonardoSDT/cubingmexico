@@ -14,7 +14,7 @@ from django.views.generic.edit import UpdateView, CreateView
 
 from django.core.files.storage import default_storage
 
-from django.db.models import Max, F, Value, Q
+from django.db.models import Max, F, Value, Q, Count
 
 from itertools import groupby
 
@@ -370,7 +370,11 @@ class StateTeamsView(ContentMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['state_teams'] = StateTeam.objects.all()
+
+        state_teams = StateTeam.objects.annotate(person_count=Count('personstateteam'))
+        state_teams = state_teams.order_by('-person_count')
+
+        context['state_teams'] = state_teams
         return context
     
 class IndividualStateTeamView(ContentMixin, DetailView):
@@ -456,6 +460,18 @@ class AddStateTeamMemberView(ContentMixin, CreateView):
         person_state_team = form.save(commit=False)
         person_state_team.state_team = state_team
         person_state_team.save()
+
+        person_id = person_state_team.person.id
+
+        try:
+            wca_profile = WCAProfile.objects.get(wca_id=person_id)
+            user_id = wca_profile.user
+            cubingmexico_profile = CubingmexicoProfile.objects.get(user=user_id)
+            cubingmexico_profile.person_state_team = person_state_team
+            cubingmexico_profile.save()
+        except WCAProfile.DoesNotExist:
+            pass
+        
         return super().form_valid(form)
     
 class RemoveStateTeamMemberView(DeleteView):
