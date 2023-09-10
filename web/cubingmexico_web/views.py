@@ -573,6 +573,12 @@ class WCACallbackView(RedirectView):
             # Redirect new users to their profile page
             redirect_uri = 'cubingmexico_web:profile'
 
+        else:
+            wca_profile.avatar_url = profile_data['avatar']['url']
+            wca_profile.avatar_thumb_url = profile_data['avatar']['thumb_url']
+            wca_profile.is_default_avatar = profile_data['avatar']['is_default']
+            wca_profile.save()
+
         # Login the user
         login(self.request, wca_profile.user)
 
