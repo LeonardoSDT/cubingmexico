@@ -24,7 +24,7 @@ from .models import User, WCAProfile, CubingmexicoProfile, PersonStateTeam, Stat
 from cubingmexico_wca.models import Event, RanksSingle, RanksAverage, Competition
 from .forms import *
 from .utils import *
-from datetime import date
+from datetime import date, datetime
 
 # Create your views here.
 
@@ -75,30 +75,41 @@ class CompetitionsView(ContentMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         
-        today = date.today()
+        now = datetime.now()  # Get the current date and time
         
+        # Filter upcoming competitions excluding current competitions
         upcoming_competitions = Competition.objects.filter(
-            Q(country__name='Mexico') & Q(year__gte=today.year) & (
-                Q(month__gt=today.month) | (Q(month=today.month) & Q(day__gte=today.day))
-            )
+            Q(country__name='Mexico') & Q(year__gte=now.year) & (
+                Q(month__gt=now.month) | (Q(month=now.month) & Q(day__gte=now.day))
+            ) & ~Q(year=now.year, month=now.month, day=now.day)
         ).annotate(
             competition_state=F('competitionstate__state__name')
         ).order_by('year', 'month', 'day')[:10]
 
         past_competitions = Competition.objects.filter(
             Q(country__name='Mexico') & (
-                Q(year__lt=today.year) | (Q(year=today.year) & Q(month__lt=today.month)) |
-                (Q(year=today.year) & Q(month=today.month) & Q(day__lt=today.day))
+                Q(year__lt=now.year) | (Q(year=now.year) & Q(month__lt=now.month)) |
+                (Q(year=now.year) & Q(month=now.month) & Q(day__lt=now.day))
             )
         ).annotate(
             competition_state=F('competitionstate__state__name')
         ).order_by('-year', '-month', '-day')
 
+        # Filter competitions that are being celebrated right now
+        current_competitions = Competition.objects.filter(
+            Q(country__name='Mexico') &
+            Q(year=now.year) & Q(month=now.month) & Q(day=now.day)
+        ).annotate(
+            competition_state=F('competitionstate__state__name')
+        )
+
         context['upcoming_competitions_list_json'] = json.dumps(list(upcoming_competitions.values('name', 'latitude', 'longitude', 'competitionstate__state__name')))
         context['past_competitions_list_json'] = json.dumps(list(past_competitions.values('name', 'latitude', 'longitude', 'competitionstate__state__name')))
+        context['current_competitions_list_json'] = json.dumps(list(current_competitions.values('name', 'latitude', 'longitude', 'competitionstate__state__name')))
         
         context['upcoming_competitions'] = upcoming_competitions
         context['past_competitions'] = past_competitions
+        context['current_competitions'] = current_competitions
         
         return context
 
