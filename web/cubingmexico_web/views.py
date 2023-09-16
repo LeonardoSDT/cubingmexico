@@ -86,6 +86,7 @@ class CompetitionsView(ContentMixin, TemplateView):
             competition_state=F('competitionstate__state__name')
         ).order_by('year', 'month', 'day')[:10]
 
+        # Filter competitions that are in Mexico and have already ended
         past_competitions = Competition.objects.filter(
             Q(country__name='Mexico') & (
                 Q(year__lt=now.year) | (Q(year=now.year) & Q(month__lt=now.month)) |
@@ -93,12 +94,20 @@ class CompetitionsView(ContentMixin, TemplateView):
             )
         ).annotate(
             competition_state=F('competitionstate__state__name')
+        )
+
+        # Exclude competitions that match the current date criteria
+        past_competitions = past_competitions.exclude(
+            Q(country__name='Mexico') &
+            Q(year=now.year) & Q(month=now.month) & Q(day__lte=now.day) &
+            Q(year=now.year) & Q(end_month__gte=now.month) & Q(end_day__gte=now.day)
         ).order_by('-year', '-month', '-day')
 
         # Filter competitions that are being celebrated right now
         current_competitions = Competition.objects.filter(
             Q(country__name='Mexico') &
-            Q(year=now.year) & Q(month=now.month) & Q(day=now.day)
+            Q(year=now.year) & Q(month=now.month) & Q(day__lte=now.day) &
+            Q(year=now.year) & Q(end_month__gte=now.month) & Q(end_day__gte=now.day)
         ).annotate(
             competition_state=F('competitionstate__state__name')
         )
