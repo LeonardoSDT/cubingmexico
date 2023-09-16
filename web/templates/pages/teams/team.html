@@ -140,15 +140,16 @@
 {% endif %}
 
 <div class="accordion mt-3" id="accordionExample">
+    <h1 class="fs-3 my-3">Preguntas frecuentes</h1>
     <div class="accordion-item">
       <h2 class="accordion-header" id="headingOne">
         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-          <strong>¿Por qué no aparezco como miembro del Team? :(</strong>
+          <strong>¿Por qué no aparezco como miembro del {{ object.name }}? :(</strong>
         </button>
       </h2>
       <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
         <div class="accordion-body">
-          Si no apareces como miembro del Team es porque no has sido agregado por algún administrador, recuerda que todos pueden ser parte de un Team, el único requisito es que vivas en el mismo estado, si cumples con lo anterior mencionado envía un mensaje a alguna de las redes sociales para que puedan agregarte:
+            Si no apareces como miembro del Team es porque no has participado en una competencia oficial de la <a href="https://www.worldcubeassociation.org/">World Cube Association</a> o porque no has sido agregado por algún administrador, recuerda que todos pueden ser parte de un Team, el único requisito es que vivas en el mismo estado, si cumples con lo anterior mencionado envía un mensaje a alguna de las redes sociales para que puedan agregarte:
             {% if object.facebook_link != '' %}
                 <a href="{{ object.facebook_link }}" class="link-dark"><i class="bi bi-facebook m-1"></i></a>
             {% endif %}
@@ -166,7 +167,7 @@
       </h2>
       <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
         <div class="accordion-body">
-          Puede deberse a que la persona se cambió recientemente de residencia o simplemente a algún error del administrador del Team, puedes enviar un mensaje a alguna de sus redes sociales para que puedan revisarlo:
+          Puede deberse a que la persona se cambió recientemente de residencia o simplemente a algún error de un administrador del Team, puedes enviar un mensaje a alguna de sus redes sociales para que puedan revisarlo:
           {% if object.facebook_link != '' %}
               <a href="{{ object.facebook_link }}" class="link-dark"><i class="bi bi-facebook m-1"></i></a>
           {% endif %}
@@ -176,15 +177,15 @@
         </div>
       </div>
     </div>
-    <!-- <div class="accordion-item">
+    <div class="accordion-item">
       <h2 class="accordion-header" id="headingThree">
         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-          <strong>¿Vives en {{ object.state }} pero no quieres pertenecer al Team?</strong>
+          <strong>Vivo en {{ object.state }} pero no quiero pertenecer al {{ object.name }}, ¿qué puedo hacer?</strong>
         </button>
       </h2>
       <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
         <div class="accordion-body">
-          Para poder aparecer en los rankings y récords estatales sin tener que ser miembro de un team tienes que hacer lo siguiente:
+          Para poder aparecer en los rankings y récords estatales de {{ object.state }} sin tener que ser miembro del {{ object.name }} tienes que hacer lo siguiente:
           <ol>
             <li>Haber participado en una competencia oficial avalada por la <a href="https://www.worldcubeassociation.org/">World Cube Association</a>.</li>
             <li>Iniciar sesión en Cubingmexico utilizando tus credenciales de la WCA.</li>
@@ -196,7 +197,7 @@
           </ol>
         </div>
       </div>
-    </div> -->
+    </div>
 </div>
 
 {% endblock %}
