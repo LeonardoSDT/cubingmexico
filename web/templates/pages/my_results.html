@@ -17,6 +17,11 @@
 
 {% if wca_profile %}
 <h1 class="my-3 text-center">{{ wca_profile.name }}</h1>
+{% if wca_profile.gender == 'm' %}
+<p class="text-center"><strong>Sexo:</strong> Masculino</p>
+{% elif wca_profile.gender == 'f' %}
+<p class="text-center"><strong>Sexo:</strong> Femenino</p>
+{% endif %}
 
 <div class="row">
     <div class="col-12 mb-3">

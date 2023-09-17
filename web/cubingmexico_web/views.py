@@ -594,8 +594,8 @@ class WCACallbackView(RedirectView):
             redirect_uri = 'cubingmexico_web:profile'
 
         else:
-            wca_profile.name = profile_data['name'],
-            wca_profile.gender = profile_data['gender'],
+            wca_profile.name = profile_data['name']
+            wca_profile.gender = profile_data['gender']
             wca_profile.avatar_url = profile_data['avatar']['url']
             wca_profile.avatar_thumb_url = profile_data['avatar']['thumb_url']
             wca_profile.is_default_avatar = profile_data['avatar']['is_default']
