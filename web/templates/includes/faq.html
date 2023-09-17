@@ -8,7 +8,7 @@
     </h2>
     <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
       <div class="accordion-body">
-        Si no apareces como miembro del Team es porque no has participado en una competencia oficial de la <a href="https://www.worldcubeassociation.org/">World Cube Association</a> o porque no has sido agregado por algún administrador, recuerda que todos pueden ser parte de un Team, el único requisito es que vivas en el mismo estado, si cumples con lo anterior mencionado envía un mensaje a alguna de las <a href="{% url 'cubingmexico_web:team' team_code=selected_state %}">redes sociales</a> para que puedan agregarte.
+        Si no apareces como miembro del Team es porque no has participado en una competencia oficial de la <a href="https://www.worldcubeassociation.org/">World Cube Association</a> o porque no has sido agregado por algún administrador, recuerda que todos pueden ser parte de un Team, el único requisito es que vivas en el mismo estado, si cumples con lo anterior mencionado contáctate con el Team en alguno de los medios que aparecen <a href="{% url 'cubingmexico_web:team' team_code=selected_state %}">aquí</a> para que puedan agregarte.
       </div>
     </div>
   </div>
@@ -42,6 +42,18 @@
           <li>Ir a tu Perfil y seleccionar tu estado.</li>
           {% endif %}
         </ol>
+      </div>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="headingFour">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+        <strong>Ya hice todo lo mencionado anteriormente y no aparezco en los rankings/récords de mi estado</strong>
+      </button>
+    </h2>
+    <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+        Si has completado las acciones mencionadas previamente y aún no ves resultados, se debe a que la base de datos aún no ha sido actualizada. Esto es una situación común y no debes inquietarte. La base de datos se actualiza todos los días a las 02:00 UTC-6 (2 AM hora de la Ciudad de México). Te pedimos amablemente que tengas paciencia y compruebes de nuevo mañana.
       </div>
     </div>
   </div>

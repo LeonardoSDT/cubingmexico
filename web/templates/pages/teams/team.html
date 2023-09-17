@@ -122,12 +122,25 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p>Esta es una comunidad de cuberos en {{ object.state }}, para unirte contáctalos en sus redes sociales:</p>
-                    {% if object.facebook_link != '' %}
-                        <p><a href="{{ object.facebook_link }}"><i class="bi bi-facebook me-1"></i>{{ object.facebook_link }}</a></p>
-                    {% endif %}
-                    {% if object.instagram_link != '' %}
-                        <p><a href="{{ object.instagram_link }}"><i class="bi bi-instagram me-1"></i>{{ object.instagram_link }}</a></p>
+                    Esta es una comunidad de cuberos en {{ object.state }}, para unirte
+                    {% if object.facebook_link == '' and object.instagram_link == '' and object.phone_number == '' and object.email == '' %}
+                    envía un mensaje a <a href="https://www.facebook.com/rubik.nayarit">esta página</a>.
+                    {% else %}
+                    contáctalos a través de alguno de los siguientes medios:
+                    <ul>
+                        {% if object.facebook_link != '' %}
+                            <li><a href="{{ object.facebook_link }}" class="link-dark"><i class="bi bi-facebook m-1"></i>{{ object.facebook_link }}</a></li>
+                        {% endif %}
+                        {% if object.instagram_link != '' %}
+                            <li><a href="{{ object.instagram_link }}" class="link-dark"><i class="bi bi-instagram m-1"></i>{{ object.instagram_link }}</a></li>
+                        {% endif %}
+                        {% if object.phone_number != '' %}
+                            <li><a href="https://wa.me/{{ object.phone_number }}" class="link-dark"><i class="bi bi-whatsapp m-1"></i>{{ object.phone_number }}</a></li>
+                        {% endif %}
+                        {% if object.email != '' %}
+                            <li><a href="mailto:{{ object.email }}" class="link-dark"><i class="bi bi-envelope-fill m-1"></i>{{ object.email }}</a></li>
+                        {% endif %}
+                    </ul>
                     {% endif %}
                 </div>
                 <div class="modal-footer">
@@ -149,12 +162,25 @@
       </h2>
       <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
         <div class="accordion-body">
-            Si no apareces como miembro del Team es porque no has participado en una competencia oficial de la <a href="https://www.worldcubeassociation.org/">World Cube Association</a> o porque no has sido agregado por algún administrador, recuerda que todos pueden ser parte de un Team, el único requisito es que vivas en el mismo estado, si cumples con lo anterior mencionado envía un mensaje a alguna de las redes sociales para que puedan agregarte:
-            {% if object.facebook_link != '' %}
-                <a href="{{ object.facebook_link }}" class="link-dark"><i class="bi bi-facebook m-1"></i></a>
-            {% endif %}
-            {% if object.instagram_link != '' %}
-                <a href="{{ object.instagram_link }}" class="link-dark"><i class="bi bi-instagram m-1"></i></a>
+            Si no apareces como miembro del Team es porque no has participado en una competencia oficial de la <a href="https://www.worldcubeassociation.org/">World Cube Association</a> o porque no has sido agregado por algún administrador, recuerda que todos pueden ser parte de un Team, el único requisito es que vivas en el mismo estado, si cumples con lo anterior mencionado,
+            {% if object.facebook_link == '' and object.instagram_link == '' and object.phone_number == '' and object.email == '' %}
+            envía un mensaje a <a href="https://www.facebook.com/rubik.nayarit">esta página</a>.
+            {% else %}
+            contáctate con el {{ object.name }} a través de alguno de los medios que aparecen a continuación para que puedan agregarte:
+            <ul>
+                {% if object.facebook_link != '' %}
+                    <li><a href="{{ object.facebook_link }}" class="link-dark"><i class="bi bi-facebook m-1"></i>{{ object.facebook_link }}</a></li>
+                {% endif %}
+                {% if object.instagram_link != '' %}
+                    <li><a href="{{ object.instagram_link }}" class="link-dark"><i class="bi bi-instagram m-1"></i>{{ object.instagram_link }}</a></li>
+                {% endif %}
+                {% if object.phone_number != '' %}
+                    <li><a href="https://wa.me/{{ object.phone_number }}" class="link-dark"><i class="bi bi-whatsapp m-1"></i>{{ object.phone_number }}</a></li>
+                {% endif %}
+                {% if object.email != '' %}
+                    <li><a href="mailto:{{ object.email }}" class="link-dark"><i class="bi bi-envelope-fill m-1"></i>{{ object.email }}</a></li>
+                {% endif %}
+            </ul>
             {% endif %}
         </div>
       </div>
@@ -167,13 +193,7 @@
       </h2>
       <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
         <div class="accordion-body">
-          Puede deberse a que la persona se cambió recientemente de residencia o simplemente a algún error de un administrador del Team, puedes enviar un mensaje a alguna de sus redes sociales para que puedan revisarlo:
-          {% if object.facebook_link != '' %}
-              <a href="{{ object.facebook_link }}" class="link-dark"><i class="bi bi-facebook m-1"></i></a>
-          {% endif %}
-          {% if object.instagram_link != '' %}
-              <a href="{{ object.instagram_link }}" class="link-dark"><i class="bi bi-instagram m-1"></i></a>
-          {% endif %}
+          Puede deberse a que la persona se cambió recientemente de residencia o simplemente a algún error de un administrador del Team, puedes enviar un mensaje a <a href="https://www.facebook.com/rubik.nayarit">esta página</a> para que podamos revisarlo.
         </div>
       </div>
     </div>
