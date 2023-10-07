@@ -63,6 +63,24 @@ class IndexView(ContentMixin, TemplateView):
             return redirect(reverse_lazy('cubingmexico_web:logout'))
         return super().dispatch(request, *args, **kwargs)
     
+class AboutView(ContentMixin, TemplateView):
+    template_name = 'pages/about.html'
+    page = 'cubingmexico_web:about'
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_superuser:
+            return redirect(reverse_lazy('cubingmexico_web:logout'))
+        return super().dispatch(request, *args, **kwargs)
+    
+class DonationsView(ContentMixin, TemplateView):
+    template_name = 'pages/donations.html'
+    page = 'cubingmexico_web:donations'
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_superuser:
+            return redirect(reverse_lazy('cubingmexico_web:logout'))
+        return super().dispatch(request, *args, **kwargs)
+    
 class CompetitionsView(ContentMixin, TemplateView):
     template_name = 'pages/competitions.html'
     page = 'cubingmexico_web:competitions'

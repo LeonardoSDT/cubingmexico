@@ -1,4 +1,4 @@
-Cubingmexico
+Cubing México
 ===
 
 ## Características
@@ -26,10 +26,10 @@ Ningún récord oficial ha sido modificado/alterado.
 
 1. Configurar Google Cloud Platform:
 
-  a. Create a new project
-  b. Make sure the project has a billing account attached
-  c. Download GCP CLI from [here](https://cloud.google.com/sdk/docs/install)
-  d. Create a service account:
+  1. Create a new project
+  2. Make sure the project has a billing account attached
+  3. Download GCP CLI from [here](https://cloud.google.com/sdk/docs/install)
+  4. Create a service account:
       As a best practice, we will create a new service account on GCP to run our Cloud Run instance. Go to the GCP console → IAM & Admin → Service Accounts and create a new service account e.g. "cubingmexico_app_dev"
       Next, grant the following permissions to it:
         - Cloud SQL Client
@@ -39,11 +39,11 @@ Ningún récord oficial ha sido modificado/alterado.
         - Secret Manager Secret Accessor
         - Storage Object Admin
       Next, go to the KEYS section. Create a new key and store the JSON file as "creds.json" inside the /gcp folder.
-  e. Create a Cloud SQL instance
+  5. Create a Cloud SQL instance
       Although we can create a database instance using GCP CLI, it’s helpful to use the GUI if doing for the first time. Head to your GCP console → SQL → Create Instance.
       Select a Postgres instance with required capacity (3.75 GB memory and 10 GB SSD). Give an apt name e.g. cubignemxico-dev-db. GCP will take up to 5 minutes to create a new instance, it will also create a default user postgres and a default database postgres.
       Next, create a new user named "cubingmexicodevdbadmin" and a new database called "cubingmexicodevdb". Make sure to note down the password for cubingmexicodevdbadmin.
-  f. Create a storage bucket
+  6. Create a storage bucket
       We will need to create a Google Cloud Storage bucket to host the static files from Django. Head to GCP console → Cloud Storage → Create bucket, name it "cubingmexico_dev_bucket".
 
 2. Construir y ejecutar:

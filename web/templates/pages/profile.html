@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Perfil{% endblock %}
+{% block title %}Perfil - Cubing México{% endblock %}
 
 {% block content %}
 
@@ -27,7 +27,7 @@
                 <h5 class="card-title">Detalles</h5>
                 <p class="card-text">
                     <!-- <p>Te uniste a la WCA el {{ user.wcaprofile.wca_created_at }}</p> -->
-                    <p>Te uniste a Cubingmexico el {{ user.date_joined }}</p>
+                    <p>Te uniste a Cubing México el {{ user.date_joined }}</p>
                     <hr>
                     {% if user.cubingmexicoprofile.state == '' or user.cubingmexicoprofile.state == None %}
                         {% if user.wcaprofile.country_iso2 == 'MX' %}

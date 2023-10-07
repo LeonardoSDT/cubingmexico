@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}{{ object.name }} - Cubingmexico{% endblock %}
+{% block title %}{{ object.name }} - Cubing México{% endblock %}
 {% block meta_description %}Conoce más sobre el {{ object.name }} de speedcubing en México. Descubre a los competidores de {{ object.state.name }}, récords y competiciones.{% endblock %}
 {% block meta_keywords %}{{ object.name }}, speedcubing, jugadores destacados, logros, competiciones, cubo Rubik, México, {{ object.state.name }}{% endblock %}
 
@@ -208,7 +208,7 @@
           Para poder aparecer en los rankings y récords estatales de {{ object.state }} sin tener que ser miembro del {{ object.name }} tienes que hacer lo siguiente:
           <ol>
             <li>Haber participado en una competencia oficial avalada por la <a href="https://www.worldcubeassociation.org/">World Cube Association</a>.</li>
-            <li>Iniciar sesión en Cubingmexico utilizando tus credenciales de la WCA.</li>
+            <li>Iniciar sesión en Cubing México utilizando tus credenciales de la WCA.</li>
             {% if user.cubingmexicoprofile.person_state_team %}
             <li>Ir a tu <a href="{% url 'cubingmexico_web:my_results' wca_id=request.user.wcaprofile.wca_id %}">Perfil</a> y seleccionar tu estado.</li>
             {% else %}

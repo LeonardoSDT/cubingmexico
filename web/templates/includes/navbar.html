@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container-fluid">
-    <a class="navbar-brand" href="{% url 'cubingmexico_web:index' %}">Cubingmexico</a>
+    <a class="navbar-brand" href="{% url 'cubingmexico_web:index' %}">Cubing México</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -27,13 +27,13 @@
         <li class="nav-item">
           <a class="nav-link" href="{% url 'cubingmexico_web:state_teams' %}"><i class="bi bi-people-fill me-2"></i>Teams estatales</a>
         </li>
-        <!-- <li class="nav-item dropdown">
+        <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink3" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-file-person-fill me-2"></i>Acerca de</a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink3">
-            <li><a class="dropdown-item" href="#"><i class="bi bi-info-circle-fill me-2"></i>Acerca de Cubingmexico</a></li>
-            <li><a class="dropdown-item" href="#"><i class="bi bi-cash me-2"></i>Donaciones</a></li>
+            <li><a class="dropdown-item disabled" href="{% url 'cubingmexico_web:about' %}"><i class="bi bi-info-circle-fill me-2"></i>Acerca de Cubing México</a></li>
+            <li><a class="dropdown-item disabled" href="{% url 'cubingmexico_web:donations' %}"><i class="bi bi-cash me-2"></i>Donaciones</a></li>
           </ul>
-        </li> -->
+        </li>
         {% if user.is_authenticated %}
           <li class="nav-item dropdown me-5">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink3" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-person-fill me-2"></i>{{ user.wcaprofile }}</a>

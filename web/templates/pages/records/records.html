@@ -11,7 +11,7 @@
     {% else %}
         Récords nacionales
     {% endif %}
-     - Cubingmexico
+     - Cubing México
 {% endblock %}
 
 {% block meta_description %}{% if selected_state %}{% for state in states %}{% if state.three_letter_code == selected_state %}Explora los récords estatales de {{ state.name }} en el mundo del cubo Rubik en México.{% endif %}{% endfor %}{% else %}Descubre los récords nacionales en el mundo del cubo Rubik en México.{% endif %}{% endblock %}
