@@ -8,20 +8,61 @@
     <meta name="description" property="og:description" content="{% block meta_description %}{% endblock %}">
     <meta name="keywords" content="{% block meta_keywords %}{% endblock %}">
 
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css" integrity="sha384-b6lVK+yci+bfDmaY1u0zE8YYJt0TZxLEAFyYSLHId4xoVvsrQu3INevFKo+Xir8e" crossorigin="anonymous"/>
 
     {% block stylesheets %}{% endblock stylesheets %}
 </head>
-<body>
+<body data-bs-theme="light">
     {% include "includes/navbar.html" %}
     <main class="container">
         {% block content %}{% endblock %}
     </main>
     {% include "includes/footer.html" %}
     
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js" integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SY2XofN4zfuZxLkoj1gXtW8ANNCe9d5Y3eG5eD" crossorigin="anonymous"></script>
+
+    <script>
+        // Load dark mode preference from local storage on page load
+        document.addEventListener('DOMContentLoaded', function () {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                document.body.dataset.bsTheme = savedTheme;
+                updateIconVisibility(savedTheme);
+
+                // Check the switch if the saved theme is 'dark'
+                if (savedTheme === 'dark') {
+                    document.getElementById('flexSwitchCheckChecked').checked = true;
+                }
+            }
+        });
+    
+        function toggleDarkMode() {
+            const element = document.body;
+            const currentTheme = element.dataset.bsTheme;
+    
+            // Toggle the dataset value for the theme
+            element.dataset.bsTheme = currentTheme === "light" ? "dark" : "light";
+            localStorage.setItem('theme', element.dataset.bsTheme);
+    
+            // Update the icons based on the selected theme
+            updateIconVisibility(element.dataset.bsTheme);
+        }
+    
+        function updateIconVisibility(theme) {
+            const sunIcon = document.getElementById("sunIcon");
+            const moonIcon = document.getElementById("moonIcon");
+    
+            if (theme === "dark") {
+                sunIcon.style.display = "none";
+                moonIcon.style.display = "inline";
+            } else {
+                sunIcon.style.display = "inline";
+                moonIcon.style.display = "none";
+            }
+        }
+    </script>
     
     {% block javascripts %}{% endblock javascripts %}
 </body>

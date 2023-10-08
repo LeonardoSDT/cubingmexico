@@ -33,9 +33,9 @@
 {% load time_formatter_333mbf %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.1/css/responsive.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
 
     <link rel="stylesheet" href="{% static 'css/cubing-icons.css' %}">
 {% endblock stylesheets %}
@@ -67,17 +67,17 @@
         
             <div class="mb-3">
                 <div class="flex flex-row flex-wrap">
-                        {% for event in events %}
-                            {% if state %}
-                                <a href="{% url 'cubingmexico_web:rankings' event_type=event.id state=selected_state ranking_type=selected_ranking %}" class="text-decoration-none">
-                                    <span class="cubing-icon event-{{ event.id }} m-1 h4 {% if event.id == selected_event %} text-dark {% else %} text-black-50 {% endif %}"></span>
-                                </a>
-                            {% else %}
-                                <a href="{% url 'cubingmexico_web:rankings' event_type=event.id ranking_type=selected_ranking %}" class="text-decoration-none">
-                                    <span class="cubing-icon event-{{ event.id }} m-1 h4 {% if event.id == selected_event %} text-dark {% else %} text-black-50 {% endif %}"></span>
-                                </a>
-                            {% endif %}
-                        {% endfor %}
+                    {% for event in events %}
+                        {% if state %}
+                            <a href="{% url 'cubingmexico_web:rankings' event_type=event.id state=selected_state ranking_type=selected_ranking %}" class="text-decoration-none">
+                                <span class="cubing-icon event-{{ event.id }} m-1 h4 {% if event.id == selected_event %} text-body {% else %} text-secondary {% endif %}"></span>
+                            </a>
+                        {% else %}
+                            <a href="{% url 'cubingmexico_web:rankings' event_type=event.id ranking_type=selected_ranking %}" class="text-decoration-none">
+                                <span class="cubing-icon event-{{ event.id }} m-1 h4 {% if event.id == selected_event %} text-body {% else %} text-secondary {% endif %}"></span>
+                            </a>
+                        {% endif %}
+                    {% endfor %}
                 </div>
             </div>
         
@@ -102,7 +102,7 @@
                     <option value="{% url 'cubingmexico_web:rankings' event_type=selected_event state=state.three_letter_code ranking_type=selected_ranking %}" {% if state.three_letter_code == selected_state %}selected{% endif %}>{{ state.name }}</option>
                   {% endfor %}
                 </select>
-              </form>
+            </form>
         </div>        
     </div>
     
@@ -192,11 +192,11 @@
 
 {% block javascripts %}
 
-<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
-<script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
-<script src="https://cdn.datatables.net/responsive/2.4.1/js/responsive.bootstrap5.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
 
 <script>
     $(document).ready(function () {

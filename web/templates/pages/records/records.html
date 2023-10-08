@@ -24,6 +24,8 @@
 {% load time_formatter_333mbf %}
 
 {% block stylesheets %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+
     <link rel="stylesheet" href="{% static 'css/cubing-icons.css' %}">
 {% endblock stylesheets %}
 
@@ -52,7 +54,7 @@
                     <option value="{% url 'cubingmexico_web:records' state=state.three_letter_code %}" {% if state.three_letter_code == selected_state %}selected{% endif %}>{{ state.name }}</option>
                   {% endfor %}
                 </select>
-              </form>              
+            </form>
         </div>
     </div>
     <!-- <div class="row">
@@ -82,7 +84,7 @@
         {% for record in single_records %}
             <tr>
                 <td>
-                    <span class="cubing-icon event-{{ record.event.id }} m-1 h4 text-dark"></span>
+                    <span class="cubing-icon event-{{ record.event.id }} m-1 h4 text-body"></span>
                     {% for event in events %}
                         {% if event.id == selected_event %}
                             {{ event.name }}
@@ -116,7 +118,7 @@
         {% for record in average_records %}
             <tr>
                 <td>
-                    <span class="cubing-icon event-{{ record.event.id }} m-1 h4 text-dark"></span>
+                    <span class="cubing-icon event-{{ record.event.id }} m-1 h4 text-body"></span>
                     {% for event in events %}
                         {% if event.id == selected_event %}
                             {{ event.name }}
