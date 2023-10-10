@@ -47,6 +47,7 @@ class ContentMixin:
 
     def get_context_data(self, **kwargs):
         context = super(ContentMixin, self).get_context_data(**kwargs)
+        context['last_competition'] = Competition.objects.filter(country='Mexico', result__isnull=False).latest('year', 'month', 'day')
         context['wca_login_uri'] = wca_authorize_uri()
         context['page'] = self.page
         return context

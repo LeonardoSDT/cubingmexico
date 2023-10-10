@@ -57,7 +57,7 @@
                                 {% for record, rankssingle in my_single_results %}
                                     <tr>
                                         <td>
-                                            <span class="cubing-icon event-{{ record.event.id }} m-1 h4 text-dark"></span>
+                                            <span class="cubing-icon event-{{ record.event.id }} m-1 h4 text-body"></span>
                                         </td>
                                         {% if record.event.id == '333mbf' %}
                                         <td>{{ record.best|time_formatter_333mbf }}</td>
@@ -97,7 +97,7 @@
                                 {% for record, ranksaverage in my_average_results %}
                                     <tr>
                                         <td>
-                                            <span class="cubing-icon event-{{ record.event.id }} m-1 h4 text-dark"></span>
+                                            <span class="cubing-icon event-{{ record.event.id }} m-1 h4 text-body"></span>
                                         </td>
                                         {% if record.event.id == '333fm' %}
                                         <td>{{ record.average|divide_by_100 }}</td>
