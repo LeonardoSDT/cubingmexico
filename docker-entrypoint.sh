@@ -31,4 +31,10 @@ then
     exit 0
 fi
 
+if [ "$1" = "statecomps" ]
+then
+    sh /determine_competition_state.sh
+    exit 0
+fi
+
 exec "$@"

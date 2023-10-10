@@ -13,6 +13,7 @@ RUN pip install -r /requirements.txt
 
 COPY ./docker-entrypoint.sh /docker-entrypoint.sh
 COPY ./sync_wca_database.sh /sync_wca_database.sh
+COPY ./determine_competition_state.sh /determine_competition_state.sh
 RUN chmod +x /docker-entrypoint.sh
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
