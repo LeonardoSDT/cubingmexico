@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+
+{% block title %}Preguntas Frecuentes{% endblock %}
+{% block meta_description %}{% endblock %}
+{% block meta_keywords %}{% endblock %}
+
+{% load static %}
+
+{% block content %}
+
+<h1 class="text-center my-3">Preguntas Frecuentes</h1>
+
+<p class="text-center">A continuación se listan una serie de preguntas que le pudieran surgir a los usuarios promedio al momento de interactuar en el sitio:</p>
+
+<div class="container">
+    <div class="row">
+        <div class="accordion mt-3" id="accordionExample">
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingOne">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                  <strong>¿Por qué no aparezco como miembro del Team de mi estado? :(</strong>
+                </button>
+              </h2>
+              <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                  Si no apareces como miembro de tu Team estatal es porque no has participado en una competencia oficial de la <a href="https://www.worldcubeassociation.org/" class="text-decoration-none">World Cube Association</a> o porque no has sido agregado por algún administrador, recuerda que todos pueden ser parte de un Team, el único requisito es que vivas en el mismo estado, si cumples con lo anterior mencionado contáctate con el <a href="{% url 'cubingmexico_web:state_teams' %}" class="text-decoration-none">Team</a> en cuestión o a través de la página <a href="https://www.facebook.com/CubingMexico" class="text-decoration-none">Facebook de Cubing México</a>.
+                </div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingTwo">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                  <strong>¿Por qué aparece tal persona en un Team si ni siquiera vive en ese estado?</strong>
+                </button>
+              </h2>
+              <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                  Puede deberse a que la persona se cambió recientemente de residencia o simplemente a algún error del administrador de un Team, puedes enviar un mensaje a alguna de sus redes sociales para que puedan revisarlo o reportarlo directamente a la página <a href="https://www.facebook.com/CubingMexico" class="text-decoration-none">Facebook de Cubing México</a>.
+                </div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingThree">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                  <strong>Vivo en tal estado pero no quiero pertenecer al Team, ¿qué puedo hacer?</strong>
+                </button>
+              </h2>
+              <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                  Para poder aparecer en los rankings y récords estatales sin tener que ser miembro de un Team tienes que hacer lo siguiente:
+                  <ol>
+                    <li>Haber participado en una competencia oficial avalada por la <a href="https://www.worldcubeassociation.org/" class="text-decoration-none">World Cube Association</a>.</li>
+                    {% if not user.is_authenticated %}
+                    <li><a href="{{ wca_login_uri }}" class="text-decoration-none">Iniciar sesión en Cubing México</a> utilizando tus credenciales de la WCA.</li>
+                    {% else %}
+                    <li>Iniciar sesión en Cubing México utilizando tus credenciales de la WCA.</li>
+                    {% endif %}
+                    {% if user.cubingmexicoprofile.person_state_team %}
+                    <li>Ir a tu <a href="{% url 'cubingmexico_web:my_results' wca_id=request.user.wcaprofile.wca_id %}" class="text-decoration-none">Perfil</a> y seleccionar tu estado.</li>
+                    {% else %}
+                    <li>Ir a tu Perfil y seleccionar tu estado.</li>
+                    {% endif %}
+                  </ol>
+                </div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingFour">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                  <strong>Ya hice todo lo mencionado anteriormente y no aparezco en los rankings/récords de mi estado</strong>
+                </button>
+              </h2>
+              <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                  Si has completado las acciones mencionadas previamente y aún no ves resultados, se debe a que la base de datos aún no ha sido actualizada. Esto es una situación común y no debes inquietarte. La base de datos se actualiza todos los días a las 02:00 UTC-6 (2 AM hora de la Ciudad de México). Te pedimos amablemente que tengas paciencia y compruebes de nuevo mañana.
+                </div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingFive">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                  <strong>¡La información en este sitio no está actualizada!</strong>
+                </button>
+              </h2>
+              <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                  La base de datos se actualiza todos los días a las 02:00 UTC-6 (2 AM hora de la Ciudad de México). Te pedimos amablemente que tengas paciencia y compruebes de nuevo mañana si la información aparece actualizada. También es importante tomar en cuenta que el hecho de que la información esté actualizada no depende de nosotros, si no de la WCA, la base de datos se extrae directamente de <a href="https://www.worldcubeassociation.org/export/results" class="text-decoration-none">aquí</a> y según la WCA está exportación se suele actualizar después de cada fin de semana (que es cuando suele haber más competencias), por lo que puede que algunos resultados o competencias anunciados en la WCA tarden hasta 2 o 3 días en verse reflejados en el sitio.
+                </div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingSix">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                  <strong>¿Para qué sirve Iniciar Sesión?</strong>
+                </button>
+              </h2>
+              <div id="collapseSix" class="accordion-collapse collapse" aria-labelledby="headingSix" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                  Más que nada sirve para que puedas ver tu ranking estatal al estilo de la WCA en tu perfil, aquí puedes ver un <a href="{% url 'cubingmexico_web:my_results' wca_id='2018GONZ21' %}" class="text-decoration-none">ejemplo</a>.<br>
+                  {% if not user.is_authenticated %}
+                    ¡Te invitamos a unirte!<br>
+                    <a href="{{ wca_login_uri }}" class="btn btn-primary mt-2">¡Únete a Cubing México con tu cuenta de la WCA! <img src="https://www.worldcubeassociation.org/files/WCAlogo_notext.svg" alt="WCA" width="20"></a>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingSeven">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
+                  <strong>¿Puedo aparecer en los rankings/récords estatales si no soy mexicano de nacimiento?</strong>
+                </button>
+              </h2>
+              <div id="collapseSeven" class="accordion-collapse collapse" aria-labelledby="headingSeven" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                  Este sitio es para competidores mexicanos, esto quiere decir que tienes que representar a México ante la WCA. Si representas a otro país pero vives en México, puedes solicitar a algún delegado que te cambie la nacionalidad en tu perfil de la WCA.
+                  Esto es así debido a que cada país cuenta con sus respectivos rankings nacionales, y el combinar rankings mexicanos con rankings extranjeros estropearía todo el sitio.
+                </div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingEight">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEight" aria-expanded="false" aria-controls="collapseEight">
+                  <strong>Me equivoqué al poner mi estado de residencia o me cambié de residencia recientemente, ¿cómo puedo modificar este dato?</strong>
+                </button>
+              </h2>
+              <div id="collapseEight" class="accordion-collapse collapse" aria-labelledby="headingEight" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                  Este dato no puede ser modificado por el usuario por defecto, ya que queremos evitar cualquier tipo de alteración malitencionada en los rankings/récords estatales. Si necesitas modificar este dato háznoslo saber enviando un mensaje a la página de <a href="https://www.facebook.com/CubingMexico" class="text-decoration-none">Facebook</a>.
+                </div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingNine">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseNine" aria-expanded="false" aria-controls="collapseNine">
+                  <strong>¿Por qué no hay un Team en mi estado?</strong>
+                </button>
+              </h2>
+              <div id="collapseNine" class="accordion-collapse collapse" aria-labelledby="headingNine" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                  Si no hay un Team en tu estado puede deberse a la falta de conocimiento o iniciativa por parte de los speedcubers locales. No obstante, la buena noticia es que esto puede cambiar, ¡y tú puedes ser el pionero que haga que suceda!<br>
+                  La formación de un Team en tu estado es una emocionante oportunidad para promover el speedcubing, construir una comunidad local de speedcubers, organizar eventos, representar con orgullo tu región en competencias y, sobre todo, inspirar a otros a seguir tu ejemplo. Si no hay un Team en tu estado, no te preocupes, tú puedes ser el catalizador del cambio, reuniendo a apasionados speedcubers locales para crear una vibrante comunidad. Esto no solo enriquecerá tu estado, sino que también contribuirá al crecimiento y la diversidad de la comunidad de speedcubers a nivel nacional. El speedcubing es un deporte emocionante, y formar un Team puede ser el primer paso para llevarlo a nuevas alturas en tu región.<br>
+                  Si estás interesado en esto podemos ayudarte, contáctanos a través de la página de <a href="https://www.facebook.com/CubingMexico" class="text-decoration-none">Facebook</a>.
+                </div>
+              </div>
+            </div>
+        </div>
+        <!-- <a href="{% url 'cubingmexico_web:donations' %}" class="btn btn-secondary mt-3">¿Te interesa donar? Puedes hacerlo aquí <i class="bi bi-paypal"></i></a> -->
+    </div>
+</div>
+
+{% endblock %}

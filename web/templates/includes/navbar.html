@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg">
   <div class="container-fluid">
-    <a class="navbar-brand" href="{% url 'cubingmexico_web:index' %}">Cubing México</a>
+    <a class="navbar-brand" href="{% url 'cubingmexico_web:index' %}"><img src="https://storage.cloud.google.com/cubingmexico_dev_bucket/img/cubingmexico_logo.png?authuser=0" width="50" alt="Logo de Cubing México" class="me-2">Cubing México</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -30,8 +30,11 @@
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink3" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-file-person-fill me-2"></i>Acerca de</a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink3">
-            <li><a class="dropdown-item disabled" href="{% url 'cubingmexico_web:about' %}"><i class="bi bi-info-circle-fill me-2"></i>Acerca de Cubing México</a></li>
-            <li><a class="dropdown-item disabled" href="{% url 'cubingmexico_web:donations' %}"><i class="bi bi-cash me-2"></i>Donaciones</a></li>
+            <!-- <li><a class="dropdown-item" href="{% url 'cubingmexico_web:about' %}"><i class="bi bi-info-circle-fill me-2"></i>Acerca de</a></li>
+            <li><a class="dropdown-item" href="{% url 'cubingmexico_web:development' %}"><i class="bi bi-braces me-2"></i>Desarrollo</a></li>
+            <li><a class="dropdown-item" href="{% url 'cubingmexico_web:donations' %}"><i class="bi bi-cash me-2"></i>Donaciones</a></li> -->
+            <li><a class="dropdown-item" href="{% url 'cubingmexico_web:faq' %}"><i class="bi bi-question-circle-fill me-2"></i>Preguntas frecuentes</a></li>
+            <li><a class="dropdown-item" href="{% url 'cubingmexico_web:logo' %}"><i class="bi bi-image me-2"></i>Logo</a></li>
           </ul>
         </li>
         {% if user.is_authenticated %}
@@ -39,9 +42,9 @@
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink3" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-person-fill me-2"></i>{{ user.wcaprofile }}</a>
               <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink3">
                 <li><a class="dropdown-item" href="{% url 'cubingmexico_web:profile' %}"><i class="bi bi-person-lines-fill me-2"></i>Perfil</a></li>
-                <li><a class="dropdown-item" href="{% url 'cubingmexico_web:my_results' wca_id=request.user.wcaprofile.wca_id %}"><i class="bi bi-person-fill me-2"></i>Mis resultados</a></li>
+                <li><a class="dropdown-item" href="{% url 'cubingmexico_web:my_results' wca_id=request.user.wcaprofile.wca_id %}"><i class="bi bi-table me-2"></i>Mis resultados</a></li>
                 {% if user.cubingmexicoprofile.person_state_team %}
-                <li><a class="dropdown-item" href="{% url 'cubingmexico_web:team' team_code=request.user.cubingmexicoprofile.person_state_team.state_team.state.three_letter_code %}"><i class="bi bi-people-fill me-2"></i>Mi team</a></li>
+                <li><a class="dropdown-item" href="{% url 'cubingmexico_web:team' team_code=request.user.cubingmexicoprofile.person_state_team.state_team.state.three_letter_code %}"><i class="bi bi-people-fill me-2"></i>Mi Team</a></li>
                 {% endif %}
                 <li><a class="dropdown-item" href="{% url 'cubingmexico_web:logout' %}"><i class="bi bi-box-arrow-right me-2"></i>Cerar sesión</a></li>
               </ul>

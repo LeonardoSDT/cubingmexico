@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}Desarrollo de Cubing México{% endblock %}
+{% block meta_description %}{% endblock %}
+{% block meta_keywords %}{% endblock %}
+
+{% load static %}
+
+{% block content %}
+
+<h1 class="text-center my-3">Desarrollo de Cubing México</h1>
+
+<div class="container">
+    <div class="row">
+        <h2 class="text-center mt-3">Sobre el Desarrollador</h2>
+        <p>¡Hola a todos! Mi nombre es <a href="{% url 'cubingmexico_web:my_results' wca_id='2016TORO03' %}" class="text-decoration-none">Leonardo Del Toro</a> y quiero compartir un poco de mi historia personal y cómo llegué a desarrollar Cubing México. El speedcubing y este sitio web significan mucho para mí, y aquí está por qué.</p>
+        <p>Mi viaje en el mundo del cubo de Rubik comenzó a una temprana edad, gracias a mi padre. Recuerdo que cuando tenía alrededor de 6 años, mi padre me enseñó a resolver este misterioso rompecabezas tridimensional. Al principio, debo admitir que no era un gran entusiasta. Lo veía más como una tarea que como un juego. Sin embargo, mi perspectiva cambió radicalmente en la secundaria.</p>
+        <p>En la secundaria, un buen amigo mío se convirtió en otro amante del cubo de Rubik. Juntos, comenzamos a competir en resolverlo lo más rápido posible. Mi amigo parecía estar un paso por delante de mí en términos de velocidad y eficiencia. Su habilidad para resolver el cubo de manera más rápida me motivó a aceptar el desafío y mejorar mis habilidades.</p>
+        <p>Fue en ese momento que decidí entrar de lleno en el emocionante mundo del speedcubing. Comencé a practicar de manera más regular, a aprender técnicas avanzadas y a participar en competencias. Cada vez que mejoraba mis tiempos y rompía mis propios récords personales, sentía una satisfacción increíble.</p>
+        <p>Sin embargo, dejé el mundo del speedcubing por unos años, durante la pandemia por COVID-19 más que nada. Decidí volver a inicios del año 2023, al igual que varios speedcubers de la comunidad, y fue aquí cuando me di cuenta que, a pesar de haber una creciente comunidad de speedcubers, faltaba un recurso en línea que reuniera a todos los apasionados de este deporte y proporcionara información actualizada sobre rankings y récords a nivel estatal. Fue entonces cuando nació la idea de crear Cubing México, un proyecto que me permitiera contribuir al crecimiento del speedcubing en nuestro país y celebrar a todos los que, como yo, se enamoraron de este desafío.</p>
+        <p>Este sitio web es un testimonio de mi amor por el speedcubing y mi deseo de compartirlo con la comunidad de speedcubers en México. Estoy comprometido a seguir mejorando y expandiendo Cubing México para servir a todos los entusiastas de este deporte. Si tienes sugerencias, comentarios o ideas para el sitio, no dudes en contactarme a través de la página de <a href="https://www.facebook.com/CubingMexico" class="text-decoration-none">Facebook</a> o en el <a href="https://github.com/LeonardoSDT/cubingmexico" class="text-decoration-none">GitHub</a> de Cubing México. Espero que disfrutes de Cubing México tanto como yo disfruté creándolo.</p>
+        <p></p>
+    </div>
+    <div class="row">
+        <h2 class="text-center mt-3">Agradecimientos</h2>
+        <p>Quiero aprovechar esta oportunidad para agradecer a varias personas y grupos que han sido fundamentales en el desarrollo y crecimiento de Cubing México. Sus contribuciones han sido invaluables, y sin ellos, este proyecto no sería lo que es hoy.</p>
+        <ul>
+            <li><strong><a href="{% url 'cubingmexico_web:my_results' wca_id='2014RUIZ12' %}" class="text-decoration-none">Lucero Alvarado</a>:</strong> Un agradecimiento especial a Lucero, quien ha sido una colaboradora esencial en la configuración del dominio de Cubing México. Su experiencia y apoyo han sido fundamentales para el sitio.</li>
+            <li><strong>Líderes de Teams Estatales:</strong> Quiero expresar mi gratitud a los líderes de los Teams de cada estado en México. Su trabajo en la organización de eventos y la promoción del speedcubing ha sido fundamental para el crecimiento de esta emocionante disciplina en sus respectivas regiones, ellos son los encargados de administrar a los miembros de sus respectivos Teams, gracias a ellos el sitio funciona como debería.</li>
+            <li><strong>Delegados de la World Cube Association en México:</strong> Un agradecimiento especial a los delegados de la World Cube Association en México, Aru, JT, Chin y Rocío, quienes han desempeñado un papel vital en la organización y supervisión de competencias oficiales. Su dedicación y esfuerzo han contribuido significativamente a la expansión del speedcubing en nuestro país. También por haber demostrado un claro interés y apoyo hacia este proyecto.</li>
+            <li><strong>Donadores y Patrocinadores:</strong> Por último, pero no menos importante, quisiera  expresar mi agradecimiento a todos los donadores que han apoyado a Cubing México. Sus contribuciones han permitido que el sitio se mantenga en funcionamiento y siga creciendo para servir a la comunidad de speedcubers en México.</li>
+        </ul>
+        <p>Gracias a todos ustedes por ser parte de esta emocionante comunidad y por ayudarnos a hacer de Cubing México un recurso valioso para todos los entusiastas del speedcubing en nuestro país.</p>
+    </div>
+    <div class="row">
+        <p class="text-center mt-3"><img src="https://storage.cloud.google.com/cubingmexico_dev_bucket/img/Atenea.jpeg?authuser=0" alt="Atenea" class="img-fluid rounded"></p>
+        <p class="text-center">Un agradecimiento especial a Atenea por acompañarme durante varias horas.</p>
+        <a href="{% url 'cubingmexico_web:donations' %}" class="btn btn-secondary mt-3">¿Te interesa donar? Puedes hacerlo aquí <i class="bi bi-paypal"></i></a>
+    </div>
+</div>
+
+{% endblock %}

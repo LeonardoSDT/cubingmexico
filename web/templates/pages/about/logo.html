@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Logo de Cubing México{% endblock %}
+{% block meta_description %}{% endblock %}
+{% block meta_keywords %}{% endblock %}
+
+{% load static %}
+
+{% block content %}
+
+<h1 class="text-center my-3">Logo de Cubing México</h1>
+
+<div class="container">
+    <div class="row">
+        <p>El logo de Cubing México, diseñado por Sofía Celaya Álvarez, combina elementos culturales mexicanos con un cubo de Rubik, representando la identidad de la comunidad. La forma del logo se asemeja a un elote, un elemento culinario tradicionalmente mexicano que con su forma semicuadrada, simboliza esta fusión.</p>
+        <p>Si deseas apoyar a la artista detrás del diseño, puedes conectarte con Sofía a través de sus redes sociales, que se proporcionan a continuación:</p>
+        <p class="text-center"><a href="https://www.instagram.com/ad_chrofy/" class="text-decoration-none fs-4"><i class="bi bi-instagram me-2"></i>AD CHROFY</a></p>
+        <p>Es importante destacar que el logo es propiedad exclusiva de Cubing México y su uso requiere permiso. El logo en formato SVG está disponible para su descarga a continuación:</p>
+    </div>
+    <div class="row">
+        <p class="text-center mt-3">
+            <img src="https://storage.cloud.google.com/cubingmexico_dev_bucket/img/cubingmexico_logo.png?authuser=0" alt="Logo de Cubing México" class="img-fluid rounded">
+        </p>
+        <!-- <a href="{% url 'cubingmexico_web:donations' %}" class="btn btn-secondary mt-3">¿Te interesa donar? Puedes hacerlo aquí <i class="bi bi-paypal"></i></a> -->
+    </div>
+</div>
+
+{% endblock %}

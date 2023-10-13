@@ -73,7 +73,10 @@
                     <tbody>
                         {% for auth_member in auth_team_members %}
                             <tr>
-                                <td scope="row"><a href="{% url 'cubingmexico_web:my_results' wca_id=auth_member.wcaprofile.wca_id %}">{{ auth_member.wcaprofile.wca_id }}</a></td>
+                                <td scope="row">
+                                    <img src="https://storage.cloud.google.com/cubingmexico_dev_bucket/img/cubingmexico_logo.png?authuser=0" width="20" alt="Cubing México" class="me-2" title="Perfil de Cubing México">
+                                    <a href="{% url 'cubingmexico_web:my_results' wca_id=auth_member.wcaprofile.wca_id %}" class="text-decoration-none">{{ auth_member.wcaprofile.wca_id }}</a>
+                                </td>
                                 <td>
                                     {{ auth_member.wcaprofile.name }}
                                     {% if auth_member.cubingmexicoprofile.is_state_team_leader %}
@@ -87,7 +90,10 @@
                         {% endfor %}
                         {% for member in team_members %}
                             <tr>
-                                <td scope="row"><a href="https://www.worldcubeassociation.org/persons/{{ member.person.id }}" class="link-secondary">{{ member.person.id }}</a></td>
+                                <td scope="row">
+                                    <img src="https://www.worldcubeassociation.org/files/WCAlogo_notext.svg" alt="WCA" width="20" class="me-2" title="Perfil de la WCA">
+                                    <a href="https://www.worldcubeassociation.org/persons/{{ member.person.id }}" class="link-secondary text-decoration-none">{{ member.person.id }}</a>
+                                </td>
                                 <td>
                                     {{ member.person.name }}
                                 </td>
@@ -124,21 +130,21 @@
                 <div class="modal-body">
                     Esta es una comunidad de cuberos en {{ object.state }}, para unirte
                     {% if object.facebook_link == '' and object.instagram_link == '' and object.phone_number == '' and object.email == '' %}
-                    envía un mensaje a <a href="https://www.facebook.com/rubik.nayarit">esta página</a>.
+                    envía un mensaje a <a href="https://www.facebook.com/CubingMexico" class="text-decoration-none">esta página</a>.
                     {% else %}
                     contáctalos a través de alguno de los siguientes medios:
                     <ul>
                         {% if object.facebook_link != '' %}
-                            <li><a href="{{ object.facebook_link }}" class="link-secondary"><i class="bi bi-facebook m-1"></i>{{ object.facebook_link }}</a></li>
+                            <li><a href="{{ object.facebook_link }}" class="link-secondary text-decoration-none"><i class="bi bi-facebook m-1"></i>{{ object.facebook_link }}</a></li>
                         {% endif %}
                         {% if object.instagram_link != '' %}
-                            <li><a href="{{ object.instagram_link }}" class="link-secondary"><i class="bi bi-instagram m-1"></i>{{ object.instagram_link }}</a></li>
+                            <li><a href="{{ object.instagram_link }}" class="link-secondary text-decoration-none"><i class="bi bi-instagram m-1"></i>{{ object.instagram_link }}</a></li>
                         {% endif %}
                         {% if object.phone_number != '' %}
-                            <li><a href="https://wa.me/{{ object.phone_number }}" class="link-secondary"><i class="bi bi-whatsapp m-1"></i>{{ object.phone_number }}</a></li>
+                            <li><a href="https://wa.me/{{ object.phone_number }}" class="link-secondary text-decoration-none"><i class="bi bi-whatsapp m-1"></i>{{ object.phone_number }}</a></li>
                         {% endif %}
                         {% if object.email != '' %}
-                            <li><a href="mailto:{{ object.email }}" class="link-secondary"><i class="bi bi-envelope-fill m-1"></i>{{ object.email }}</a></li>
+                            <li><a href="mailto:{{ object.email }}" class="link-secondary text-decoration-none"><i class="bi bi-envelope-fill m-1"></i>{{ object.email }}</a></li>
                         {% endif %}
                     </ul>
                     {% endif %}
@@ -162,23 +168,23 @@
       </h2>
       <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
         <div class="accordion-body">
-            Si no apareces como miembro del Team es porque no has participado en una competencia oficial de la <a href="https://www.worldcubeassociation.org/">World Cube Association</a> o porque no has sido agregado por algún administrador, recuerda que todos pueden ser parte de un Team, el único requisito es que vivas en el mismo estado, si cumples con lo anterior mencionado,
+            Si no apareces como miembro del Team es porque no has participado en una competencia oficial de la <a href="https://www.worldcubeassociation.org/" class="text-decoration-none">World Cube Association</a> o porque no has sido agregado por algún administrador, recuerda que todos pueden ser parte de un Team, el único requisito es que vivas en el mismo estado, si cumples con lo anterior mencionado,
             {% if object.facebook_link == '' and object.instagram_link == '' and object.phone_number == '' and object.email == '' %}
-            envía un mensaje a <a href="https://www.facebook.com/rubik.nayarit">esta página</a>.
+            envía un mensaje a <a href="https://www.facebook.com/CubingMexico" class="text-decoration-none">esta página</a>.
             {% else %}
             contáctate con el {{ object.name }} a través de alguno de los medios que aparecen a continuación para que puedan agregarte:
             <ul>
                 {% if object.facebook_link != '' %}
-                    <li><a href="{{ object.facebook_link }}" class="link-secondary"><i class="bi bi-facebook m-1"></i>{{ object.facebook_link }}</a></li>
+                    <li><a href="{{ object.facebook_link }}" class="link-secondary text-decoration-none"><i class="bi bi-facebook m-1"></i>{{ object.facebook_link }}</a></li>
                 {% endif %}
                 {% if object.instagram_link != '' %}
-                    <li><a href="{{ object.instagram_link }}" class="link-secondary"><i class="bi bi-instagram m-1"></i>{{ object.instagram_link }}</a></li>
+                    <li><a href="{{ object.instagram_link }}" class="link-secondary text-decoration-none"><i class="bi bi-instagram m-1"></i>{{ object.instagram_link }}</a></li>
                 {% endif %}
                 {% if object.phone_number != '' %}
-                    <li><a href="https://wa.me/{{ object.phone_number }}" class="link-secondary"><i class="bi bi-whatsapp m-1"></i>{{ object.phone_number }}</a></li>
+                    <li><a href="https://wa.me/{{ object.phone_number }}" class="link-secondary text-decoration-none"><i class="bi bi-whatsapp m-1"></i>{{ object.phone_number }}</a></li>
                 {% endif %}
                 {% if object.email != '' %}
-                    <li><a href="mailto:{{ object.email }}" class="link-secondary"><i class="bi bi-envelope-fill m-1"></i>{{ object.email }}</a></li>
+                    <li><a href="mailto:{{ object.email }}" class="link-secondary text-decoration-none"><i class="bi bi-envelope-fill m-1"></i>{{ object.email }}</a></li>
                 {% endif %}
             </ul>
             {% endif %}
@@ -193,7 +199,7 @@
       </h2>
       <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
         <div class="accordion-body">
-          Puede deberse a que la persona se cambió recientemente de residencia o simplemente a algún error de un administrador del Team, puedes enviar un mensaje a <a href="https://www.facebook.com/rubik.nayarit">esta página</a> para que podamos revisarlo.
+          Puede deberse a que la persona se cambió recientemente de residencia o simplemente a algún error de un administrador del Team, puedes enviar un mensaje a <a href="https://www.facebook.com/CubingMexico" class="text-decoration-none">esta página</a> para que podamos revisarlo.
         </div>
       </div>
     </div>
@@ -207,10 +213,14 @@
         <div class="accordion-body">
           Para poder aparecer en los rankings y récords estatales de {{ object.state }} sin tener que ser miembro del {{ object.name }} tienes que hacer lo siguiente:
           <ol>
-            <li>Haber participado en una competencia oficial avalada por la <a href="https://www.worldcubeassociation.org/">World Cube Association</a>.</li>
+            <li>Haber participado en una competencia oficial avalada por la <a href="https://www.worldcubeassociation.org/" class="text-decoration-none">World Cube Association</a>.</li>
+            {% if not user.is_authenticated %}
+            <li><a href="{{ wca_login_uri }}" class="text-decoration-none">Iniciar sesión en Cubing México</a> utilizando tus credenciales de la WCA.</li>
+            {% else %}
             <li>Iniciar sesión en Cubing México utilizando tus credenciales de la WCA.</li>
+            {% endif %}
             {% if user.cubingmexicoprofile.person_state_team %}
-            <li>Ir a tu <a href="{% url 'cubingmexico_web:my_results' wca_id=request.user.wcaprofile.wca_id %}">Perfil</a> y seleccionar tu estado.</li>
+            <li>Ir a tu <a href="{% url 'cubingmexico_web:my_results' wca_id=request.user.wcaprofile.wca_id %}" class="text-decoration-none">Perfil</a> y seleccionar tu estado.</li>
             {% else %}
             <li>Ir a tu Perfil y seleccionar tu estado.</li>
             {% endif %}

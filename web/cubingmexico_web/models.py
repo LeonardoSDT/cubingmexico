@@ -118,3 +118,35 @@ class StateRanksAverage(models.Model):
     ranksaverage = models.ForeignKey(RanksAverage, on_delete=models.DO_NOTHING)
     state = models.CharField(max_length=3)
     state_rank = models.IntegerField()
+
+class Donor(models.Model):
+    def __str__(self):
+        return str(self.name)
+
+    name = models.CharField(_("Nombre del donador"), max_length=255)
+    amount = models.DecimalField(_("Monto donado"), max_digits=10, decimal_places=2)
+    is_active = models.BooleanField(default=True)
+
+    donation_date = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = _('Donador')
+        verbose_name_plural = _('Donadores')
+
+
+class Sponsor(models.Model):
+    def __str__(self):
+        return str(self.name)
+
+    name = models.CharField(_("Nombre del patrocinador"), max_length=255)
+    description =  models.TextField(_("Descripción del patrocinador"), null=True, blank=True, default='')
+    sponsor_logo = models.ImageField(verbose_name=_("Logotipo del patrocinador"), upload_to='img/sponsors/', null=True, blank=True)
+    link = models.URLField(_("Enlace de interés"), max_length=255, blank=True, default='')
+    amount = models.DecimalField(_("Monto donado"), max_digits=10, decimal_places=2, null=True, blank=True, default='')
+    is_active = models.BooleanField(default=True)
+
+    donation_date = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = _('Patrocinador')
+        verbose_name_plural = _('Patrocinadores')

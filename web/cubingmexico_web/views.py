@@ -20,7 +20,7 @@ from itertools import groupby
 
 import copy, json
 
-from .models import User, WCAProfile, CubingmexicoProfile, PersonStateTeam, StateRanksSingle, StateRanksAverage
+from .models import User, WCAProfile, CubingmexicoProfile, PersonStateTeam, StateRanksSingle, StateRanksAverage, Donor, Sponsor
 from cubingmexico_wca.models import Event, RanksSingle, RanksAverage, Competition
 from .forms import *
 from .utils import *
@@ -65,7 +65,7 @@ class IndexView(ContentMixin, TemplateView):
         return super().dispatch(request, *args, **kwargs)
     
 class AboutView(ContentMixin, TemplateView):
-    template_name = 'pages/about.html'
+    template_name = 'pages/about/about.html'
     page = 'cubingmexico_web:about'
 
     def dispatch(self, request, *args, **kwargs):
@@ -73,9 +73,91 @@ class AboutView(ContentMixin, TemplateView):
             return redirect(reverse_lazy('cubingmexico_web:logout'))
         return super().dispatch(request, *args, **kwargs)
     
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        now = datetime.now()
+
+        number_person = Person.objects.filter(result__competition__country='Mexico').distinct().count()
+
+        number_competitions  = Competition.objects.filter(
+            Q(country__name='Mexico') & (
+                Q(year__lt=now.year) | (Q(year=now.year) & Q(month__lt=now.month)) |
+                (Q(year=now.year) & Q(month=now.month) & Q(day__lt=now.day))
+            )
+        ).exclude(
+            Q(country__name='Mexico') &
+            Q(year=now.year) & Q(month=now.month) & Q(day__lte=now.day) &
+            Q(year=now.year) & Q(end_month__gte=now.month) & Q(end_day__gte=now.day)
+        ).count()
+
+        context['number_competitions'] = number_competitions
+        context['number_person'] = number_person
+
+        return context
+        
+
+class FAQView(ContentMixin, TemplateView):
+    template_name = 'pages/about/faq.html'
+    page = 'cubingmexico_web:faq'
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_superuser:
+            return redirect(reverse_lazy('cubingmexico_web:logout'))
+        return super().dispatch(request, *args, **kwargs)
+    
+
+class DevelopmentView(ContentMixin, TemplateView):
+    template_name = 'pages/about/development.html'
+    page = 'cubingmexico_web:development'
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_superuser:
+            return redirect(reverse_lazy('cubingmexico_web:logout'))
+        return super().dispatch(request, *args, **kwargs)
+    
+
+class LogoView(ContentMixin, TemplateView):
+    template_name = 'pages/about/logo.html'
+    page = 'cubingmexico_web:logo'
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_superuser:
+            return redirect(reverse_lazy('cubingmexico_web:logout'))
+        return super().dispatch(request, *args, **kwargs)
+
 class DonationsView(ContentMixin, TemplateView):
-    template_name = 'pages/donations.html'
+    template_name = 'pages/about/donations.html'
     page = 'cubingmexico_web:donations'
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_superuser:
+            return redirect(reverse_lazy('cubingmexico_web:logout'))
+        return super().dispatch(request, *args, **kwargs)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        donors = Donor.objects.filter(is_active=True).order_by('-amount')
+        sponsors = Sponsor.objects.filter(is_active=True).order_by('-amount')
+
+        context['donors'] = donors
+        context['sponsors'] = sponsors
+
+        return context
+    
+class DonationCompletedView(ContentMixin, TemplateView):
+    template_name = 'pages/about/donations/completed.html'
+    page = 'cubingmexico_web:donation_completed'
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_superuser:
+            return redirect(reverse_lazy('cubingmexico_web:logout'))
+        return super().dispatch(request, *args, **kwargs)
+    
+class DonationCancelView(ContentMixin, TemplateView):
+    template_name = 'pages/about/donations/cancel.html'
+    page = 'cubingmexico_web:donation_cancel'
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_superuser:

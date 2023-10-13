@@ -8,7 +8,7 @@
     </h2>
     <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
       <div class="accordion-body">
-        Si no apareces como miembro del Team es porque no has participado en una competencia oficial de la <a href="https://www.worldcubeassociation.org/">World Cube Association</a> o porque no has sido agregado por algún administrador, recuerda que todos pueden ser parte de un Team, el único requisito es que vivas en el mismo estado, si cumples con lo anterior mencionado contáctate con el Team en alguno de los medios que aparecen <a href="{% url 'cubingmexico_web:team' team_code=selected_state %}">aquí</a> para que puedan agregarte.
+        Si no apareces como miembro del Team es porque no has participado en una competencia oficial de la <a href="https://www.worldcubeassociation.org/" class="text-decoration-none">World Cube Association</a> o porque no has sido agregado por algún administrador, recuerda que todos pueden ser parte de un Team, el único requisito es que vivas en el mismo estado, si cumples con lo anterior mencionado contáctate con el Team en alguno de los medios que aparecen <a href="{% url 'cubingmexico_web:team' team_code=selected_state %}" class="text-decoration-none">aquí</a> para que puedan agregarte.
       </div>
     </div>
   </div>
@@ -20,7 +20,7 @@
     </h2>
     <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
       <div class="accordion-body">
-        Puede deberse a que la persona se cambió recientemente de residencia o simplemente a algún error del administrador de un Team, puedes enviar un mensaje a alguna de sus <a href="{% url 'cubingmexico_web:team' team_code=selected_state %}">redes sociales</a> para que puedan revisarlo.
+        Puede deberse a que la persona se cambió recientemente de residencia o simplemente a algún error del administrador de un Team, puedes enviar un mensaje a alguna de sus <a href="{% url 'cubingmexico_web:team' team_code=selected_state %}" class="text-decoration-none">redes sociales</a> para que puedan revisarlo.
       </div>
     </div>
   </div>
@@ -34,10 +34,14 @@
       <div class="accordion-body">
         Para poder aparecer en los rankings y récords estatales sin tener que ser miembro de un Team tienes que hacer lo siguiente:
         <ol>
-          <li>Haber participado en una competencia oficial avalada por la <a href="https://www.worldcubeassociation.org/">World Cube Association</a>.</li>
+          <li>Haber participado en una competencia oficial avalada por la <a href="https://www.worldcubeassociation.org/" class="text-decoration-none">World Cube Association</a>.</li>
+          {% if not user.is_authenticated %}
+          <li><a href="{{ wca_login_uri }}" class="text-decoration-none">Iniciar sesión en Cubing México</a> utilizando tus credenciales de la WCA.</li>
+          {% else %}
           <li>Iniciar sesión en Cubing México utilizando tus credenciales de la WCA.</li>
+          {% endif %}
           {% if user.cubingmexicoprofile.person_state_team %}
-          <li>Ir a tu <a href="{% url 'cubingmexico_web:my_results' wca_id=request.user.wcaprofile.wca_id %}">Perfil</a> y seleccionar tu estado.</li>
+          <li>Ir a tu <a href="{% url 'cubingmexico_web:my_results' wca_id=request.user.wcaprofile.wca_id %}" class="text-decoration-none">Perfil</a> y seleccionar tu estado.</li>
           {% else %}
           <li>Ir a tu Perfil y seleccionar tu estado.</li>
           {% endif %}
