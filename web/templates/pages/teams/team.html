@@ -76,7 +76,7 @@
                         {% for auth_member in auth_team_members %}
                             <tr>
                                 <td scope="row">
-                                    <img src="{% static 'img/cubingmexico_logo.png' %}" width="20" alt="Cubing México" class="me-2" title="Perfil de Cubing México">
+                                    <img src="{% static 'img/cubingmexico_logo.svg' %}" width="20" alt="Cubing México" class="me-2" title="Perfil de Cubing México">
                                     <a href="{% url 'cubingmexico_web:my_results' wca_id=auth_member.wcaprofile.wca_id %}" class="text-decoration-none">{{ auth_member.wcaprofile.wca_id }}</a>
                                 </td>
                                 <td>

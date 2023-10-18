@@ -1,3 +1,5 @@
+{% load static %}
+
 <footer class="footer mt-auto py-3">
   <div class="container">
     <div class="row">
@@ -7,7 +9,7 @@
         <span class="text-muted fw-lighter">Últimos resultados: {{ last_competition.name }}</span>
       </div>
       <div class="col-3">
-        <div class="form-check form-switch m-4">
+        <div class="form-check form-switch m-3">
           <input class="form-check-input p-2" type="checkbox" role="switch" id="flexSwitchCheckChecked" onclick="toggleDarkMode()">
           <label class="form-check-label" for="flexSwitchCheckChecked">
             <i class="bi bi-sun-fill" id="sunIcon"></i>
@@ -16,5 +18,11 @@
         </div>
       </div>
     </div>
+    <div class="row">
+      <ul class="nav list-unstyled d-flex">
+        <li class="ms-3"><a class="text-muted" href="https://www.facebook.com/CubingMexico"><i class="bi bi-facebook m-1"></i></a></li>
+        <li class="ms-3"><a class="text-muted" href="https://www.instagram.com/cubingmexico/"><i class="bi bi-instagram m-1"></i></a></li>
+      </ul>
+    </div>    
   </div>
 </footer>
