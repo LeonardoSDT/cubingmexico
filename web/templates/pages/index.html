@@ -4,9 +4,11 @@
 {% block meta_description %}Cubing México - Tu fuente de información para rankings, récords y más en el mundo del cubo Rubik en México.{% endblock %}
 {% block meta_keywords %}Cubing México, Rubik's cube, rankings, récords, competiciones, WCA, México{% endblock %}
 
+{% load static %}
+
 {% block content %}
 
-<p class="text-center"><img src="https://storage.cloud.google.com/cubingmexico_dev_bucket/img/cubingmexico_logo.png?authuser=0" width="200" alt="Logo de Cubing México"></p>
+<p class="text-center"><img src="{% static 'img/cubingmexico_logo.png' %}" width="200" alt="Logo de Cubing México"></p>
 <h1 class="text-center my-3">Bienvenido a Cubing México</h1>
 
 <div class="container">

@@ -28,6 +28,7 @@
 {% block meta_keywords %}{% if selected_state %}{% for state in states %}{% if state.three_letter_code == selected_state %}ranking estatal, {{ state.name }}, {% for event in events %}{% if event.id == selected_event %}{{ event.name }}{% endif %}{% endfor %}, {% if event.id != '333mbf' %}{{ selected_ranking|title }}{% endif %}, cubo Rubik, México{% endif %}{% endfor %}{% else %}ranking nacional, {% for event in events %}{% if event.id == selected_event %}{{ event.name }}{% endif %}{% endfor %}, {% if event.id != '333mbf' %}{{ selected_ranking|title }}{% endif %}, cubo Rubik, México{% endif %}{% endblock %}
 
 {% load static %}
+
 {% load divide_by_100 %}
 {% load time_formatter %}
 {% load time_formatter_333mbf %}

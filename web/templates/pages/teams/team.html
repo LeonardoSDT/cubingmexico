@@ -4,6 +4,8 @@
 {% block meta_description %}Conoce más sobre el {{ object.name }} de speedcubing en México. Descubre a los competidores de {{ object.state.name }}, récords y competiciones.{% endblock %}
 {% block meta_keywords %}{{ object.name }}, speedcubing, jugadores destacados, logros, competiciones, cubo Rubik, México, {{ object.state.name }}{% endblock %}
 
+{% load static %}
+
 {% block stylesheets %}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
@@ -74,7 +76,7 @@
                         {% for auth_member in auth_team_members %}
                             <tr>
                                 <td scope="row">
-                                    <img src="https://storage.cloud.google.com/cubingmexico_dev_bucket/img/cubingmexico_logo.png?authuser=0" width="20" alt="Cubing México" class="me-2" title="Perfil de Cubing México">
+                                    <img src="{% static 'img/cubingmexico_logo.png' %}" width="20" alt="Cubing México" class="me-2" title="Perfil de Cubing México">
                                     <a href="{% url 'cubingmexico_web:my_results' wca_id=auth_member.wcaprofile.wca_id %}" class="text-decoration-none">{{ auth_member.wcaprofile.wca_id }}</a>
                                 </td>
                                 <td>
