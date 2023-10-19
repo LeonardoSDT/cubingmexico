@@ -1,10 +1,16 @@
 {% extends 'base.html' %}
 
-{% block title %}Desarrollo de Cubing México{% endblock %}
-{% block meta_description %}{% endblock %}
-{% block meta_keywords %}{% endblock %}
-
 {% load static %}
+
+{% block title %}Desarrollo de Cubing México{% endblock %}
+
+{% block meta_title %}Desarrollo de Cubing México{% endblock %}
+{% block meta_type %}website{% endblock %}
+{% block meta_url %}https://cubingmexico.org/development/{% endblock %}
+{% block meta_image %}{% static 'img/cubingmexico_logo.svg' %}{% endblock %}
+
+{% block meta_description %}Conoce más sobre Cubing México y su desarrollo a manos de Leonardo Sánchez Del Toro. Descubre la historia personal del desarrollador, su pasión por el speedcubing y cómo este sitio web contribuye al crecimiento de la comunidad de speedcubers en México.{% endblock %}
+{% block meta_keywords %}Cubing México, desarrollo de sitio web, speedcubing, Leonardo Sánchez Del Toro, historia personal, comunidad de speedcubers, agradecimientos{% endblock %}
 
 {% block content %}
 
@@ -13,7 +19,7 @@
 <div class="container">
     <div class="row">
         <h2 class="text-center mt-3">Sobre el Desarrollador</h2>
-        <p>¡Hola a todos! Mi nombre es <a href="{% url 'cubingmexico_web:my_results' wca_id='2016TORO03' %}" class="text-decoration-none">Leonardo Del Toro</a> y quiero compartir un poco de mi historia personal y cómo llegué a desarrollar Cubing México. El speedcubing y este sitio web significan mucho para mí, y aquí está por qué.</p>
+        <p>¡Hola a todos! Mi nombre es <a href="{% url 'cubingmexico_web:my_results' wca_id='2016TORO03' %}" class="text-decoration-none">Leonardo Sánchez Del Toro</a>, soy un speedcuber y programador nayarita y quiero compartir un poco de mi historia personal y cómo llegué a desarrollar Cubing México. El speedcubing y este sitio web significan mucho para mí, y aquí está por qué.</p>
         <p>Mi viaje en el mundo del cubo de Rubik comenzó a una temprana edad, gracias a mi padre. Recuerdo que cuando tenía alrededor de 6 años, mi padre me enseñó a resolver este misterioso rompecabezas tridimensional. Al principio, debo admitir que no era un gran entusiasta. Lo veía más como una tarea que como un juego. Sin embargo, mi perspectiva cambió radicalmente en la secundaria.</p>
         <p>En la secundaria, un buen amigo mío se convirtió en otro amante del cubo de Rubik. Juntos, comenzamos a competir en resolverlo lo más rápido posible. Mi amigo parecía estar un paso por delante de mí en términos de velocidad y eficiencia. Su habilidad para resolver el cubo de manera más rápida me motivó a aceptar el desafío y mejorar mis habilidades.</p>
         <p>Fue en ese momento que decidí entrar de lleno en el emocionante mundo del speedcubing. Comencé a practicar de manera más regular, a aprender técnicas avanzadas y a participar en competencias. Cada vez que mejoraba mis tiempos y rompía mis propios récords personales, sentía una satisfacción increíble.</p>

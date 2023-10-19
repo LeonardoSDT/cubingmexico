@@ -50,6 +50,9 @@ class State(models.Model):
 class StateTeam(models.Model):
     def __str__(self):
         return str(self.name)
+    
+    def get_absolute_url(self):
+        return f'/team/{self.state.three_letter_code}'
 
     name = models.CharField(_("Nombre del team"), max_length=255)
     description =  models.TextField(_("Descripción del team"), null=True, blank=True, default='')

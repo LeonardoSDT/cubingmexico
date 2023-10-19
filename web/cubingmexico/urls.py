@@ -18,7 +18,12 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 from django.contrib.sitemaps.views import sitemap
-from cubingmexico_web.sitemaps import sitemaps
+from .sitemaps import *
+
+sitemaps = {
+    'about': StaticViewSitemap,
+    'stateteam': StateTeamSitemap,
+}
 
 urlpatterns = [
     path("", include("cubingmexico_web.urls", namespace='cubingmexico_web')),

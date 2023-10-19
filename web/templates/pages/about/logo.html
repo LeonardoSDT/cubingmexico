@@ -1,10 +1,16 @@
 {% extends 'base.html' %}
 
-{% block title %}Logo de Cubing México{% endblock %}
-{% block meta_description %}{% endblock %}
-{% block meta_keywords %}{% endblock %}
-
 {% load static %}
+
+{% block title %}Logo de Cubing México{% endblock %}
+
+{% block meta_title %}Logo de Cubing México{% endblock %}
+{% block meta_type %}website{% endblock %}
+{% block meta_url %}https://cubingmexico.org/logo/{% endblock %}
+{% block meta_image %}{% static 'img/cubingmexico_logo.svg' %}{% endblock %}
+
+{% block meta_description %}Logo de Cubing México - Descubre el significado detrás del logo de Cubing México y cómo apoyar a la artista detrás del diseño. Propiedad exclusiva de Cubing México.{% endblock %}
+{% block meta_keywords %}Cubing México, logo, diseño, elote, Rubik, arte, Sofia Celaya Álvarez, AD CHROFY{% endblock %}
 
 {% block content %}
 
@@ -15,12 +21,9 @@
         <p>El logo de Cubing México, diseñado por Sofia Celaya Álvarez, combina elementos culturales mexicanos con un cubo de Rubik, representando la identidad de la comunidad. La forma del logo se asemeja a un elote, un elemento culinario tradicionalmente mexicano que con su forma semicuadrada, simboliza esta fusión.</p>
         <p>Si deseas apoyar a la artista detrás del diseño, puedes conectarte con Sofia a través de sus redes sociales, que se proporcionan a continuación:</p>
         <p class="text-center"><a href="https://www.instagram.com/ad_chrofy/" class="text-decoration-none fs-4"><i class="bi bi-instagram me-2"></i>AD CHROFY</a></p>
-        <p>Es importante destacar que el logo es propiedad exclusiva de Cubing México y su uso requiere permiso. El logo en formato SVG está disponible para su descarga a continuación:</p>
+        <p>Es importante destacar que el logo es propiedad exclusiva de Cubing México y su uso requiere permiso. El logo en formato SVG está disponible para su descarga <a href="{% static 'img/cubingmexico_logo.svg' %}" target="_blank" class="text-decoration-none">aquí</a>.</p>
     </div>
     <div class="row">
-        <p class="text-center mt-3">
-            <img src="{% static 'img/cubingmexico_logo.svg' %}" alt="Logo de Cubing México" class="img-fluid rounded">
-        </p>
         <!-- <a href="{% url 'cubingmexico_web:donations' %}" class="btn btn-secondary mt-3">¿Te interesa donar? Puedes hacerlo aquí <i class="bi bi-paypal"></i></a> -->
     </div>
 </div>

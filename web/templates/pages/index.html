@@ -1,14 +1,20 @@
 {% extends 'base.html' %}
 
-{% block title %}Inicio - Cubing México{% endblock %}
-{% block meta_description %}Cubing México - Tu fuente de información para rankings, récords y más en el mundo del cubo Rubik en México.{% endblock %}
-{% block meta_keywords %}Cubing México, Rubik's cube, rankings, récords, competiciones, WCA, México{% endblock %}
-
 {% load static %}
+
+{% block title %}Inicio - Cubing México{% endblock %}
+
+{% block meta_title %}Inicio - Cubing México{% endblock %}
+{% block meta_type %}website{% endblock %}
+{% block meta_url %}https://cubingmexico.org/{% endblock %}
+{% block meta_image %}{% static 'img/cubingmexico_logo.svg' %}{% endblock %}
+
+{% block meta_description %}Cubing México - Tu fuente de información para rankings, récords y más en el mundo del cubo Rubik en México.{% endblock %}
+{% block meta_keywords %}Cubing México, Rubik's cube, rankings, récords, competiciones, competencias, WCA, México{% endblock %}
 
 {% block content %}
 
-<p class="text-center"><img src="{% static 'img/cubingmexico_logo.svg' %}" width="200" alt="Logo de Cubing México"></p>
+<p class="text-center"><img src="{% static 'img/cubingmexico_logo.svg' %}" width="200" height="200" alt="Logo de Cubing México"></p>
 <h1 class="text-center my-3">Bienvenido a Cubing México</h1>
 
 <div class="container">
@@ -16,7 +22,7 @@
     <div class="col mb-3">
       <div class="card text-center">
         <div class="card-body">
-          <h5 class="card-title">Próximas competencias oficiales en México</h5>
+          <h2 class="card-title fs-5">Próximas competencias oficiales en México</h2>
           <p class="card-text">Competencias oficiales avaladas por la <a href="https://www.worldcubeassociation.org/" class="text-decoration-none">World Cube Association</a>.</p>
           <a href="{% url 'cubingmexico_web:competitions' %}" class="btn btn-primary"><i class="bi bi-trophy-fill me-2"></i>Ver competencias</a>
         </div>
@@ -27,7 +33,7 @@
     <div class="col mb-3">
       <div class="card text-center">
           <div class="card-body">
-            <h5 class="card-title">Rankings nacionales oficiales</h5>
+            <h2 class="card-title fs-5">Rankings nacionales oficiales</h2>
             <p class="card-text">Obtenidos directamente de la <a href="https://www.worldcubeassociation.org/" class="text-decoration-none">World Cube Association</a>.</p>
             <a href="{% url 'cubingmexico_web:rankings' event_type='333' ranking_type='single' %}" class="btn btn-primary"><i class="bi bi-reception-4 me-2"></i>Ver rankings</a>
           </div>
@@ -36,7 +42,7 @@
     <div class="col mb-3">
       <div class="card text-center">
           <div class="card-body">
-            <h5 class="card-title">Récords nacionales oficiales</h5>
+            <h2 class="card-title fs-5">Récords nacionales oficiales</h2>
             <p class="card-text">Obtenidos directamente de la <a href="https://www.worldcubeassociation.org/" class="text-decoration-none">World Cube Association</a>.</p>
             <a href="{% url 'cubingmexico_web:records' %}" class="btn btn-primary"><i class="bi bi bi-award-fill me-2"></i>Ver récords</a>
           </div>
@@ -45,7 +51,7 @@
     <div class="col mb-3">
       <div class="card text-center">
         <div class="card-body">
-          <h5 class="card-title">Teams estatales</h5>
+          <h2 class="card-title fs-5">Teams estatales</h2>
           <p class="card-text">Comunidades de cuberos en cada estado de la república mexicana.</p>
           <a href="{% url 'cubingmexico_web:state_teams' %}" class="btn btn-primary"><i class="bi bi-people-fill me-2"></i>Ver teams</a>
         </div>
@@ -56,7 +62,7 @@
     <div class="col mb-3">
       <div class="card text-center">
           <div class="card-body">
-            <h5 class="card-title">Rankings estatales</h5>
+            <h2 class="card-title fs-5">Rankings estatales</h2>
             <p class="card-text">Acorde a la información proporcionada por la <a href="https://www.worldcubeassociation.org/" class="text-decoration-none">World Cube Association</a>.</p>
             <a href="{% url 'cubingmexico_web:rankings' event_type='333' state='JAL' ranking_type='single' %}" class="btn btn-primary"><i class="bi bi-reception-4 me-2"></i>Ver rankings</a>
           </div>
@@ -65,7 +71,7 @@
     <div class="col mb-3">
       <div class="card text-center">
           <div class="card-body">
-            <h5 class="card-title">Récords estatales</h5>
+            <h2 class="card-title fs-5">Récords estatales</h2>
             <p class="card-text">Acorde a la información proporcionada por la <a href="https://www.worldcubeassociation.org/" class="text-decoration-none">World Cube Association</a>.</p>
             <a href="{% url 'cubingmexico_web:records' state='JAL' %}" class="btn btn-primary"><i class="bi bi bi-award-fill me-2"></i>Ver récords</a>
           </div>
@@ -74,7 +80,7 @@
     <div class="col mb-3">
       <div class="card text-center">
           <div class="card-body">
-            <h5 class="card-title">Récords nacionales no oficiales (UNRs)</h5>
+            <h2 class="card-title fs-5">Récords nacionales no oficiales (UNRs)</h2>
             <p class="card-text">Récords nacionales no oficiales.</p>
             <a href="#" class="btn btn-primary disabled"><i class="bi bi-reception-4 me-2"></i>Ver UNRs (Próximamente)</a>
           </div>
@@ -85,7 +91,7 @@
     <div class="col mb-3">
       <div class="card text-center">
           <div class="card-body">
-            <h5 class="card-title">Sum of Ranks</h5>
+            <h2 class="card-title fs-5">Sum of Ranks</h2>
             <p class="card-text">Acorde a la información proporcionada por la <a href="https://www.worldcubeassociation.org/" class="text-decoration-none">World Cube Association</a>.</p>
             <a href="{% url 'cubingmexico_web:sor' ranking_type='single' %}" class="btn btn-primary"><i class="bi bi-plus-circle-fill me-2"></i>Ver SOR</a>
           </div>
@@ -94,7 +100,7 @@
     <div class="col mb-3">
       <div class="card text-center">
           <div class="card-body">
-            <h5 class="card-title">Kinch Ranks</h5>
+            <h2 class="card-title fs-5">Kinch Ranks</h2>
             <p class="card-text">Acorde a la información proporcionada por la <a href="https://www.worldcubeassociation.org/" class="text-decoration-none">World Cube Association</a>.</p>
             <a href="{% url 'cubingmexico_web:kinch' %}" class="btn btn-primary disabled"><i class="bi bi-bar-chart-steps me-2"></i>Ver Kinch Ranks (Próximamente)</a>
           </div>
@@ -105,7 +111,7 @@
     <div class="col mb-3">
       <div class="card text-center">
           <div class="card-body">
-            <h5 class="card-title">Preguntas frecuentes</h5>
+            <h2 class="card-title fs-5">Preguntas frecuentes</h2>
             <p class="card-text">¿Tienes alguna pregunta sobre el sitio? Tal vez esta sección pueda serte de utilidad</p>
             <a href="{% url 'cubingmexico_web:faq' %}" class="btn btn-primary"><i class="bi bi-question-circle-fill me-2"></i>Ver FAQ</a>
           </div>
@@ -114,7 +120,7 @@
     <div class="col mb-3">
       <div class="card text-center">
           <div class="card-body">
-            <h5 class="card-title">Donaciones</h5>
+            <h2 class="card-title fs-5">Donaciones</h2>
             <p class="card-text">Actualmente el sitio necesita de donaciones para poder mantenerse en pie, ¿te gustaría apoyar a la causa?</p>
             <a href="{% url 'cubingmexico_web:donations' %}" class="btn btn-primary disabled"><i class="bi bi-cash me-2"></i>Donar (Próximamente)</a>
           </div>

@@ -2,7 +2,7 @@
 
 <nav class="navbar navbar-expand-lg">
   <div class="container-fluid">
-    <a class="navbar-brand" href="{% url 'cubingmexico_web:index' %}"><img src="{% static 'img/cubingmexico_logo.svg' %}" width="50" alt="Logo de Cubing México" class="me-2">Cubing México</a>
+    <a class="navbar-brand" href="{% url 'cubingmexico_web:index' %}"><img src="{% static 'img/cubingmexico_logo.svg' %}" width="50" height="50" alt="Logo de Cubing México" class="me-2">Cubing México</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -41,8 +41,8 @@
         </li>
         {% if user.is_authenticated %}
           <li class="nav-item dropdown me-5">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink3" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-person-fill me-2"></i>{{ user.wcaprofile }}</a>
-              <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink3">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink4" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-person-fill me-2"></i>{{ user.wcaprofile }}</a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink4">
                 <li><a class="dropdown-item" href="{% url 'cubingmexico_web:profile' %}"><i class="bi bi-person-lines-fill me-2"></i>Perfil</a></li>
                 <li><a class="dropdown-item" href="{% url 'cubingmexico_web:my_results' wca_id=request.user.wcaprofile.wca_id %}"><i class="bi bi-table me-2"></i>Mis resultados</a></li>
                 {% if user.cubingmexicoprofile.person_state_team %}

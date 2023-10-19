@@ -1,10 +1,16 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
 {% block title %}Competencias - Cubing México{% endblock %}
+
+{% block meta_title %}Competencias en México{% endblock %}
+{% block meta_type %}website{% endblock %}
+{% block meta_url %}https://cubingmexico.org/competitions/{% endblock %}
+{% block meta_image %}{% static 'img/cubingmexico_logo.svg' %}{% endblock %}
+
 {% block meta_description %}Próximas competencias oficiales en México para entusiastas del cubo de Rubik. Mantente actualizado con fechas de competencias, ubicaciones y detalles importantes.{% endblock %}
 {% block meta_keywords %}competencias oficiales próximas, competencias próximas, México, cubo de Rubik, speedcubing, eventos de rompecabezas, fechas de competencias, detalles de ubicación{% endblock %}
-
-{% load static %}
 
 {% load split_events %}
 {% load date_formatter %}

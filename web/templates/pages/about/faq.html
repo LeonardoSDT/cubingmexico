@@ -1,8 +1,16 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
 {% block title %}Preguntas Frecuentes{% endblock %}
-{% block meta_description %}{% endblock %}
-{% block meta_keywords %}{% endblock %}
+
+{% block meta_title %}Preguntas Frecuentes{% endblock %}
+{% block meta_type %}website{% endblock %}
+{% block meta_url %}https://cubingmexico.org/faq/{% endblock %}
+{% block meta_image %}{% static 'img/cubingmexico_logo.svg' %}{% endblock %}
+
+{% block meta_description %}Respuestas a preguntas frecuentes sobre Cubing México: Teams estatales, actualización de datos, nacionalidad, y más. Obtén información clave aquí.{% endblock %}
+{% block meta_keywords %}Preguntas frecuentes, Cubing México, Teams estatales, actualización de datos, nacionalidad, récords estatales, SR{% endblock %}
 
 {% block content %}
 
@@ -138,6 +146,18 @@
                   Si no hay un Team en tu estado puede deberse a la falta de conocimiento o iniciativa por parte de los speedcubers locales. No obstante, la buena noticia es que esto puede cambiar, ¡y tú puedes ser el pionero que haga que suceda!<br>
                   La formación de un Team en tu estado es una emocionante oportunidad para promover el speedcubing, construir una comunidad local de speedcubers, organizar eventos, representar con orgullo tu región en competencias y, sobre todo, inspirar a otros a seguir tu ejemplo. Si no hay un Team en tu estado, no te preocupes, tú puedes ser el catalizador del cambio, reuniendo a apasionados speedcubers locales para crear una vibrante comunidad. Esto no solo enriquecerá tu estado, sino que también contribuirá al crecimiento y la diversidad de la comunidad de speedcubers a nivel nacional. El speedcubing es un deporte emocionante, y formar un Team puede ser el primer paso para llevarlo a nuevas alturas en tu región.<br>
                   Si estás interesado en esto podemos ayudarte, contáctanos a través de la página de <a href="https://www.facebook.com/CubingMexico" class="text-decoration-none">Facebook</a>.
+                </div>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingTen">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTen" aria-expanded="false" aria-controls="collapseTen">
+                  <strong>¿Qué significan las siglas SR?</strong>
+                </button>
+              </h2>
+              <div id="collapseTen" class="accordion-collapse collapse" aria-labelledby="headingTen" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                  SR significa <i>State Record</i> (récord estatal en español). La WCA utiliza las siglas WR (World Record), CR (Continental Record) y NR (National Record) para determinar los rankings en diferentes regiones del mundo, por lo que en el caso de SR, se aplica a cada estado en México.
                 </div>
               </div>
             </div>
