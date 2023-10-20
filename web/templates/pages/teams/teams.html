@@ -37,7 +37,7 @@
                         <img src="" class="card-img-top" alt="Logotipo de {{ team.name }}">
                     {% endif %}
                     <div class="card-body">
-                    <h5 class="card-title">{{ team.name }}</h5>
+                    <h2 class="card-title fs-5">{{ team.name }}</h2>
                     <p class="card-text">{{ team.description|truncatewords:20 }}</p>
                     <p class="card-text"><strong>Estado:</strong> {{ team.state }}</p>
                     <a href="{% url 'cubingmexico_web:team' team_code=team.state.three_letter_code %}" class="btn btn-primary"><i class="bi bi-people-fill me-2"></i>Ver Team</a>

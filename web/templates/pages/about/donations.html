@@ -14,7 +14,7 @@
 
 {% block content %}
 
-<h1 class="text-center my-3">Donaciones y Patrocinadores</h1>
+<h1 class="text-center my-3">Donaciones y patrocinadores</h1>
 
 <div class="container">
     <h2 class="text-center my-3">Donaciones</h2>
@@ -29,7 +29,7 @@
         <div class="col-12 mb-3">
             <div class="card text-center">
                 <div class="card-body">
-                    <h5 class="card-title">¿Cómo puedes donar?</h5>
+                    <h4 class="card-title fs-5">¿Cómo puedes donar?</h4>
                     <p class="card-text">Es sencillo. Utilizamos PayPal para procesar nuestras donaciones de manera segura y eficiente. Simplemente haz clic en el botón de donación a continuación y podrás realizar tu aporte. ¡Cada donación, por pequeña que sea, es una contribución valiosa para seguir manteniendo y mejorando Cubing México!</p>
                     <p><strong>Si deseas aparecer en la lista de abajo, escribe tu nombre al momento de hacer la donación.</strong></p>
                     <a href="https://www.paypal.com/donate/?hosted_button_id=ZRWXP6B78SQDY" class="btn btn-primary">Donar <i class="bi bi-paypal"></i></a>  
@@ -39,7 +39,7 @@
         <div class="col-12 mb-3">
             <div class="card text-center">
                 <div class="card-body">
-                    <h5 class="card-title">¿Prefieres donar mediante otro método?</h5>
+                    <h4 class="card-title fs-5">¿Prefieres donar mediante otro método?</h4>
                     <p class="card-text">Por ejemplo, mediante transferencia interbancaria o alguna otra propuesta, si es así, ponte en contacto con nosotros mediante <a href="https://www.facebook.com/CubingMexico" class="text-decoration-none">Facebook</a>.</p>
                 </div>
             </div>
@@ -75,13 +75,14 @@
         <p>¡Gracias por ser parte de la comunidad de Cubing México y por considerar hacer una donación para apoyarnos!</p>
     </div>
     <h2 class="text-center my-3">Patrocinadores</h2>
+    <p>Si eres dueño de algún negocio y deseas que este aparezca como patrocinador, asegúrate de escribir el nombre al momento de donar.</p>
     <div class="row">
         {% for sponsor in sponsors %}
         <div class="col-12 col-sm-6 col-md-4 col-lg-3 mt-3">
             <div class="card">
                 <img class="card-img-top" src="{{ sponsor.sponsor_logo.url }}" alt="Logo del patrocinador">
                 <div class="card-body text-center">
-                  <h5 class="card-title">{{ sponsor.name }}</h5>
+                  <h2 class="card-title fs-5">{{ sponsor.name }}</h2>
                   <p class="card-text">{{ sponsor.description }}</p>
                   <a href="{{ sponsor.link }}" class="btn btn-primary">Ver patrocinador</a>
                 </div>

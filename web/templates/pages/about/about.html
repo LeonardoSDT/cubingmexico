@@ -21,14 +21,14 @@
         <p class="text-center mt-3"><img src="{% static 'img/competidores.jpg' %}" alt="Competidores" class="img-fluid rounded"></p>
     </div>
     <div class="row">
-        <h2 class="text-center">Promoviendo el Speedcubing en México</h2>
-        <p>Cubing México es un sitio web apasionado por el speedcubing y diseñado con el propósito de unir a la comunidad de speedcubers en México. Nuestra dedicación es inquebrantable y nuestra misión es clara: fomentar el crecimiento y la celebración de la próspera comunidad de speedcubers en México.</p>
-        <p>En el corazón de Cubing México se encuentra una misión esencial: proporcionar una fuente integral de información sobre los rankings y récords estatales mexicanos en el speedcubing. Nos basamos en los datos proporcionados por la <a href="https://www.worldcubeassociation.org/" class="text-decoration-none">World Cube Association</a>, que coordina y supervisa 17 eventos diferentes en este apasionante deporte. En Cubing México, creemos en la importancia de llevar un registro detallado de los logros de nuestros speedcubers y compartir estos logros con orgullo.</p>
+        <h2 class="text-center">Promoviendo el speedcubing en México</h2>
+        <p>Cubing México es un sitio web de apasionados por el speedcubing y diseñado con el propósito de unir a la comunidad de speedcubers en México. Nuestra dedicación es inquebrantable y la misión es clara: fomentar el crecimiento y la celebración de la prosperidad del speedcubing en nuestro país.</p>
+        <p>En el corazón de Cubing México se encuentra una meta esencial: proporcionar una fuente integral de información sobre los rankings y récords estatales a lo largo del territorio. Nos basamos en los datos proporcionados por la <a href="https://www.worldcubeassociation.org/" class="text-decoration-none">World Cube Association</a>, que coordina y supervisa 17 eventos diferentes en este apasionante deporte. En Cubing México, creemos en la importancia de llevar un registro detallado de los logros de nuestros speedcubers y compartir estos logros con orgullo.</p>
         <p>Desde el año 2008, hemos sido testigos de un crecimiento fenomenal en la comunidad de speedcubing en México. ¡Un asombroso total de <strong>{{ number_person }} mexicanos</strong> han participado en nada menos que <strong>{{ number_competitions }} competencias oficiales</strong> en todo el país! Estos números son un testimonio del compromiso y la pasión que los speedcubers mexicanos tienen por su deporte, y estamos orgullosos de ser parte de esta emocionante travesía.</p>
         {% if not user.is_authenticated %}
             <a href="{{ wca_login_uri }}" class="btn btn-primary">¡Únete a Cubing México con tu cuenta de la WCA! <img src="https://www.worldcubeassociation.org/files/WCAlogo_notext.svg" alt="WCA" width="20"></a>
         {% endif %}
-        <a href="{% url 'cubingmexico_web:donations' %}" class="btn btn-secondary mt-3">¿Te interesa donar? Puedes hacerlo aquí <i class="bi bi-paypal"></i></a>
+        <!-- <a href="{% url 'cubingmexico_web:donations' %}" class="btn btn-secondary mt-3">¿Te interesa donar? Puedes hacerlo aquí <i class="bi bi-paypal"></i></a> -->
     </div>
 </div>
 

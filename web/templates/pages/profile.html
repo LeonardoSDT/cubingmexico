@@ -10,7 +10,7 @@
     <div class="col-md-6 col-12 mb-3">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">{{ user.wcaprofile.name }}</h5>
+                <h2 class="card-title fs-5">{{ user.wcaprofile.name }}</h2>
                 <p class="card-text">
                   {% if user.wcaprofile.wca_id %}
                     WCA ID: {{ user.wcaprofile.wca_id }}
@@ -24,7 +24,7 @@
     <div class="col-md-6 col-12">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">Detalles</h5>
+                <h2 class="card-title fs-5">Detalles</h2>
                 <p class="card-text">
                     <!-- <p>Te uniste a la WCA el {{ user.wcaprofile.wca_created_at }}</p> -->
                     <p>Te uniste a Cubing México el {{ user.date_joined }}</p>
