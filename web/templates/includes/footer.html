@@ -7,11 +7,20 @@
         <span class="text-muted">¿Ves algo erróneo o tienes alguna sugerencia? Repórtalo en el repositorio de <a href="https://github.com/LeonardoSDT/cubingmexico" class="text-body text-decoration-none">Cubing México <i class="bi bi-github"></i></a></span>
         <br>
         <span class="text-muted fw-lighter">Últimos resultados: {{ last_competition.name }}</span>
+          {% if missing_competitions %}
+          <br>
+          <span class="text-muted fw-lighter">Resultados pendientes:</span>
+          <ul>
+            {% for missing_competition in missing_competitions %}
+              <li class="text-muted fw-lighter">{{ missing_competition.name }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
       </div>
       <div class="col-3">
         <div class="form-check form-switch m-3">
           <label class="form-check-label" for="flexSwitchCheckChecked">
-            <input class="form-check-input p-2" type="checkbox" role="switch" id="flexSwitchCheckChecked" name="flexSwitchCheckChecked" onclick="toggleDarkMode()">
+            <input class="form-check-input p-2" type="checkbox" role="switch" id="flexSwitchCheckChecked" name="flexSwitchCheckChecked" aria-labelledby="flexSwitchCheckChecked" onclick="toggleDarkMode()">
             <i class="bi bi-sun-fill" id="sunIcon"></i>
             <i class="bi bi-moon-fill" id="moonIcon" style="display: none;"></i>
           </label>

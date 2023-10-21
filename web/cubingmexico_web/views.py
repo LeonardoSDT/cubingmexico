@@ -47,9 +47,37 @@ class ContentMixin:
 
     def get_context_data(self, **kwargs):
         context = super(ContentMixin, self).get_context_data(**kwargs)
-        context['last_competition'] = Competition.objects.filter(country='Mexico', result__isnull=False).latest('year', 'month', 'day')
+
+        context['last_competition'] = Competition.objects.filter(country='Mexico', result__isnull=False).order_by('result__id').last()
+
+        now = datetime.now()
+
+        past_competition = Competition.objects.filter(
+            Q(country__name='Mexico') & (
+                Q(year__lt=now.year) | (Q(year=now.year) & Q(month__lt=now.month)) |
+                (Q(year=now.year) & Q(month=now.month) & Q(day__lt=now.day))
+            )
+        ).exclude(
+            Q(country__name='Mexico') &
+            Q(year=now.year) & Q(month=now.month) & Q(day__lte=now.day) &
+            Q(year=now.year) & Q(end_month__gte=now.month) & Q(end_day__gte=now.day)
+        ).exclude(id__in=['PerryOpen2013', 'ChapingoOpen2020'])
+        
+        past_competition_2 = Competition.objects.filter(country='Mexico', result__isnull=False).distinct()
+
+        missing_competitions = past_competition.exclude(
+            Q(id__in=past_competition_2.values('id'))
+        ).union(
+            past_competition_2.exclude(
+                Q(id__in=past_competition.values('id'))
+            )
+        )
+
+        context['missing_competitions'] = missing_competitions
+
         context['wca_login_uri'] = wca_authorize_uri()
         context['page'] = self.page
+
         return context
     
 class UserLogoutView(LogoutView):
@@ -76,27 +104,15 @@ class AboutView(ContentMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        now = datetime.now()
-
         number_person = Person.objects.filter(result__competition__country='Mexico').distinct().count()
 
-        number_competitions  = Competition.objects.filter(
-            Q(country__name='Mexico') & (
-                Q(year__lt=now.year) | (Q(year=now.year) & Q(month__lt=now.month)) |
-                (Q(year=now.year) & Q(month=now.month) & Q(day__lt=now.day))
-            )
-        ).exclude(
-            Q(country__name='Mexico') &
-            Q(year=now.year) & Q(month=now.month) & Q(day__lte=now.day) &
-            Q(year=now.year) & Q(end_month__gte=now.month) & Q(end_day__gte=now.day)
-        ).count()
+        number_competitions  = Competition.objects.filter(country='Mexico', result__isnull=False).distinct().count()
 
         context['number_competitions'] = number_competitions
         context['number_person'] = number_person
 
         return context
         
-
 class FAQView(ContentMixin, TemplateView):
     template_name = 'pages/about/faq.html'
     page = 'cubingmexico_web:faq'
@@ -106,7 +122,6 @@ class FAQView(ContentMixin, TemplateView):
             return redirect(reverse_lazy('cubingmexico_web:logout'))
         return super().dispatch(request, *args, **kwargs)
     
-
 class DevelopmentView(ContentMixin, TemplateView):
     template_name = 'pages/about/development.html'
     page = 'cubingmexico_web:development'
@@ -116,7 +131,6 @@ class DevelopmentView(ContentMixin, TemplateView):
             return redirect(reverse_lazy('cubingmexico_web:logout'))
         return super().dispatch(request, *args, **kwargs)
     
-
 class LogoView(ContentMixin, TemplateView):
     template_name = 'pages/about/logo.html'
     page = 'cubingmexico_web:logo'
