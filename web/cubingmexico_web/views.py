@@ -251,7 +251,7 @@ class CompetitionsView(ContentMixin, TemplateView):
 
         context['total_count'] = context['uc_count'] + context['pc_count'] + context['cc_count']
 
-        context['upcoming_competitions'] = upcoming_competitions[:10]
+        context['upcoming_competitions'] = upcoming_competitions
         context['past_competitions'] = past_competitions
         context['current_competitions'] = current_competitions
         

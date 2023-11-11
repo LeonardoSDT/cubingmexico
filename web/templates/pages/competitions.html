@@ -79,7 +79,9 @@
                     <th>Categorías</th>
                     <th>WCA Live</th>
                     <th>Fecha(s)</th>
+                    {% if not selected_state %}
                     <th>Estado</th>
+                    {% endif %}
                 </tr>
             </thead>
             <tbody>
@@ -100,7 +102,9 @@
                         </a>
                     </td>
                     <td>{{ competition|format_competition_date_spanish }}</td>
+                    {% if not selected_state %}
                     <td>{{ competition.competition_state }}</td>
+                    {% endif %}
                 </tr>
                 {% endfor %}
             </tbody>
@@ -111,7 +115,9 @@
                     <th>Categorías</th>
                     <th>WCA Live</th>
                     <th>Fecha(s)</th>
+                    {% if not selected_state %}
                     <th>Estado</th>
+                    {% endif %}
                 </tr>
             </tfoot>
         </table>
@@ -131,7 +137,9 @@
                         <th>Nombre de la competencia</th>
                         <th>Categorías</th>
                         <th>Fecha(s)</th>
+                        {% if not selected_state %}
                         <th>Estado</th>
+                        {% endif %}
                     </tr>
                 </thead>
                 <tbody>
@@ -147,7 +155,9 @@
                             {% endfor %}
                         </td>
                         <td>{{ competition|format_competition_date_spanish }}</td>
+                        {% if not selected_state %}
                         <td>{{ competition.competition_state }}</td>
+                        {% endif %}
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -157,7 +167,9 @@
                         <th>Nombre de la competencia</th>
                         <th>Categorías</th>
                         <th>Fecha(s)</th>
+                        {% if not selected_state %}
                         <th>Estado</th>
+                        {% endif %}
                     </tr>
                 </tfoot>
             </table>
@@ -181,7 +193,9 @@
                         <th>Nombre de la competencia</th>
                         <th>Categorías</th>
                         <th>Fecha(s)</th>
+                        {% if not selected_state %}
                         <th>Estado</th>
+                        {% endif %}
                     </tr>
                 </thead>
                 <tbody>
@@ -197,7 +211,9 @@
                             {% endfor %}
                         </td>
                         <td>{{ competition|format_competition_date_spanish }}</td>
+                        {% if not selected_state %}
                         <td>{{ competition.competition_state }}</td>
+                        {% endif %}
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -207,7 +223,9 @@
                         <th>Nombre de la competencia</th>
                         <th>Categorías</th>
                         <th>Fecha(s)</th>
+                        {% if not selected_state %}
                         <th>Estado</th>
+                        {% endif %}
                     </tr>
                 </tfoot>
             </table>
