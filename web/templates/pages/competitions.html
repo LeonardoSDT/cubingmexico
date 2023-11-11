@@ -2,15 +2,26 @@
 
 {% load static %}
 
-{% block title %}Competencias - Cubing México{% endblock %}
+{% block title %}
+{% if selected_state %}
+    Competencias en
+    {% for state in states %}
+        {% if state.three_letter_code == selected_state %}
+            {{ state.name }}
+        {% endif %}
+    {% endfor %}
+{% else %}
+    Competencias
+{% endif %}
+ - Cubing México{% endblock %}
 
 {% block meta_title %}Competencias en México{% endblock %}
 {% block meta_type %}website{% endblock %}
 {% block meta_url %}https://cubingmexico.org/competitions/{% endblock %}
 {% block meta_image %}{% static 'img/cubingmexico_logo.png' %}{% endblock %}
 
-{% block meta_description %}Próximas competencias oficiales en México para entusiastas del cubo de Rubik. Mantente actualizado con fechas de competencias, ubicaciones y detalles importantes.{% endblock %}
-{% block meta_keywords %}competencias oficiales próximas, competencias próximas, México, cubo de Rubik, speedcubing, eventos de rompecabezas, fechas de competencias, detalles de ubicación{% endblock %}
+{% block meta_description %}Próximas competencias oficiales en {% if selected_state %}{% for state in states %}{% if state.three_letter_code == selected_state %}{{ state.name }}{% endif %}{% endfor %}{% else %}México{% endif %} para entusiastas del cubo de Rubik. Mantente actualizado con fechas de competencias, ubicaciones y detalles importantes.{% endblock %}
+{% block meta_keywords %}competencias oficiales próximas, competencias próximas, {% if selected_state %}{% for state in states %}{% if state.three_letter_code == selected_state %}{{ state.name }}{% endif %}{% endfor %}{% else %}México{% endif %}, cubo de Rubik, speedcubing, eventos de rompecabezas, fechas de competencias, detalles de ubicación{% endblock %}
 
 {% load split_events %}
 {% load date_formatter %}
@@ -27,9 +38,38 @@
 {% block content %}
 
 <div class="container">
+    <div class="row">
+        <div class="col-12 col-sm-9">
+            <h1 class="my-3">
+            {% if selected_state %}
+                Competencias oficiales en 
+                {% for state in states %}
+                    {% if state.three_letter_code == selected_state %}
+                        {{ state.name }}
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                Competencias oficiales en México
+            {% endif %}
+             <span class="badge bg-secondary">{% if total_count != 0 %}{{ total_count }}{% endif %}</span>
+            </h1>
+            <p>Una competencia oficial de la <a href="https://www.worldcubeassociation.org/" class="text-decoration-none">World Cube Association</a> es mucho más que resolver cubos; es un evento vibrante donde los cuberos de todas las edades y niveles se reúnen para desafiar sus habilidades, compartir su pasión y establecer nuevos récords. Descubre competencias de velocidad, resolución a ciegas, con una sola mano y más. ¡Explora las fechas, ubicaciones y detalles para unirte a la comunidad cubera en {% if selected_state %}{% for state in states %}{% if state.three_letter_code == selected_state %}{{ state.name }}{% endif %}{% endfor %}{% else %}México{% endif %} y vivir la emoción de la competencia!</p>
+        </div>
+        <div class="col-12 col-sm-3 d-flex justify-content-center my-3">
+            <form>
+                <label for="state-select"><strong>Selecciona un estado</strong></label>
+                <select class="form-select" id="state-select" onchange="location = this.value;">
+                    <option value="{% url 'cubingmexico_web:competitions' %}">Todo el país</option>
+                  {% for state in states %}
+                    <option value="{% url 'cubingmexico_web:competitions' state=state.three_letter_code %}" {% if state.three_letter_code == selected_state %}selected{% endif %}>{{ state.name }}</option>
+                  {% endfor %}
+                </select>
+            </form>
+        </div>
+    </div>
     {% if current_competitions %}
     <div class="row">
-        <h1 class="text-center my-3">Competencias oficiales activas en México</h1>
+        <h2 class="text-center my-3">Competencias activas en {% if selected_state %}{% for state in states %}{% if state.three_letter_code == selected_state %}{{ state.name }}{% endif %}{% endfor %}{% else %}México{% endif %} <span class="badge bg-secondary">{{ cc_count }}</span></h2>
         <p class="card-text">Estas competencias están en marcha, ¡puedes ver los resultados en directo en la <a href="https://live.worldcubeassociation.org/" class="text-decoration-none">WCA Live</a>!</p>
         <table id="current_competitions" class="table table-striped nowrap" style="width:100%">
             <thead>
@@ -81,7 +121,7 @@
     </div>
     {% endif %}
     <div class="row">
-        <h1 class="text-center my-3">Próximas competencias oficiales en México</h1>
+        <h2 class="text-center my-3">Próximas competencias en {% if selected_state %}{% for state in states %}{% if state.three_letter_code == selected_state %}{{ state.name }}{% endif %}{% endfor %}{% else %}México{% endif %} <span class="badge bg-secondary">{% if uc_count != 0 %}{{ uc_count }}{% endif %}</span></h2>
         {% if upcoming_competitions %}
             <p class="card-text">Para obtener información más detallada sobre cada competencia, como la fecha de inscripción, cupo, cuota, y otros detalles, te invitamos a visitar el sitio web de la competencia en cuestión.</p>
             <table id="upcoming_competitions" class="table table-striped nowrap" style="width:100%">
@@ -122,56 +162,64 @@
                 </tfoot>
             </table>
         {% else %}
-            <p class="alert alert-info">No hay competencias próximas en México por el momento.</p>
+            <p class="alert alert-info">No hay competencias próximas en {% if selected_state %}{% for state in states %}{% if state.three_letter_code == selected_state %}{{ state.name }}{% endif %}{% endfor %}{% else %}México{% endif %} por el momento.</p>
         {% endif %}
     </div>
+    {% if upcoming_competitions %}
     <div class="row">
         <div id="upcoming_map" style="height: 300px;" class="my-3"></div>
     </div>
+    {% endif %}
     <div class="row">
-        <h1 class="text-center my-3">Competencias oficiales previas en México</h1>
-        <p class="card-text">Estas competencias ya fueron celebradas, puedes consultar la información de los ganadores y resultados visitando el sitio web de la competencia en cuestión.</p>
-        <table id="past_competitions" class="table table-striped nowrap" style="width:100%">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Nombre de la competencia</th>
-                    <th>Categorías</th>
-                    <th>Fecha(s)</th>
-                    <th>Estado</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for competition in past_competitions %}
-                <tr>
-                    <td scope="row">{{ forloop.counter }}</td>
-                    <td>
-                        <a href="https://www.worldcubeassociation.org/competitions/{{ competition.id }}" class="text-decoration-none">{{ competition.name }}</a>
-                    </td>
-                    <td>
-                        {% for spec in competition.event_specs|split_string_and_sort %}
-                            <span class="cubing-icon event-{{ spec }}"></span>
-                        {% endfor %}
-                    </td>
-                    <td>{{ competition|format_competition_date_spanish }}</td>
-                    <td>{{ competition.competition_state }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-            <tfoot>
-                <tr>
-                    <th>#</th>
-                    <th>Nombre de la competencia</th>
-                    <th>Categorías</th>
-                    <th>Fecha(s)</th>
-                    <th>Estado</th>
-                </tr>
-            </tfoot>
-        </table>
+        <h2 class="text-center my-3">Competencias previas en {% if selected_state %}{% for state in states %}{% if state.three_letter_code == selected_state %}{{ state.name }}{% endif %}{% endfor %}{% else %}México{% endif %} <span class="badge bg-secondary">{% if pc_count != 0 %}{{ pc_count }}{% endif %}</span></h2>
+        {% if past_competitions %}
+            <p class="card-text">Estas competencias ya fueron celebradas, puedes consultar la información de los ganadores y resultados visitando el sitio web de la competencia en cuestión.</p>
+            <table id="past_competitions" class="table table-striped nowrap" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nombre de la competencia</th>
+                        <th>Categorías</th>
+                        <th>Fecha(s)</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for competition in past_competitions %}
+                    <tr>
+                        <td scope="row">{{ forloop.counter }}</td>
+                        <td>
+                            <a href="https://www.worldcubeassociation.org/competitions/{{ competition.id }}" class="text-decoration-none">{{ competition.name }}</a>
+                        </td>
+                        <td>
+                            {% for spec in competition.event_specs|split_string_and_sort %}
+                                <span class="cubing-icon event-{{ spec }}"></span>
+                            {% endfor %}
+                        </td>
+                        <td>{{ competition|format_competition_date_spanish }}</td>
+                        <td>{{ competition.competition_state }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>#</th>
+                        <th>Nombre de la competencia</th>
+                        <th>Categorías</th>
+                        <th>Fecha(s)</th>
+                        <th>Estado</th>
+                    </tr>
+                </tfoot>
+            </table>
+        {% else %}
+            <p class="alert alert-info">No han habido competencias oficiales en {% if selected_state %}{% for state in states %}{% if state.three_letter_code == selected_state %}{{ state.name }}{% endif %}{% endfor %}{% else %}México{% endif %}.</p>
+        {% endif %}
     </div>
+    {% if past_competitions %}
     <div class="row">
         <div id="past_map" style="height: 300px;" class="my-3"></div>
     </div>
+    {% endif %}
 </div>
 
 {% endblock %}

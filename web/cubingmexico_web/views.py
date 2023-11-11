@@ -139,6 +139,15 @@ class LogoView(ContentMixin, TemplateView):
         if request.user.is_superuser:
             return redirect(reverse_lazy('cubingmexico_web:logout'))
         return super().dispatch(request, *args, **kwargs)
+    
+class DocumentsView(ContentMixin, TemplateView):
+    template_name = 'pages/about/documents.html'
+    page = 'cubingmexico_web:documents'
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_superuser:
+            return redirect(reverse_lazy('cubingmexico_web:logout'))
+        return super().dispatch(request, *args, **kwargs)
 
 class DonationsView(ContentMixin, TemplateView):
     template_name = 'pages/about/donations.html'
@@ -188,7 +197,11 @@ class CompetitionsView(ContentMixin, TemplateView):
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
+        state = self.kwargs.get('state')
         context = super().get_context_data(**kwargs)
+
+        context['selected_state'] = state
+        context['states'] = State.objects.all()
         
         now = datetime.now()  # Get the current date and time
         
@@ -199,7 +212,7 @@ class CompetitionsView(ContentMixin, TemplateView):
             ) & ~Q(year=now.year, month=now.month, day=now.day)
         ).annotate(
             competition_state=F('competitionstate__state__name')
-        ).order_by('year', 'month', 'day')[:10]
+        ).order_by('year', 'month', 'day')
 
         # Filter competitions that are in Mexico and have already ended
         past_competitions = Competition.objects.filter(
@@ -227,13 +240,24 @@ class CompetitionsView(ContentMixin, TemplateView):
             competition_state=F('competitionstate__state__name')
         )
 
+        if state:
+            upcoming_competitions = upcoming_competitions.filter(competitionstate__state__three_letter_code=state)
+            past_competitions = past_competitions.filter(competitionstate__state__three_letter_code=state)
+            current_competitions = current_competitions.filter(competitionstate__state__three_letter_code=state)
+
+        context['uc_count'] = upcoming_competitions.count()
+        context['pc_count'] = past_competitions.count()
+        context['cc_count'] = current_competitions.count()
+
+        context['total_count'] = context['uc_count'] + context['pc_count'] + context['cc_count']
+
+        context['upcoming_competitions'] = upcoming_competitions[:10]
+        context['past_competitions'] = past_competitions
+        context['current_competitions'] = current_competitions
+        
         context['upcoming_competitions_list_json'] = json.dumps(list(upcoming_competitions.values('name', 'latitude', 'longitude', 'competitionstate__state__name')))
         context['past_competitions_list_json'] = json.dumps(list(past_competitions.values('name', 'latitude', 'longitude', 'competitionstate__state__name')))
         context['current_competitions_list_json'] = json.dumps(list(current_competitions.values('name', 'latitude', 'longitude', 'competitionstate__state__name')))
-        
-        context['upcoming_competitions'] = upcoming_competitions
-        context['past_competitions'] = past_competitions
-        context['current_competitions'] = current_competitions
         
         return context
 

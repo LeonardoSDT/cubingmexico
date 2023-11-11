@@ -10,6 +10,7 @@ class StaticViewSitemap(Sitemap):
             'cubingmexico_web:about',
             'cubingmexico_web:development',
             'cubingmexico_web:donations',
+            'cubingmexico_web:documents',
             'cubingmexico_web:logo',
             'cubingmexico_web:faq',
             'cubingmexico_web:competitions',
