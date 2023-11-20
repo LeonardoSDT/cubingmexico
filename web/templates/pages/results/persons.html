@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {% if selected_state %}
+        Personas de
+        {% for state in states %}
+            {% if state.three_letter_code == selected_state %}
+                {{ state.name }}
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        Personas del país
+    {% endif %}
+     - Cubing México
+{% endblock %}
+
+{% block meta_description %}{% endblock %}
+
+{% block meta_keywords %}{% endblock %}
+
+{% load static %}
+
+{% load divide_by_100 %}
+{% load time_formatter %}
+{% load time_formatter_333mbf %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
+
+    <link rel="stylesheet" href="{% static 'css/cubing-icons.css' %}">
+{% endblock stylesheets %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-12 col-sm-9">
+            <h1 class="my-3">
+                {% if selected_state %}
+                    Personas de
+                    {% for state in states %}
+                        {% if state.three_letter_code == selected_state %}
+                            {{ state.name }}
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                    Personas del país
+                {% endif %}
+            </h1>
+             
+        </div>
+        <div class="col-12 col-sm-3 d-flex justify-content-center my-3">
+            <form>
+                <label for="state-select"><strong>Selecciona un estado</strong></label>
+                <select class="form-select" id="state-select" onchange="location = this.value;">
+                    <option value="{% url 'cubingmexico_web:persons' %}">Todo el país</option>
+                  {% for state in states %}
+                    <option value="{% url 'cubingmexico_web:persons' state=state.three_letter_code %}" {% if state.three_letter_code == selected_state %}selected{% endif %}>{{ state.name }}</option>
+                  {% endfor %}
+                </select>
+            </form>
+        </div>        
+    </div>
+    
+    <table id="rankings" class="table table-striped" style="width:100%">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>WCA ID</th>
+                <th>Representando</th>
+                <th>Estados visitados</th>
+                <th>Competencias</th>
+                <th>Podios</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for person in persons %}
+            <tr>
+                <td>{{ person.name }}</td>
+                <td><a href="https://www.worldcubeassociation.org/persons/{{ person.id }}" class="text-decoration-none">{{ person.id }}</a></td>
+                <td>
+                    {% if person.person_state %}
+                        {% for state in states %}
+                            {% if state.three_letter_code == person.person_state %}
+                                {{ state.name }}
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        -
+                    {% endif%}
+                </td>
+                <td>{{ person.states_count }}</td>
+                <td>{{ person.competition_count }}</td>
+                <td>{{ person.podium_count }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <th>Nombre</th>
+                <th>WCA ID</th>
+                <th>Representando</th>
+                <th>Estados visitados</th>
+                <th>Competencias</th>
+                <th>Podios</th>
+            </tr>
+        </tfoot>
+    </table>
+
+    {% if selected_state %}
+        {% include "includes/faq.html" %}
+    {% endif %}
+    
+{% endblock %}
+
+{% block javascripts %}
+
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#rankings').DataTable({
+            responsive: true,
+            "language": {
+                url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json',
+            }
+        });
+    });
+</script>
+{% endblock javascripts %}

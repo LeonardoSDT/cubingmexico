@@ -14,7 +14,7 @@ from django.views.generic.edit import UpdateView, CreateView
 
 from django.core.files.storage import default_storage
 
-from django.db.models import Max, F, Value, Q, Count
+from django.db.models import Max, F, Value, Q, Count, Case, IntegerField, When, OuterRef, Subquery
 
 from itertools import groupby
 
@@ -306,7 +306,7 @@ class MyResultsView(ContentMixin, TemplateView):
         return context
 
 class RankingsView(ContentMixin, TemplateView):
-    template_name = 'pages/rankings/rankings.html'
+    template_name = 'pages/results/rankings.html'
 
     def dispatch(self, request, *args, **kwargs):
         event_type = kwargs.get('event_type')
@@ -350,10 +350,63 @@ class RankingsView(ContentMixin, TemplateView):
         
         return context
     
+class PersonsView(ContentMixin, TemplateView):
+    template_name = 'pages/results/persons.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_superuser:
+            return redirect(reverse_lazy('cubingmexico_web:logout'))
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        state = self.kwargs.get('state')
+        context = super().get_context_data(**kwargs)
+
+        persons = (
+            Person.objects
+            .annotate(
+                competition_count=Count('result__competition', distinct=True),
+                states_count=Count('result__competition__competitionstate__state', distinct=True),
+                podium_count=Count(
+                    Case(
+                        When(
+                            Q(result__round_type_id='f') | Q(result__round_type_id='c'),
+                            result__pos__in=[1, 2, 3],
+                            result__best__gt=0,
+                            then=1,
+                        ),
+                        output_field=IntegerField(),
+                    )
+                ),
+                person_state=Subquery(
+                    StateRanksSingle.objects
+                    .filter(rankssingle__person_id=OuterRef('id'))
+                    .values('state')[:1]
+                )
+            )
+            .all()
+        )
+
+        if state:
+            context['selected_state'] = state
+
+            persons_in_states = StateRanksSingle.objects.filter(state=state)
+            person_ids = persons_in_states.values_list('rankssingle__person_id', flat=True)
+            unique_person_ids = list(set(person_ids))
+
+            persons = persons.filter(id__in=unique_person_ids)
+        else:
+            context['selected_state'] = None
+
+        context['persons'] = persons
+        context['states'] = State.objects.all()
+        
+        return context
+    
 class RecordsView(ContentMixin, TemplateView):
     page = 'cubingmexico_web:records'
 
-    template_name = 'pages/records/records.html'
+    template_name = 'pages/results/records.html'
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_superuser:
@@ -377,7 +430,7 @@ class RecordsView(ContentMixin, TemplateView):
         return context
 
 class SORView(ContentMixin, TemplateView):
-    template_name = 'pages/rankings/sor.html'
+    template_name = 'pages/results/sor.html'
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_superuser:
@@ -474,7 +527,7 @@ class SORView(ContentMixin, TemplateView):
         return context
     
 class KinchView(ContentMixin, TemplateView):
-    template_name = 'pages/rankings/kinch.html'
+    template_name = 'pages/results/kinch.html'
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_superuser:
