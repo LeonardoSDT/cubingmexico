@@ -28,7 +28,7 @@
         {% if not user.is_authenticated %}
             <a href="{{ wca_login_uri }}" class="btn btn-primary">¡Únete a Cubing México con tu cuenta de la WCA! <img src="https://www.worldcubeassociation.org/files/WCAlogo_notext.svg" alt="WCA" width="20"></a>
         {% endif %}
-        <!-- <a href="{% url 'cubingmexico_web:donations' %}" class="btn btn-secondary mt-3">¿Te interesa donar? Puedes hacerlo aquí <i class="bi bi-paypal"></i></a> -->
+        <a href="{% url 'cubingmexico_web:donations' %}" class="btn btn-secondary mt-3">¿Te interesa donar? Puedes hacerlo aquí <i class="bi bi-paypal"></i></a>
     </div>
 </div>
 

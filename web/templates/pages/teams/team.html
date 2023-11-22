@@ -27,9 +27,9 @@
             </div>
             <div class="card-body">
                 {% if object.team_logo %}
-                    <img src="{{ object.team_logo.url }}" class="rounded mx-auto d-block mb-3" height="300px" alt="Logotipo de {{ object.name }}">
+                    <img src="{{ object.team_logo.url }}" class="rounded mx-auto d-block mb-3" width="300px" alt="Logotipo de {{ object.name }}">
                 {% else %}
-                    <img src="" class="rounded mx-auto d-block mb-3" height="300px" alt="Logotipo de {{ object.name }}">
+                    <img src="" class="rounded mx-auto d-block mb-3" width="300px" alt="Logotipo de {{ object.name }}">
                 {% endif %}
                 <p>{{ object.description }}</p>
                 {% if object.phone_number != '' %}
@@ -48,13 +48,13 @@
                 </p>
                 <p>
                     {% if user.is_authenticated and user.cubingmexicoprofile.is_state_team_leader and user.cubingmexicoprofile.person_state_team.state_team_id == object.pk %}
-                        <a href="{% url 'cubingmexico_web:edit_team' team_code=object.state.three_letter_code %}" class="btn btn-info mb-2"><i class="bi bi-pencil-fill me-2"></i>Editar información del Team</a>
-                        <a href="{% url 'cubingmexico_web:add_member' team_code=object.state.three_letter_code %}" class="btn btn-info mb-2"><i class="bi bi-person-plus-fill me-2"></i>Añadir miembro al Team</a>
+                        <a href="{% url 'cubingmexico_web:edit_team' team_code=object.state.three_letter_code %}" class="btn btn-info mb-2"><i class="bi bi-pencil-fill me-2"></i>Editar información del team</a>
+                        <a href="{% url 'cubingmexico_web:add_member' team_code=object.state.three_letter_code %}" class="btn btn-info mb-2"><i class="bi bi-person-plus-fill me-2"></i>Añadir miembro al team</a>
                     {% endif %}
                     <a href="{% url 'cubingmexico_web:rankings' event_type='333' ranking_type='single' state=object.state.three_letter_code %}" class="btn btn-primary mb-2"><i class="bi bi-reception-4 me-2"></i>Ver rankings de {{ object.state.name }}</a>
                     <a href="{% url 'cubingmexico_web:records' state=object.state.three_letter_code %}" class="btn btn-primary mb-2"><i class="bi bi-trophy-fill me-2"></i>Ver récords de {{ object.state.name }}</a>
                     <a href="{% url 'cubingmexico_web:sor' ranking_type='single' state=object.state.three_letter_code %}" class="btn btn-primary mb-2 mx-2"><i class="bi bi-plus-circle-fill me-2"></i>Ver SOR de {{ object.state.name }}</a>
-                    <a href="{% url 'cubingmexico_web:state_teams' %}" class="btn btn-secondary"><i class="bi bi-people-fill me-2"></i>Ver otros Teams</a>
+                    <a href="{% url 'cubingmexico_web:state_teams' %}" class="btn btn-secondary"><i class="bi bi-people-fill me-2"></i>Ver otros teams</a>
                 </p>
             </div>
         </div>
@@ -176,7 +176,7 @@
       </h2>
       <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
         <div class="accordion-body">
-            Si no apareces como miembro del Team es porque no has participado en una competencia oficial de la <a href="https://www.worldcubeassociation.org/" class="text-decoration-none">World Cube Association</a> o porque no has sido agregado por algún administrador, recuerda que todos pueden ser parte de un Team, el único requisito es que vivas en el mismo estado, si cumples con lo anterior mencionado,
+            Si no apareces como miembro del team es porque no has participado en una competencia oficial de la <a href="https://www.worldcubeassociation.org/" class="text-decoration-none">World Cube Association</a> o porque no has sido agregado por algún administrador, recuerda que todos pueden ser parte de un team, el único requisito es que vivas en el mismo estado, si cumples con lo anterior mencionado,
             {% if object.facebook_link == '' and object.instagram_link == '' and object.phone_number == '' and object.email == '' %}
             envía un mensaje a <a href="https://www.facebook.com/CubingMexico" class="text-decoration-none">esta página</a>.
             {% else %}
@@ -202,12 +202,12 @@
     <div class="accordion-item">
       <h2 class="accordion-header" id="headingTwo">
         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-          <strong>¿Por qué aparece tal persona en este Team si ni siquiera vive en {{ object.state }}?</strong>
+          <strong>¿Por qué aparece tal persona en este team si ni siquiera vive en {{ object.state }}?</strong>
         </button>
       </h2>
       <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
         <div class="accordion-body">
-          Puede deberse a que la persona se cambió recientemente de residencia o simplemente a algún error de un administrador del Team, puedes enviar un mensaje a <a href="https://www.facebook.com/CubingMexico" class="text-decoration-none">esta página</a> para que podamos revisarlo.
+          Puede deberse a que la persona se cambió recientemente de residencia o simplemente a algún error de un administrador del team, puedes enviar un mensaje a <a href="https://www.facebook.com/CubingMexico" class="text-decoration-none">esta página</a> para que podamos revisarlo.
         </div>
       </div>
     </div>

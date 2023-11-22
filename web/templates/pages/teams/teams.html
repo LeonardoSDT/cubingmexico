@@ -40,7 +40,8 @@
                     <h2 class="card-title fs-5">{{ team.name }}</h2>
                     <p class="card-text">{{ team.description|truncatewords:20 }}</p>
                     <p class="card-text"><strong>Estado:</strong> {{ team.state }}</p>
-                    <a href="{% url 'cubingmexico_web:team' team_code=team.state.three_letter_code %}" class="btn btn-primary"><i class="bi bi-people-fill me-2"></i>Ver Team</a>
+                    <p class="card-text"><strong>Miembros:</strong> {{ team.person_count }}</p>
+                    <a href="{% url 'cubingmexico_web:team' team_code=team.state.three_letter_code %}" class="btn btn-primary"><i class="bi bi-people-fill me-2"></i>Ver team</a>
                     </div>
                 </div>
             </div>
