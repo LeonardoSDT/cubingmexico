@@ -207,8 +207,14 @@ class CompetitionsView(ContentMixin, TemplateView):
         
         # Filter upcoming competitions excluding current competitions
         upcoming_competitions = Competition.objects.filter(
-            Q(country__name='Mexico') & Q(year__gte=now.year) & (
-                Q(month__gt=now.month) | (Q(month=now.month) & Q(day__gte=now.day))
+            Q(country__name='Mexico') & (
+                Q(year__gt=now.year) | (
+                    Q(year=now.year) & (
+                        Q(month__gt=now.month) | (
+                            Q(month=now.month) & Q(day__gte=now.day)
+                        )
+                    )
+                )
             ) & ~Q(year=now.year, month=now.month, day=now.day)
         ).annotate(
             competition_state=F('competitionstate__state__name')
@@ -609,6 +615,7 @@ class IndividualStateTeamView(ContentMixin, DetailView):
         context = super().get_context_data(**kwargs)
 
         wca_ids = WCAProfile.objects.filter(user__cubingmexicoprofile__person_state_team__state_team__id=self.object.pk).values_list('wca_id', flat=True)
+
         context['team_members'] = PersonStateTeam.objects.filter(state_team_id=self.object.pk).exclude(person__id__in=wca_ids)
         context['auth_team_members'] = User.objects.filter(cubingmexicoprofile__person_state_team__state_team__id=self.object.pk)
 
