@@ -26,6 +26,10 @@ from .forms import *
 from .utils import *
 from datetime import date, datetime
 
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from .serializers import StateTeamSerializer
+
 # Create your views here.
 
 class AuthenticateMixin:
@@ -804,3 +808,9 @@ class WCACallbackView(RedirectView):
         login(self.request, wca_profile.user)
 
         return reverse(redirect_uri)
+
+class StateTeamEndpointView(APIView):
+    def get(self, request):
+        queryset = StateTeam.objects.all()
+        serializer = StateTeamSerializer(queryset, many=True)
+        return Response(serializer.data)
