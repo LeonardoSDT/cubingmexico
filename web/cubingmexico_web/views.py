@@ -615,13 +615,33 @@ class IndividualStateTeamView(ContentMixin, DetailView):
 
         return state_team
 
+    def get_wca_ids(self):
+        return WCAProfile.objects.filter(user__cubingmexicoprofile__person_state_team__state_team__id=self.object.pk).values_list('wca_id', flat=True)
+
+    def get_team_members(self, wca_ids):
+        team_members = PersonStateTeam.objects.filter(state_team_id=self.object.pk).exclude(person__id__in=wca_ids)
+        return self.annotate_team_members(team_members)
+
+    def get_auth_team_members(self):
+        auth_team_members = User.objects.filter(cubingmexicoprofile__person_state_team__state_team__id=self.object.pk)
+        return self.annotate_team_members(auth_team_members, is_auth=True)
+
+    def annotate_team_members(self, team_members, is_auth=False):
+        prefix = 'cubingmexicoprofile__person_state_team__person__' if is_auth else 'person__'
+        team_members = team_members.annotate(
+            sr_count_avg=Count(prefix + 'ranksaverage__stateranksaverage', filter=Q(**{prefix + 'ranksaverage__stateranksaverage__state_rank': 1}), distinct=True),
+            sr_count_single=Count(prefix + 'rankssingle__staterankssingle', filter=Q(**{prefix + 'rankssingle__staterankssingle__state_rank': 1}), distinct=True)
+        ).annotate(
+            sr_count=F('sr_count_avg') + F('sr_count_single')
+        )
+        return team_members
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        wca_ids = WCAProfile.objects.filter(user__cubingmexicoprofile__person_state_team__state_team__id=self.object.pk).values_list('wca_id', flat=True)
-
-        context['team_members'] = PersonStateTeam.objects.filter(state_team_id=self.object.pk).exclude(person__id__in=wca_ids)
-        context['auth_team_members'] = User.objects.filter(cubingmexicoprofile__person_state_team__state_team__id=self.object.pk)
+        wca_ids = self.get_wca_ids()
+        context['team_members'] = self.get_team_members(wca_ids)
+        context['auth_team_members'] = self.get_auth_team_members()
 
         return context
     
