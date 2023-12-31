@@ -113,6 +113,27 @@
     {% if selected_state %}
         {% include "includes/faq.html" %}
     {% endif %}
+
+    <p class="text-center">
+        <div class="modal" tabindex="-1" id="join_team_modal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title fs-5">¡Atención!</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Esta sección ya es funcional, sin embargo el apartado nacional de los Kinch Ranks no está muy bien optimizado, por lo que al intentar acceder a este puede que tarde varios segundos en cargar.</p>
+                    <p>Siéntete libre de explorar los Kinch Ranks estatales, y si quieres ver el nacional te recomendamos que por el momento accedas a este enlace:</p>
+                    <p><a href="https://wca.cuber.pro/kinch/persons?regionId=Mexico&gender=a&show=100+Persons">WCA Statistics</a></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+                </div>
+            </div>
+        </div>
+    </p>
     
 {% endblock %}
 
@@ -131,4 +152,10 @@
         });
     });
 </script>
+
+<script>
+    $(document).ready(function(){
+        $('#join_team_modal').modal('show');
+    });
+</script>  
 {% endblock javascripts %}
