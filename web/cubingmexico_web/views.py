@@ -551,7 +551,6 @@ class KinchView(ContentMixin, TemplateView):
 
         excluded_event_ids = ['333ft', 'magic', 'mmagic', '333mbo']
 
-        # excluded_event_ids_average = ['444bf', '555bf', '333mbf']
         excluded_event_ids_average = ['333mbf']
         excluded_event_ids_single = ['333', '222', '444', '555', '666', '777', '333oh', 'clock', 'minx', 'pyram', 'skewb', 'sq1']
 
