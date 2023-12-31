@@ -416,6 +416,8 @@ class RecordsView(ContentMixin, TemplateView):
     template_name = 'pages/results/records.html'
 
     def dispatch(self, request, *args, **kwargs):
+        self.gender = kwargs.get('gender')
+
         if request.user.is_superuser:
             return redirect(reverse_lazy('cubingmexico_web:logout'))
         return super().dispatch(request, *args, **kwargs)
@@ -434,9 +436,8 @@ class RecordsView(ContentMixin, TemplateView):
 
         return context
 
-    @staticmethod
-    def get_records(state=None, is_average=False):
-        return get_records(state=state, is_average=is_average) if state else get_records(is_average=is_average)
+    def get_records(self, state=None, is_average=False):
+        return get_records(state=state, is_average=is_average, gender=self.gender) if state else get_records(is_average=is_average, gender=self.gender)
 
 class SORView(ContentMixin, TemplateView):
     template_name = 'pages/results/sor.html'

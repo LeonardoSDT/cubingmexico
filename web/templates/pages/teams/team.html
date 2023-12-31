@@ -52,7 +52,7 @@
                         <a href="{% url 'cubingmexico_web:add_member' team_code=object.state.three_letter_code %}" class="btn btn-info mb-2"><i class="bi bi-person-plus-fill me-2"></i>Añadir miembro al team</a>
                     {% endif %}
                     <a href="{% url 'cubingmexico_web:rankings' event_type='333' ranking_type='single' state=object.state.three_letter_code gender='a' %}" class="btn btn-primary mb-2"><i class="bi bi-reception-4 me-2"></i>Ver rankings de {{ object.state.name }}</a>
-                    <a href="{% url 'cubingmexico_web:records' state=object.state.three_letter_code %}" class="btn btn-primary mb-2"><i class="bi bi-trophy-fill me-2"></i>Ver récords de {{ object.state.name }}</a>
+                    <a href="{% url 'cubingmexico_web:records' gender='a' state=object.state.three_letter_code %}" class="btn btn-primary mb-2"><i class="bi bi-trophy-fill me-2"></i>Ver récords de {{ object.state.name }}</a>
                     <a href="{% url 'cubingmexico_web:sor' ranking_type='single' state=object.state.three_letter_code %}" class="btn btn-primary mb-2 mx-2"><i class="bi bi-plus-circle-fill me-2"></i>Ver SOR de {{ object.state.name }}</a>
                     <a href="{% url 'cubingmexico_web:kinch' state=object.state.three_letter_code %}" class="btn btn-primary mb-2 mx-2"><i class="bi bi-bar-chart-steps me-2"></i>Ver Kinch de {{ object.state.name }}</a>
                     <a href="{% url 'cubingmexico_web:state_teams' %}" class="btn btn-secondary"><i class="bi bi-people-fill me-2"></i>Ver otros teams</a>

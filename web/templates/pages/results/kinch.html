@@ -43,9 +43,9 @@
 
             <p>Los Kinch Ranks son un sistema de clasificación innovador diseñado para evaluar la habilidad de un cubero en los 17 eventos oficiales de la WCA. Este sistema utiliza un enfoque único para calcular la puntuación de cada competidor en función de sus resultados en cada evento. Cada evento se puntúa en una escala del 0 al 100, considerando tanto los 
             {% if selected_state %}
-            <a href="{% url 'cubingmexico_web:records' state=selected_state %}" class="text-decoration-none">récords estatales (SR)</a>
+            <a href="{% url 'cubingmexico_web:records' gender='a' state=selected_state %}" class="text-decoration-none">récords estatales (SR)</a>
             {% else %}
-            <a href="{% url 'cubingmexico_web:records' %}" class="text-decoration-none">récords nacionales (NR)</a>
+            <a href="{% url 'cubingmexico_web:records' gender='a' %}" class="text-decoration-none">récords nacionales (NR)</a>
             {% endif %}
             como los récords personales (PR) de los competidores. A través de este enfoque, se busca equilibrar la clasificación entre todos los eventos, eliminando las desventajas percibidas en sistemas tradicionales como el
             {% if selected_state %}

@@ -2,19 +2,19 @@
 
 {% block title %}
     {% if selected_state %}
-        Récords estatales de
+        Récords estatales {% if 'f' in gender %} femeniles {% elif 'm' in gender %} varoniles {% elif 'o' in gender %} de Oscar Isaac {% endif %} de
         {% for state in states %}
             {% if state.three_letter_code == selected_state %}
                 {{ state.name }}
             {% endif %}
         {% endfor %}
     {% else %}
-        Récords nacionales
+        Récords nacionales {% if 'f' in gender %} femeniles {% elif 'm' in gender %} varoniles {% elif 'o' in gender %} de Oscar Isaac {% endif %}
     {% endif %}
      - Cubing México
 {% endblock %}
 
-{% block meta_description %}{% if selected_state %}{% for state in states %}{% if state.three_letter_code == selected_state %}Explora los récords estatales de {{ state.name }} en el mundo del cubo Rubik en México.{% endif %}{% endfor %}{% else %}Descubre los récords nacionales en el mundo del cubo Rubik en México.{% endif %}{% endblock %}
+{% block meta_description %}{% if selected_state %}{% for state in states %}{% if state.three_letter_code == selected_state %}Explora los récords estatales {% if 'f' in gender %} femeniles {% elif 'm' in gender %} varoniles {% elif 'o' in gender %} de Oscar Isaac {% endif %} de {{ state.name }} en el mundo del cubo Rubik en México.{% endif %}{% endfor %}{% else %}Descubre los récords nacionales {% if 'f' in gender %} femeniles {% elif 'm' in gender %} varoniles {% elif 'o' in gender %} de Oscar Isaac {% endif %} en el mundo del cubo Rubik en México.{% endif %}{% endblock %}
 
 {% block meta_keywords %}{% if selected_state %}{% for state in states %}{% if state.three_letter_code == selected_state %}récords estatales, {{ state.name }}, cubo Rubik, México, SR, State Record{% endif %}{% endfor %}{% else %}récords nacionales, cubo Rubik, México, NR, National Record{% endif %}{% endblock %}
 
@@ -35,24 +35,42 @@
         <div class="col-12 col-sm-9">
             <h1 class="my-3">
             {% if selected_state %}
-                Récords estatales de
+                Récords estatales {% if 'f' in gender %} femeniles {% elif 'm' in gender %} varoniles {% elif 'o' in gender %} de Oscar Isaac {% endif %} de
                 {% for state in states %}
                     {% if state.three_letter_code == selected_state %}
                         {{ state.name }}
                     {% endif %}
                 {% endfor %}
             {% else %}
-                Récords nacionales
+                Récords nacionales {% if 'f' in gender %} femeniles {% elif 'm' in gender %} varoniles {% elif 'o' in gender %} de Oscar Isaac {% endif %}
             {% endif %}
             </h1>
+
+            <div>
+                <p><strong>Género</strong></p>
+                <div class="btn-group mb-3" role="group">
+                    {% if state %}
+                        <a href="{% url 'cubingmexico_web:records' gender='a' state=selected_state %}" class="btn btn-primary {% if 'a' in gender %} disabled {% endif %}">Todos</a>
+                        <a href="{% url 'cubingmexico_web:records' gender='m' state=selected_state %}" class="btn btn-primary {% if 'm' in gender %} disabled {% endif %}">Masculino</a>
+                        <a href="{% url 'cubingmexico_web:records' gender='f' state=selected_state %}" class="btn btn-primary {% if 'f' in gender %} disabled {% endif %}">Femenino</a>
+                    {% else %}
+                        <a href="{% url 'cubingmexico_web:records' gender='a' %}" class="btn btn-primary {% if 'a' in gender %} disabled {% endif %}">Todos</a>
+                        <a href="{% url 'cubingmexico_web:records' gender='m' %}" class="btn btn-primary {% if 'm' in gender %} disabled {% endif %}">Masculino</a>
+                        <a href="{% url 'cubingmexico_web:records' gender='f' %}" class="btn btn-primary {% if 'f' in gender %} disabled {% endif %}">Femenino</a>
+                    {% endif %}
+                    {% if 'o' in gender %}
+                        <a href="" class="btn btn-primary {% if 'o' in gender %} disabled {% endif %}">Oscar Isaac</a>
+                    {% endif %}
+                </div>
+            </div>
         </div>
         <div class="col-12 col-sm-3 d-flex justify-content-center my-3">
             <form>
                 <label for="state-select"><strong>Selecciona un estado</strong></label>
                 <select class="form-select" id="state-select" onchange="location = this.value;">
-                    <option value="{% url 'cubingmexico_web:records' %}">Todo el país</option>
+                    <option value="{% url 'cubingmexico_web:records' gender=gender %}">Todo el país</option>
                   {% for state in states %}
-                    <option value="{% url 'cubingmexico_web:records' state=state.three_letter_code %}" {% if state.three_letter_code == selected_state %}selected{% endif %}>{{ state.name }}</option>
+                    <option value="{% url 'cubingmexico_web:records' gender=gender state=state.three_letter_code %}" {% if state.three_letter_code == selected_state %}selected{% endif %}>{{ state.name }}</option>
                   {% endfor %}
                 </select>
             </form>

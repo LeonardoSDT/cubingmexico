@@ -44,7 +44,7 @@
           <div class="card-body">
             <h2 class="card-title fs-5">Récords nacionales oficiales</h2>
             <p class="card-text">Obtenidos directamente de la <a href="https://www.worldcubeassociation.org/" class="text-decoration-none">World Cube Association</a>.</p>
-            <a href="{% url 'cubingmexico_web:records' %}" class="btn btn-primary"><i class="bi bi bi-award-fill me-2"></i>Ver récords</a>
+            <a href="{% url 'cubingmexico_web:records' gender='a' %}" class="btn btn-primary"><i class="bi bi bi-award-fill me-2"></i>Ver récords</a>
           </div>
       </div>
     </div>
@@ -73,7 +73,7 @@
           <div class="card-body">
             <h2 class="card-title fs-5">Récords estatales</h2>
             <p class="card-text">Acorde a la información proporcionada por la <a href="https://www.worldcubeassociation.org/" class="text-decoration-none">World Cube Association</a>.</p>
-            <a href="{% url 'cubingmexico_web:records' state='JAL' %}" class="btn btn-primary"><i class="bi bi bi-award-fill me-2"></i>Ver récords</a>
+            <a href="{% url 'cubingmexico_web:records' gender='a' state='JAL' %}" class="btn btn-primary"><i class="bi bi bi-award-fill me-2"></i>Ver récords</a>
           </div>
       </div>
     </div>

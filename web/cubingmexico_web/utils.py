@@ -72,7 +72,7 @@ def get_rankings(event_type='333', ranking_type='single', state=None, gender='a'
 
     return results
 
-def get_records(state=None, wca_id=None, is_average=False):
+def get_records(state=None, wca_id=None, is_average=False, gender='a'):
     field = "average" if is_average else "best"
     order_by_fields = ["event_id", field]
 
@@ -85,13 +85,22 @@ def get_records(state=None, wca_id=None, is_average=False):
 
     filter_kwargs = {k: v for k, v in filter_kwargs.items() if v is not None}
 
-    result_ids = (
-        Result.objects.filter(**filter_kwargs)
-        .exclude(event_id__in=EXCLUDED_EVENTS)
-        .order_by(*order_by_fields)
-        .distinct("event_id")
-        .values_list("id", flat=True)
-    )
+    if gender != 'a':
+        result_ids = (
+            Result.objects.filter(**filter_kwargs, person__gender=gender)
+            .exclude(event_id__in=EXCLUDED_EVENTS)
+            .order_by(*order_by_fields)
+            .distinct("event_id")
+            .values_list("id", flat=True)
+        )
+    else:
+        result_ids = (
+            Result.objects.filter(**filter_kwargs)
+            .exclude(event_id__in=EXCLUDED_EVENTS)
+            .order_by(*order_by_fields)
+            .distinct("event_id")
+            .values_list("id", flat=True)
+        )
 
     results = (
         Result.objects.filter(pk__in=result_ids)
