@@ -320,46 +320,42 @@ class RankingsView(ContentMixin, TemplateView):
     template_name = 'pages/results/rankings.html'
 
     def dispatch(self, request, *args, **kwargs):
-        event_type = kwargs.get('event_type')
-        ranking_type = kwargs.get('ranking_type')
+        self.event_type = kwargs.get('event_type')
+        self.ranking_type = kwargs.get('ranking_type')
 
         if request.user.is_superuser:
             return redirect(reverse_lazy('cubingmexico_web:logout'))
         
-        if event_type == '333mbf' and ranking_type == 'average':
+        if self.event_type == '333mbf' and self.ranking_type == 'average':
             return redirect('cubingmexico_web:rankings', event_type='333mbf', ranking_type='single')
         
         self.ranking_type = kwargs.pop('ranking_type', 'single')
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
-        event_type = self.kwargs.get('event_type', '333')
-        state = self.kwargs.get('state')
         context = super().get_context_data(**kwargs)
-        
+        state = self.kwargs.get('state')
+        context.update({
+            'selected_event': self.event_type,
+            'selected_ranking': self.ranking_type,
+            'states': State.objects.all(),
+            'events': Event.objects.exclude(id__in=['333ft', 'magic', 'mmagic', '333mbo']).order_by('rank'),
+            'selected_state': state if state else None,
+            'rankings': self.get_rankings(state)
+        })
+        return context
+
+    def get_rankings(self, state):
         if state:
-            results = get_rankings(state=state, event_type=event_type, ranking_type=self.ranking_type)
+            results = get_rankings(state=state, event_type=self.event_type, ranking_type=self.ranking_type)
             persons = StateRanksSingle.objects.filter(state=state)
             person_ids = persons.values_list('rankssingle__person_id', flat=True)
             unique_person_ids = list(set(person_ids))
-            if self.ranking_type == 'single':
-                rank_single = RanksSingle.objects.filter(event_id=event_type, person_id__in=unique_person_ids).order_by('best')
-                context['rankings'] = zip(results, rank_single)
-            else:
-                rank_average = RanksAverage.objects.filter(event_id=event_type, person_id__in=unique_person_ids).order_by('best')
-                context['rankings'] = zip(results, rank_average)
-
-            context['selected_state'] = state
+            rank_model = RanksSingle if self.ranking_type == 'single' else RanksAverage
+            rank = rank_model.objects.filter(event_id=self.event_type, person_id__in=unique_person_ids).order_by('best')
+            return zip(results, rank)
         else:
-            context['rankings'] = get_rankings(event_type=event_type, ranking_type=self.ranking_type)
-            context['selected_state'] = None
-        
-        context['selected_event'] = event_type
-        context['selected_ranking'] = self.ranking_type
-        context['states'] = State.objects.all()
-        context['events'] = Event.objects.exclude(id__in=['333ft', 'magic', 'mmagic', '333mbo']).order_by('rank')
-        
-        return context
+            return get_rankings(event_type=self.event_type, ranking_type=self.ranking_type)
     
 class PersonsView(ContentMixin, TemplateView):
     template_name = 'pages/results/persons.html'
@@ -416,7 +412,6 @@ class PersonsView(ContentMixin, TemplateView):
     
 class RecordsView(ContentMixin, TemplateView):
     page = 'cubingmexico_web:records'
-
     template_name = 'pages/results/records.html'
 
     def dispatch(self, request, *args, **kwargs):
@@ -425,20 +420,22 @@ class RecordsView(ContentMixin, TemplateView):
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
-        state = self.kwargs.get('state')
         context = super().get_context_data(**kwargs)
-        context['selected_state'] = state
-        context['states'] = State.objects.all()
-        context['events'] = Event.objects.exclude(id__in=['333ft', 'magic', 'mmagic', '333mbo'])
+        state = self.kwargs.get('state')
 
-        if state:
-            context['single_records'] = get_records(state=state, is_average=False)
-            context['average_records'] = get_records(state=state, is_average=True)
-        else:
-            context['single_records'] = get_records(is_average=False)
-            context['average_records'] = get_records(is_average=True)
+        context.update({
+            'selected_state': state,
+            'states': State.objects.all(),
+            'events': Event.objects.exclude(id__in=['333ft', 'magic', 'mmagic', '333mbo']),
+            'single_records': self.get_records(state, is_average=False),
+            'average_records': self.get_records(state, is_average=True)
+        })
 
         return context
+
+    @staticmethod
+    def get_records(state=None, is_average=False):
+        return get_records(state=state, is_average=is_average) if state else get_records(is_average=is_average)
 
 class SORView(ContentMixin, TemplateView):
     template_name = 'pages/results/sor.html'
