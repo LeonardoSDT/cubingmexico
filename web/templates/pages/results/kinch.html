@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    KinchRanks 
+    Kinch Ranks 
     {% if selected_state %}
         de
         {% for state in states %}
@@ -20,8 +20,8 @@
 {% load static %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
 
     <link rel="stylesheet" href="{% static 'css/cubing-icons.css' %}">
 {% endblock stylesheets %}
@@ -30,7 +30,7 @@
     <div class="row">
         <div class="col-12 col-sm-9">
             <h1 class="my-3">
-            KinchRanks 
+            Kinch Ranks 
             {% if selected_state %}
                 de
                 {% for state in states %}
@@ -41,7 +41,7 @@
             {% endif %}
             </h1>
 
-            <p>Los KinchRanks son un sistema de clasificación innovador diseñado para evaluar la habilidad de un cubero en los 17 eventos oficiales de la WCA. Este sistema utiliza un enfoque único para calcular la puntuación de cada competidor en función de sus resultados en cada evento. Cada evento se puntúa en una escala del 0 al 100, considerando tanto los 
+            <p>Los Kinch Ranks son un sistema de clasificación innovador diseñado para evaluar la habilidad de un cubero en los 17 eventos oficiales de la WCA. Este sistema utiliza un enfoque único para calcular la puntuación de cada competidor en función de sus resultados en cada evento. Cada evento se puntúa en una escala del 0 al 100, considerando tanto los 
             {% if selected_state %}
             <a href="{% url 'cubingmexico_web:records' state=selected_state %}" class="text-decoration-none">récords estatales (SR)</a>
             {% else %}
@@ -55,14 +55,14 @@
             {% endif %} 
             y promoviendo una visión más integral de las habilidades en la resolución de rompecabezas.</p>
 
-            <p>Para obtener más información sobre cómo funcionan los KinchRanks puedes consultar el <a href="https://www.speedsolving.com/threads/all-round-rankings-kinchranks.53353/">siguiente enlace</a>.</p>
+            <p>Para obtener más información sobre cómo funcionan los Kinch Ranks puedes consultar el <a href="https://www.speedsolving.com/threads/all-round-rankings-kinchranks.53353/" class="text-decoration-none">siguiente enlace</a>.</p>
         
         </div>
         <div class="col-12 col-sm-3 d-flex justify-content-center my-3">
             <form>
                 <label for="state-select"><strong>Selecciona un estado</strong></label>
                 <select class="form-select" id="state-select" onchange="location = this.value;">
-                    <option value="{% url 'cubingmexico_web:kinch' %}">Todo el país</option>
+                    <!-- <option value="{% url 'cubingmexico_web:kinch' %}">Todo el país</option> -->
                   {% for state in states %}
                     <option value="{% url 'cubingmexico_web:kinch' state=state.three_letter_code %}" {% if state.three_letter_code == selected_state %}selected{% endif %}>{{ state.name }}</option>
                   {% endfor %}
@@ -85,14 +85,13 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for person, kinch_data in final_sorted_kinch_ranks.items %}
+                    {% for person_id, person_data in person_results.items %}
                         <tr>
                             <td>{{ forloop.counter }}</td>
-                            <td>{{ person }}</td>
-                            <td>{{ kinch_data.overall_kinch_rank|floatformat:2 }}</td>
-                            {% for event_kinch_rank in kinch_data.event_kinch_ranks %}
-                                <!-- <td>{{ event_kinch_rank }}</td> -->
-                                <td><p class="{% if event_kinch_rank.kinch_rank == 0 %} text-danger fw-bold {% elif event_kinch_rank.kinch_rank == 100 %} text-success fw-bold {% endif %}">{{ event_kinch_rank.kinch_rank|floatformat:2 }}</p></td>
+                            <td><a href="https://www.worldcubeassociation.org/persons/{{ person_id }}" class="text-decoration-none">{{ person_data.name }}</a></td>
+                            <td><strong>{{ person_data.total }}</strong></td>
+                            {% for event_id, result in person_data.results.items %}
+                                <td><p class="{% if result == '0.00' %} text-muted fw-light {% elif result == '100.00' %} text-success fw-bold {% endif %}">{{ result }}</p></td>
                             {% endfor %}
                         </tr>
                     {% endfor %}
@@ -119,9 +118,9 @@
 
 {% block javascripts %}
 
-<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 
 <script>
     $(document).ready(function () {

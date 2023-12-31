@@ -92,7 +92,7 @@
                     {% for sor_person, sor_events in sor_overall_results %}
                         <tr>
                             <td>{{ forloop.counter }}</td>
-                            <td><a href="https://www.worldcubeassociation.org/persons/{{ sor_person.0 }}">{{ sor_person.1 }}</a></td>
+                            <td><a href="https://www.worldcubeassociation.org/persons/{{ sor_person.0 }}" class="text-decoration-none">{{ sor_person.1 }}</a></td>
                             <td><strong>{{ sor_person.2 }}</strong></td>
                             {% for event in sor_events %}
                                 <td><p class="{% if event.has_rank == False %} text-danger fw-bold {% elif event.country_rank <= 10 %} text-success fw-bold {% endif %}">{{ event.country_rank }}</p></td>

@@ -17,6 +17,7 @@ from django.core.files.storage import default_storage
 from django.db.models import Max, F, Value, Q, Count, Case, IntegerField, When, OuterRef, Subquery
 
 from itertools import groupby
+from collections import defaultdict, OrderedDict
 
 import copy, json
 
@@ -550,32 +551,68 @@ class KinchView(ContentMixin, TemplateView):
 
         excluded_event_ids = ['333ft', 'magic', 'mmagic', '333mbo']
 
-        if state:
-            persons = StateRanksSingle.objects.filter(state=state)
-            person_ids = persons.values_list('rankssingle__person_id', flat=True)
-            unique_person_ids = list(set(person_ids))
+        # excluded_event_ids_average = ['444bf', '555bf', '333mbf']
+        excluded_event_ids_average = ['333mbf']
+        excluded_event_ids_single = ['333', '222', '444', '555', '666', '777', '333oh', 'clock', 'minx', 'pyram', 'skewb', 'sq1']
 
-            for person in unique_person_ids:
-                personal_single_records = get_records(wca_id=person, is_average=False)
-                personal_average_records = get_records(wca_id=person, is_average=False)
+        all_event_ids = ['333', '222', '444', '555', '666', '777', '333bf', '333fm', '333oh', 'clock', 'minx', 'pyram', 'skewb', 'sq1', '444bf', '555bf', '333mbf']
 
-            state_single_records = get_records(state=state, is_average=False)
-            state_average_records = get_records(state=state, is_average=True)
+        persons = StateRanksSingle.objects.filter(state=state) if state else Person.objects.all()
+        person_ids_names = persons.values_list('rankssingle__person_id', 'rankssingle__person__name') if state else persons.values_list('id', 'name')
+        unique_person_ids_names = list(set(person_ids_names))
 
-            context['selected_state'] = state
-        else:
-            persons = Person.objects.all()
-            person_ids = persons.values_list('id', flat=True)
+        single_records = get_records(state=state, is_average=False).exclude(event_id__in=excluded_event_ids_single) if state else get_records(is_average=False).exclude(event_id__in=excluded_event_ids_single)
+        average_records = get_records(state=state, is_average=True).exclude(event_id__in=excluded_event_ids_average) if state else get_records(is_average=True).exclude(event_id__in=excluded_event_ids_average)
 
-            for person in person_ids:
-                personal_single_records = get_records(wca_id=person, is_average=False)
-                personal_average_records = get_records(wca_id=person, is_average=False)
+        single_records_dict = {sr.event_id: sr.best for sr in single_records}
+        average_records_dict = {ar.event_id: ar.average for ar in average_records}
+
+        person_results = {}
+
+        for person_id, person_name in unique_person_ids_names:
+            person_dict = {}
+            personal_single_records = get_records(wca_id=person_id, is_average=False).exclude(event_id__in=excluded_event_ids_single)
+            personal_average_records = get_records(wca_id=person_id, is_average=True).exclude(event_id__in=excluded_event_ids_average)
+
+            for psr in personal_single_records:
+                if psr.event_id in single_records_dict:
+                    if psr.event_id == '333mbf':
+                        def calculate_mbld(value):
+                            points = 99 - int(value[:2])
+                            proportionOfHourLeft = 1 - (int(value[2:7])/3600)
+                            return points + proportionOfHourLeft
+
+                        mbld = str(single_records_dict[psr.event_id])
+                        mbld_calc = calculate_mbld(mbld)
+
+                        personal_mbld = str(psr.best)
+                        personal_mbld_calc = calculate_mbld(personal_mbld)
+
+                        result = round(personal_mbld_calc / mbld_calc * 100, 2)
+                    else:
+                        result = round(single_records_dict[psr.event_id] / psr.best * 100, 2)
+                    if psr.event_id not in person_dict or result > person_dict[psr.event_id]:
+                        person_dict[psr.event_id] = "{:.2f}".format(result)
+
+            for par in personal_average_records:
+                if par.event_id in average_records_dict:
+                    result = round(average_records_dict[par.event_id] / par.average * 100, 2)
+                    if par.event_id not in person_dict or result > float(person_dict[par.event_id]):
+                        person_dict[par.event_id] = "{:.2f}".format(result)
+
+            total = 0
+            for event_id, result in person_dict.items():
+                total += float(result)
             
-            national_single_records = get_records(is_average=False)
-            national_average_records = get_records(is_average=True)
+            ordered_dict = OrderedDict()
+            for event_id in all_event_ids:
+                ordered_dict[event_id] = person_dict.get(event_id, '0.00')
 
-            context['selected_state'] = None
+            person_results[person_id] = {'name': person_name, 'results': ordered_dict, 'total': round(total/17, 2)}
+            person_results = dict(sorted(person_results.items(), key=lambda item: item[1]['total'], reverse=True))
 
+        context['person_results'] = person_results
+        context['selected_state'] = state
         context['states'] = State.objects.all()
         context['events'] = Event.objects.exclude(id__in=excluded_event_ids).order_by('rank')
 

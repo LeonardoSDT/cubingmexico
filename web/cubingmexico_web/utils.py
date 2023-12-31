@@ -44,55 +44,51 @@ def wca_access_token_uri(code):
     - sq1 (Square-1)
     """
 
+DEFAULT_COUNTRY = 'Mexico'
+EXCLUDED_EVENTS = ['333ft', 'magic', 'mmagic']
+
 def get_rankings(event_type='333', ranking_type='single', state=None):
     filter_key = 'best' if ranking_type == 'single' else 'average'
+    base_query = Result.objects.filter(event=event_type, **{f"{filter_key}__gt": 0})
 
-    result_filter = Result.objects.filter(event=event_type, **{f"{filter_key}__gt": 0})
     if state:
-        persons = StateRanksSingle.objects.filter(state=state)
-        person_ids = persons.values_list('rankssingle__person_id', flat=True)
+        person_ids = StateRanksSingle.objects.filter(state=state).values_list('rankssingle__person_id', flat=True)
         unique_person_ids = list(set(person_ids))
-        result_filter = result_filter.filter(person_id__in=unique_person_ids)
+        filtered_query = base_query.filter(person_id__in=unique_person_ids)
     else:
-        result_filter = result_filter.filter(country_id='Mexico')
-    result_ids = result_filter.exclude(event_id__in=['333ft', 'magic', 'mmagic']).order_by("person_id", filter_key).distinct("person_id").values_list("id")
-    results = Result.objects.filter(pk__in=result_ids).select_related("event", "person", "competition").order_by(filter_key)
+        filtered_query = base_query.filter(country_id=DEFAULT_COUNTRY)
+
+    result_ids = (filtered_query.exclude(event_id__in=EXCLUDED_EVENTS)
+                                  .order_by("person_id", filter_key)
+                                  .distinct("person_id")
+                                  .values_list("id"))
+
+    results = (Result.objects.filter(pk__in=result_ids)
+                             .select_related("event", "person", "competition")
+                             .order_by(filter_key))
+
     return results
 
 def get_records(state=None, wca_id=None, is_average=False):
-    if is_average:
-        field = "average"
-    else:
-        field = "best"
-
-    filter_kwargs = {f"{field}__gt": 0}
-    exclude_event_ids = ['333ft', 'magic', 'mmagic']
+    field = "average" if is_average else "best"
     order_by_fields = ["event_id", field]
 
-    if state:
-        persons = StateRanksSingle.objects.filter(state=state)
-        person_ids = persons.values_list('rankssingle__person_id', flat=True)
-        unique_person_ids = list(set(person_ids))
-        filter_kwargs["person_id__in"] = unique_person_ids
+    filter_kwargs = {
+        f"{field}__gt": 0,
+        "person_id__in": get_unique_person_ids(state) if state else None,
+        "person_id": wca_id if wca_id else None,
+        "country_id": DEFAULT_COUNTRY if not wca_id else None
+    }
 
-    if wca_id:
-        filter_kwargs["person_id"] = wca_id
-        result_ids = (
-            Result.objects.filter(**filter_kwargs)
-            .exclude(event_id__in=exclude_event_ids)
-            .order_by("event_id", field)
-            .distinct("event_id")
-            .values_list("id")
-        )
-    else:
-        filter_kwargs["country_id"] = 'Mexico'
-        result_ids = (
-            Result.objects.filter(**filter_kwargs)
-            .exclude(event_id__in=exclude_event_ids)
-            .order_by(*order_by_fields)
-            .distinct("event_id")
-            .values_list("id", flat=True)
-        )
+    filter_kwargs = {k: v for k, v in filter_kwargs.items() if v is not None}
+
+    result_ids = (
+        Result.objects.filter(**filter_kwargs)
+        .exclude(event_id__in=EXCLUDED_EVENTS)
+        .order_by(*order_by_fields)
+        .distinct("event_id")
+        .values_list("id", flat=True)
+    )
 
     results = (
         Result.objects.filter(pk__in=result_ids)
@@ -100,9 +96,12 @@ def get_records(state=None, wca_id=None, is_average=False):
         .order_by(*order_by_fields)
     )
 
-    ordered_results = results.order_by('event__rank')
+    return results.order_by('event__rank')
 
-    return ordered_results
+def get_unique_person_ids(state):
+    persons = StateRanksSingle.objects.filter(state=state)
+    person_ids = persons.values_list('rankssingle__person_id', flat=True)
+    return list(set(person_ids))
 
 def get_wcaprofile(wca_id=''):
     return WCAProfile.objects.filter(wca_id=wca_id).first()
