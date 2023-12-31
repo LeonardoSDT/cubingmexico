@@ -2,19 +2,19 @@
 
 {% block title %}
     {% if selected_state %}
-        Récords estatales {% if 'f' in gender %} femeniles {% elif 'm' in gender %} varoniles {% elif 'o' in gender %} de Oscar Isaac {% endif %} de
+        Récords estatales {% if 'f' in gender %}femeniles{% elif 'm' in gender %}varoniles{% elif 'o' in gender %}de Oscar Isaac{% endif %} de
         {% for state in states %}
             {% if state.three_letter_code == selected_state %}
                 {{ state.name }}
             {% endif %}
         {% endfor %}
     {% else %}
-        Récords nacionales {% if 'f' in gender %} femeniles {% elif 'm' in gender %} varoniles {% elif 'o' in gender %} de Oscar Isaac {% endif %}
+        Récords nacionales {% if 'f' in gender %}femeniles{% elif 'm' in gender %}varoniles{% elif 'o' in gender %}de Oscar Isaac{% endif %}
     {% endif %}
      - Cubing México
 {% endblock %}
 
-{% block meta_description %}{% if selected_state %}{% for state in states %}{% if state.three_letter_code == selected_state %}Explora los récords estatales {% if 'f' in gender %} femeniles {% elif 'm' in gender %} varoniles {% elif 'o' in gender %} de Oscar Isaac {% endif %} de {{ state.name }} en el mundo del cubo Rubik en México.{% endif %}{% endfor %}{% else %}Descubre los récords nacionales {% if 'f' in gender %} femeniles {% elif 'm' in gender %} varoniles {% elif 'o' in gender %} de Oscar Isaac {% endif %} en el mundo del cubo Rubik en México.{% endif %}{% endblock %}
+{% block meta_description %}{% if selected_state %}{% for state in states %}{% if state.three_letter_code == selected_state %}Explora los récords estatales {% if 'f' in gender %}femeniles{% elif 'm' in gender %}varoniles{% elif 'o' in gender %}de Oscar Isaac{% endif %} de {{ state.name }} en el mundo del cubo Rubik en México.{% endif %}{% endfor %}{% else %}Descubre los récords nacionales {% if 'f' in gender %}femeniles{% elif 'm' in gender %}varoniles{% elif 'o' in gender %}de Oscar Isaac{% endif %} en el mundo del cubo Rubik en México.{% endif %}{% endblock %}
 
 {% block meta_keywords %}{% if selected_state %}{% for state in states %}{% if state.three_letter_code == selected_state %}récords estatales, {{ state.name }}, cubo Rubik, México, SR, State Record{% endif %}{% endfor %}{% else %}récords nacionales, cubo Rubik, México, NR, National Record{% endif %}{% endblock %}
 
@@ -35,14 +35,14 @@
         <div class="col-12 col-sm-9">
             <h1 class="my-3">
             {% if selected_state %}
-                Récords estatales {% if 'f' in gender %} femeniles {% elif 'm' in gender %} varoniles {% elif 'o' in gender %} de Oscar Isaac {% endif %} de
+                Récords estatales {% if 'f' in gender %}femeniles{% elif 'm' in gender %}varoniles{% elif 'o' in gender %}de Oscar Isaac{% endif %} de
                 {% for state in states %}
                     {% if state.three_letter_code == selected_state %}
                         {{ state.name }}
                     {% endif %}
                 {% endfor %}
             {% else %}
-                Récords nacionales {% if 'f' in gender %} femeniles {% elif 'm' in gender %} varoniles {% elif 'o' in gender %} de Oscar Isaac {% endif %}
+                Récords nacionales {% if 'f' in gender %}femeniles{% elif 'm' in gender %}varoniles{% elif 'o' in gender %}de Oscar Isaac{% endif %}
             {% endif %}
             </h1>
 

@@ -2,14 +2,14 @@
 
 {% block title %}
     {% if selected_state %}
-        Ranking estatal {% if 'f' in gender %} femenil {% elif 'm' in gender %} varonil {% elif 'o' in gender %} de Oscar Isaac {% endif %} de
+        Ranking estatal {% if 'f' in gender %}femenil{% elif 'm' in gender %}varonil{% elif 'o' in gender %}de Oscar Isaac{% endif %} de
         {% for state in states %}
             {% if state.three_letter_code == selected_state %}
                 {{ state.name }}
             {% endif %}
         {% endfor %}
     {% else %}
-        Ranking nacional {% if 'f' in gender %} femenil {% elif 'm' in gender %} varonil {% elif 'o' in gender %} de Oscar Isaac {% endif %}
+        Ranking nacional {% if 'f' in gender %}femenil{% elif 'm' in gender %}varonil{% elif 'o' in gender %}de Oscar Isaac{% endif %}
     {% endif %}
         de
     {% for event in events %}
@@ -23,7 +23,7 @@
      - Cubing México
 {% endblock %}
 
-{% block meta_description %}{% if selected_state %}{% for state in states %}{% if state.three_letter_code == selected_state %}Explora el ranking estatal {% if 'f' in gender %} femenil {% elif 'm' in gender %} varonil {% elif 'o' in gender %} de Oscar Isaac {% endif %} de {{ state.name }} para la categoría {% for event in events %}{% if event.id == selected_event %}{{ event.name }}{% endif %}{% endfor %}{% if event.id != '333mbf' %} ({{ selected_ranking|title }}){% endif %} en el mundo del cubo Rubik en México.{% endif %}{% endfor %}{% else %}Descubre el ranking nacional {% if 'f' in gender %} femenil {% elif 'm' in gender %} varonil {% elif 'o' in gender %} de Oscar Isaac {% endif %} para la categoría {% for event in events %}{% if event.id == selected_event %}{{ event.name }}{% endif %}{% endfor %}{% if event.id != '333mbf' %} ({{ selected_ranking|title }}){% endif %} en el mundo del cubo Rubik en México.{% endif %}{% endblock %}
+{% block meta_description %}{% if selected_state %}{% for state in states %}{% if state.three_letter_code == selected_state %}Explora el ranking estatal {% if 'f' in gender %}femenil{% elif 'm' in gender %}varonil{% elif 'o' in gender %}de Oscar Isaac{% endif %} de {{ state.name }} para la categoría {% for event in events %}{% if event.id == selected_event %}{{ event.name }}{% endif %}{% endfor %}{% if event.id != '333mbf' %} ({{ selected_ranking|title }}){% endif %} en el mundo del cubo Rubik en México.{% endif %}{% endfor %}{% else %}Descubre el ranking nacional {% if 'f' in gender %}femenil{% elif 'm' in gender %}varonil{% elif 'o' in gender %}de Oscar Isaac{% endif %} para la categoría {% for event in events %}{% if event.id == selected_event %}{{ event.name }}{% endif %}{% endfor %}{% if event.id != '333mbf' %} ({{ selected_ranking|title }}){% endif %} en el mundo del cubo Rubik en México.{% endif %}{% endblock %}
 
 {% block meta_keywords %}{% if selected_state %}{% for state in states %}{% if state.three_letter_code == selected_state %}ranking estatal, {{ state.name }}, {% for event in events %}{% if event.id == selected_event %}{{ event.name }}{% endif %}{% endfor %}, {% if event.id != '333mbf' %}{{ selected_ranking|title }}{% endif %}, cubo Rubik, México{% endif %}{% endfor %}{% else %}ranking nacional, {% for event in events %}{% if event.id == selected_event %}{{ event.name }}{% endif %}{% endfor %}, {% if event.id != '333mbf' %}{{ selected_ranking|title }}{% endif %}, cubo Rubik, México{% endif %}{% endblock %}
 
@@ -46,14 +46,14 @@
         <div class="col-12 col-sm-9">
             <h1 class="my-3">
             {% if selected_state %}
-                Ranking estatal {% if 'f' in gender %} femenil {% elif 'm' in gender %} varonil {% elif 'o' in gender %} de Oscar Isaac {% endif %} de
+                Ranking estatal {% if 'f' in gender %}femenil{% elif 'm' in gender %}varonil{% elif 'o' in gender %}de Oscar Isaac{% endif %} de
                 {% for state in states %}
                     {% if state.three_letter_code == selected_state %}
                         {{ state.name }}
                     {% endif %}
                 {% endfor %}
             {% else %}
-                Ranking nacional {% if 'f' in gender %} femenil {% elif 'm' in gender %} varonil {% elif 'o' in gender %} de Oscar Isaac {% endif %}
+                Ranking nacional {% if 'f' in gender %}femenil{% elif 'm' in gender %}varonil{% elif 'o' in gender %}de Oscar Isaac{% endif %}
             {% endif %}
             de
             {% for event in events %}
