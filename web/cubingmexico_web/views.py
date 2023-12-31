@@ -322,12 +322,13 @@ class RankingsView(ContentMixin, TemplateView):
     def dispatch(self, request, *args, **kwargs):
         self.event_type = kwargs.get('event_type')
         self.ranking_type = kwargs.get('ranking_type')
+        self.gender = kwargs.get('gender')
 
         if request.user.is_superuser:
             return redirect(reverse_lazy('cubingmexico_web:logout'))
         
         if self.event_type == '333mbf' and self.ranking_type == 'average':
-            return redirect('cubingmexico_web:rankings', event_type='333mbf', ranking_type='single')
+            return redirect('cubingmexico_web:rankings', event_type='333mbf', ranking_type='single', gender=self.gender)
         
         self.ranking_type = kwargs.pop('ranking_type', 'single')
         return super().dispatch(request, *args, **kwargs)
@@ -347,7 +348,7 @@ class RankingsView(ContentMixin, TemplateView):
 
     def get_rankings(self, state):
         if state:
-            results = get_rankings(state=state, event_type=self.event_type, ranking_type=self.ranking_type)
+            results = get_rankings(state=state, event_type=self.event_type, ranking_type=self.ranking_type, gender=self.gender)
             persons = StateRanksSingle.objects.filter(state=state)
             person_ids = persons.values_list('rankssingle__person_id', flat=True)
             unique_person_ids = list(set(person_ids))
@@ -355,7 +356,7 @@ class RankingsView(ContentMixin, TemplateView):
             rank = rank_model.objects.filter(event_id=self.event_type, person_id__in=unique_person_ids).order_by('best')
             return zip(results, rank)
         else:
-            return get_rankings(event_type=self.event_type, ranking_type=self.ranking_type)
+            return get_rankings(event_type=self.event_type, ranking_type=self.ranking_type, gender=self.gender)
     
 class PersonsView(ContentMixin, TemplateView):
     template_name = 'pages/results/persons.html'

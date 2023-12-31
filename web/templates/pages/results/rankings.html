@@ -46,14 +46,14 @@
         <div class="col-12 col-sm-9">
             <h1 class="my-3">
             {% if selected_state %}
-                Ranking estatal de
+                Ranking estatal {% if 'f' in gender %} femenil {% elif 'm' in gender %} varonil {% elif 'o' in gender %} de Oscar Isaac {% endif %} de
                 {% for state in states %}
                     {% if state.three_letter_code == selected_state %}
                         {{ state.name }}
                     {% endif %}
                 {% endfor %}
             {% else %}
-                Ranking nacional
+                Ranking nacional {% if 'f' in gender %} femenil {% elif 'm' in gender %} varonil {% elif 'o' in gender %} de Oscar Isaac {% endif %}
             {% endif %}
             de
             {% for event in events %}
@@ -68,43 +68,65 @@
         
             <div class="mb-3">
                 <div class="flex flex-row flex-wrap">
+                    <p><strong>Eventos</strong></p>
                     {% for event in events %}
                         {% if state %}
-                            <a href="{% url 'cubingmexico_web:rankings' event_type=event.id state=selected_state ranking_type=selected_ranking %}" class="text-decoration-none">
+                            <a href="{% url 'cubingmexico_web:rankings' event_type=event.id state=selected_state ranking_type=selected_ranking gender=gender %}" class="text-decoration-none">
                                 <span class="cubing-icon event-{{ event.id }} m-1 h4 {% if event.id == selected_event %} text-body {% else %} text-secondary {% endif %}"></span>
                             </a>
                         {% else %}
-                            <a href="{% url 'cubingmexico_web:rankings' event_type=event.id ranking_type=selected_ranking %}" class="text-decoration-none">
+                            <a href="{% url 'cubingmexico_web:rankings' event_type=event.id ranking_type=selected_ranking gender=gender %}" class="text-decoration-none">
                                 <span class="cubing-icon event-{{ event.id }} m-1 h4 {% if event.id == selected_event %} text-body {% else %} text-secondary {% endif %}"></span>
                             </a>
                         {% endif %}
                     {% endfor %}
                 </div>
             </div>
-        
-            {% if selected_event != '333mbf' %}
-            <div class="btn-group mb-3" role="group">
-                {% if state %}
-                    <a href="{% url 'cubingmexico_web:rankings' event_type=selected_event state=selected_state ranking_type='single' %}" class="btn btn-primary {% if 'single' in selected_ranking %} disabled {% endif %}">Single</a>
-                    <a href="{% url 'cubingmexico_web:rankings' event_type=selected_event state=selected_state ranking_type='average' %}" class="btn btn-primary {% if 'average' in selected_ranking %} disabled {% endif %}">Media</a>
-                {% else %}
-                    <a href="{% url 'cubingmexico_web:rankings' event_type=selected_event ranking_type='single' %}" class="btn btn-primary {% if 'single' in selected_ranking %} disabled {% endif %}">Single</a>
-                    <a href="{% url 'cubingmexico_web:rankings' event_type=selected_event ranking_type='average' %}" class="btn btn-primary {% if 'average' in selected_ranking %} disabled {% endif %}">Media</a>
-                {% endif %}
+            <div class="d-sm-flex flex-sm-row flex-column align-items-start">
+                <div>
+                    {% if selected_event != '333mbf' %}
+                        <p><strong>Tipo</strong></p>
+                        <div class="btn-group mb-3" role="group">
+                            {% if state %}
+                                <a href="{% url 'cubingmexico_web:rankings' event_type=selected_event state=selected_state ranking_type='single' gender=gender %}" class="btn btn-primary {% if 'single' in selected_ranking %} disabled {% endif %}">Single</a>
+                                <a href="{% url 'cubingmexico_web:rankings' event_type=selected_event state=selected_state ranking_type='average' gender=gender %}" class="btn btn-primary {% if 'average' in selected_ranking %} disabled {% endif %}">Media</a>
+                            {% else %}
+                                <a href="{% url 'cubingmexico_web:rankings' event_type=selected_event ranking_type='single' gender=gender %}" class="btn btn-primary {% if 'single' in selected_ranking %} disabled {% endif %}">Single</a>
+                                <a href="{% url 'cubingmexico_web:rankings' event_type=selected_event ranking_type='average' gender=gender %}" class="btn btn-primary {% if 'average' in selected_ranking %} disabled {% endif %}">Media</a>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="mt-3 mt-sm-0 mx-sm-3">
+                    <p><strong>Género</strong></p>
+                    <div class="btn-group mb-3" role="group">
+                        {% if state %}
+                            <a href="{% url 'cubingmexico_web:rankings' event_type=selected_event state=selected_state ranking_type=selected_ranking gender='a' %}" class="btn btn-primary {% if 'a' in gender %} disabled {% endif %}">Todos</a>
+                            <a href="{% url 'cubingmexico_web:rankings' event_type=selected_event state=selected_state ranking_type=selected_ranking gender='m' %}" class="btn btn-primary {% if 'm' in gender %} disabled {% endif %}">Masculino</a>
+                            <a href="{% url 'cubingmexico_web:rankings' event_type=selected_event state=selected_state ranking_type=selected_ranking gender='f' %}" class="btn btn-primary {% if 'f' in gender %} disabled {% endif %}">Femenino</a>
+                        {% else %}
+                            <a href="{% url 'cubingmexico_web:rankings' event_type=selected_event ranking_type=selected_ranking gender='a' %}" class="btn btn-primary {% if 'a' in gender %} disabled {% endif %}">Todos</a>
+                            <a href="{% url 'cubingmexico_web:rankings' event_type=selected_event ranking_type=selected_ranking gender='m' %}" class="btn btn-primary {% if 'm' in gender %} disabled {% endif %}">Masculino</a>
+                            <a href="{% url 'cubingmexico_web:rankings' event_type=selected_event ranking_type=selected_ranking gender='f' %}" class="btn btn-primary {% if 'f' in gender %} disabled {% endif %}">Femenino</a>
+                        {% endif %}
+                        {% if 'o' in gender %}
+                            <a href="{% url 'cubingmexico_web:rankings' event_type=selected_event ranking_type=selected_ranking gender='o' %}" class="btn btn-primary {% if 'o' in gender %} disabled {% endif %}">Oscar Isaac</a>
+                        {% endif %}
+                    </div>
+                </div>
             </div>
-            {% endif %}        
         </div>
         <div class="col-12 col-sm-3 d-flex justify-content-center my-3">
             <form>
                 <label for="state-select"><strong>Selecciona un estado</strong></label>
                 <select class="form-select" id="state-select" onchange="location = this.value;">
-                    <option value="{% url 'cubingmexico_web:rankings' event_type=selected_event ranking_type=selected_ranking %}">Todo el país</option>
-                  {% for state in states %}
-                    <option value="{% url 'cubingmexico_web:rankings' event_type=selected_event state=state.three_letter_code ranking_type=selected_ranking %}" {% if state.three_letter_code == selected_state %}selected{% endif %}>{{ state.name }}</option>
-                  {% endfor %}
+                    <option value="{% url 'cubingmexico_web:rankings' event_type=selected_event ranking_type=selected_ranking gender=gender %}">Todo el país</option>
+                {% for state in states %}
+                    <option value="{% url 'cubingmexico_web:rankings' event_type=selected_event state=state.three_letter_code ranking_type=selected_ranking gender=gender %}" {% if state.three_letter_code == selected_state %}selected{% endif %}>{{ state.name }}</option>
+                {% endfor %}
                 </select>
             </form>
-        </div>        
+        </div>
     </div>
     
     <table id="rankings" class="table table-striped" style="width:100%">

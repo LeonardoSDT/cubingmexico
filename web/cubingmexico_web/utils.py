@@ -47,7 +47,7 @@ def wca_access_token_uri(code):
 DEFAULT_COUNTRY = 'Mexico'
 EXCLUDED_EVENTS = ['333ft', 'magic', 'mmagic']
 
-def get_rankings(event_type='333', ranking_type='single', state=None):
+def get_rankings(event_type='333', ranking_type='single', state=None, gender='a'):
     filter_key = 'best' if ranking_type == 'single' else 'average'
     base_query = Result.objects.filter(event=event_type, **{f"{filter_key}__gt": 0})
 
@@ -57,6 +57,9 @@ def get_rankings(event_type='333', ranking_type='single', state=None):
         filtered_query = base_query.filter(person_id__in=unique_person_ids)
     else:
         filtered_query = base_query.filter(country_id=DEFAULT_COUNTRY)
+
+    if gender != 'a':
+        filtered_query = filtered_query.filter(person__gender=gender)
 
     result_ids = (filtered_query.exclude(event_id__in=EXCLUDED_EVENTS)
                                   .order_by("person_id", filter_key)
