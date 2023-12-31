@@ -539,6 +539,11 @@ class SORView(ContentMixin, TemplateView):
     
 class KinchView(ContentMixin, TemplateView):
     template_name = 'pages/results/kinch.html'
+    EXCLUDED_EVENT_IDS = ['333ft', 'magic', 'mmagic', '333mbo']
+    EXCLUDED_EVENT_IDS_AVERAGE = ['333mbf']
+    EXCLUDED_EVENT_IDS_SINGLE = ['333', '222', '444', '555', '666', '777', '333oh', 'clock', 'minx', 'pyram', 'skewb', 'sq1']
+    ALL_EVENT_IDS = ['333', '222', '444', '555', '666', '777', '333bf', '333fm', '333oh', 'clock', 'minx', 'pyram', 'skewb', 'sq1', '444bf', '555bf', '333mbf']
+    NUM_EVENTS = len(ALL_EVENT_IDS)
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_superuser:
@@ -549,19 +554,12 @@ class KinchView(ContentMixin, TemplateView):
         state = self.kwargs.get('state')
         context = super().get_context_data(**kwargs)
 
-        excluded_event_ids = ['333ft', 'magic', 'mmagic', '333mbo']
-
-        excluded_event_ids_average = ['333mbf']
-        excluded_event_ids_single = ['333', '222', '444', '555', '666', '777', '333oh', 'clock', 'minx', 'pyram', 'skewb', 'sq1']
-
-        all_event_ids = ['333', '222', '444', '555', '666', '777', '333bf', '333fm', '333oh', 'clock', 'minx', 'pyram', 'skewb', 'sq1', '444bf', '555bf', '333mbf']
-
         persons = StateRanksSingle.objects.filter(state=state) if state else Person.objects.all()
         person_ids_names = persons.values_list('rankssingle__person_id', 'rankssingle__person__name') if state else persons.values_list('id', 'name')
         unique_person_ids_names = list(set(person_ids_names))
 
-        single_records = get_records(state=state, is_average=False).exclude(event_id__in=excluded_event_ids_single) if state else get_records(is_average=False).exclude(event_id__in=excluded_event_ids_single)
-        average_records = get_records(state=state, is_average=True).exclude(event_id__in=excluded_event_ids_average) if state else get_records(is_average=True).exclude(event_id__in=excluded_event_ids_average)
+        single_records = get_records(state=state, is_average=False).exclude(event_id__in=self.EXCLUDED_EVENT_IDS_SINGLE) if state else get_records(is_average=False).exclude(event_id__in=self.EXCLUDED_EVENT_IDS_SINGLE)
+        average_records = get_records(state=state, is_average=True).exclude(event_id__in=self.EXCLUDED_EVENT_IDS_AVERAGE) if state else get_records(is_average=True).exclude(event_id__in=self.EXCLUDED_EVENT_IDS_AVERAGE)
 
         single_records_dict = {sr.event_id: sr.best for sr in single_records}
         average_records_dict = {ar.event_id: ar.average for ar in average_records}
@@ -570,8 +568,8 @@ class KinchView(ContentMixin, TemplateView):
 
         for person_id, person_name in unique_person_ids_names:
             person_dict = {}
-            personal_single_records = get_records(wca_id=person_id, is_average=False).exclude(event_id__in=excluded_event_ids_single)
-            personal_average_records = get_records(wca_id=person_id, is_average=True).exclude(event_id__in=excluded_event_ids_average)
+            personal_single_records = get_records(wca_id=person_id, is_average=False).exclude(event_id__in=self.EXCLUDED_EVENT_IDS_SINGLE)
+            personal_average_records = get_records(wca_id=person_id, is_average=True).exclude(event_id__in=self.EXCLUDED_EVENT_IDS_AVERAGE)
 
             for psr in personal_single_records:
                 if psr.event_id in single_records_dict:
@@ -604,16 +602,16 @@ class KinchView(ContentMixin, TemplateView):
                 total += float(result)
             
             ordered_dict = OrderedDict()
-            for event_id in all_event_ids:
+            for event_id in self.ALL_EVENT_IDS:
                 ordered_dict[event_id] = person_dict.get(event_id, '0.00')
 
-            person_results[person_id] = {'name': person_name, 'results': ordered_dict, 'total': round(total/17, 2)}
+            person_results[person_id] = {'name': person_name, 'results': ordered_dict, 'total': round(total/self.NUM_EVENTS, 2)}
             person_results = dict(sorted(person_results.items(), key=lambda item: item[1]['total'], reverse=True))
 
         context['person_results'] = person_results
         context['selected_state'] = state
         context['states'] = State.objects.all()
-        context['events'] = Event.objects.exclude(id__in=excluded_event_ids).order_by('rank')
+        context['events'] = Event.objects.exclude(id__in=self.EXCLUDED_EVENT_IDS).order_by('rank')
 
         return context
 

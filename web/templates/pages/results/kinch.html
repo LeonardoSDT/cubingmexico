@@ -62,7 +62,7 @@
             <form>
                 <label for="state-select"><strong>Selecciona un estado</strong></label>
                 <select class="form-select" id="state-select" onchange="location = this.value;">
-                    <!-- <option value="{% url 'cubingmexico_web:kinch' %}">Todo el país</option> -->
+                    <option value="{% url 'cubingmexico_web:kinch' %}">Todo el país (experimental)</option>
                   {% for state in states %}
                     <option value="{% url 'cubingmexico_web:kinch' state=state.three_letter_code %}" {% if state.three_letter_code == selected_state %}selected{% endif %}>{{ state.name }}</option>
                   {% endfor %}
