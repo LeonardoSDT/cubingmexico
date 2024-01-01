@@ -97,6 +97,36 @@ class IndexView(ContentMixin, TemplateView):
             return redirect(reverse_lazy('cubingmexico_web:logout'))
         return super().dispatch(request, *args, **kwargs)
     
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        sponsors = Sponsor.objects.filter(is_active=True).order_by('-amount')
+        state_teams = StateTeam.objects.annotate(person_count=Count('personstateteam')).order_by('-person_count')
+
+        now = datetime.now()
+        
+        upcoming_competitions = Competition.objects.filter(
+            Q(country__name='Mexico') & (
+                Q(year__gt=now.year) | (
+                    Q(year=now.year) & (
+                        Q(month__gt=now.month) | (
+                            Q(month=now.month) & Q(day__gte=now.day)
+                        )
+                    )
+                )
+            ) & ~Q(year=now.year, month=now.month, day=now.day)
+        ).annotate(
+            competition_state=F('competitionstate__state__name')
+        ).order_by('year', 'month', 'day')
+
+        context['sponsors'] = sponsors
+        context['state_teams'] = state_teams
+        context['upcoming_competitions'] = upcoming_competitions
+
+        return context
+    
+
+    
 class AboutView(ContentMixin, TemplateView):
     template_name = 'pages/about/about.html'
     page = 'cubingmexico_web:about'
@@ -166,10 +196,24 @@ class DonationsView(ContentMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        donors = Donor.objects.filter(is_active=True).order_by('-amount')
+        now = datetime.now()
+        start_of_month = datetime(now.year, now.month, 1)
+        if now.month == 1:
+            start_of_last_month = datetime(now.year - 1, 12, 1)
+        else:
+            start_of_last_month = datetime(now.year, now.month - 1, 1)
+
+
+        this_month_donors = Donor.objects.filter(donation_date__gte=start_of_month, is_active=True).order_by('-amount')
+        last_month_donors = Donor.objects.filter(donation_date__lt=start_of_month, donation_date__gte=start_of_last_month, is_active=True).order_by('-amount')
+        lifetime_donors = Donor.objects.filter(is_active=True).order_by('-amount')
+
+        context['this_month_donors'] = this_month_donors
+        context['last_month_donors'] = last_month_donors
+        context['lifetime_donors'] = lifetime_donors
+
         sponsors = Sponsor.objects.filter(is_active=True).order_by('-amount')
 
-        context['donors'] = donors
         context['sponsors'] = sponsors
 
         return context

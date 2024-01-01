@@ -44,7 +44,7 @@
                 </div>
             </div>
         </div>
-        <h3 class="text-center my-3">Donadores</h3>
+        <h3 class="text-center my-3">Donadores del mes</h3>
         <p>A continuación se muestran los donadores (estos se agregan de manera manual, por lo que si acabas de donar y no apareces te pedimos ser paciente):</p>
         <div class="row">
             <div class="col-12">
@@ -58,21 +58,85 @@
                     </tr>
                     </thead>
                     <tbody>
-                        {% for donor in donors %}
-                        <tr>
-                            <th scope="row">{{ forloop.counter }}</th>
-                            <td>{{ donor.name }}</td>
-                            <td>${{ donor.amount }} MXN</td>
-                            <td>{{ donor.donation_date }}</td>
-                        </tr>
-                        {% endfor %}
+                        {% if this_month_donors %}
+                            {% for donor in this_month_donors %}
+                            <tr>
+                                <td scope="row">{{ forloop.counter }}</td>
+                                <td>{{ donor.name }}</td>
+                                <td>${{ donor.amount }} MXN</td>
+                                <td>{{ donor.donation_date }}</td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr><td colspan="4">Parece que nadie ha donado este mes, <a href="https://www.paypal.com/donate/?hosted_button_id=ZRWXP6B78SQDY" class="text-decoration-none">¡sé el primero!</a></td></tr>
+                        {% endif %}
                     </tbody>
                 </table>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <p>¡Gracias por ser parte de la comunidad de Cubing México y por considerar hacer una donación para apoyarnos!</p>
+        <div class="row">
+            <p>¡Gracias por ser parte de la comunidad de Cubing México y por considerar hacer una donación para apoyarnos!</p>
+        </div>
+        <button type="button" class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#pastMonthDonors">
+            Mostrar donadores del mes pasado
+        </button>
+        <div id="pastMonthDonors" class="collapse">
+            <h3 class="text-center my-3">Donadores del mes pasado</h3>
+            <div class="row">
+                <div class="col-12">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Monto</th>
+                            <th scope="col">Fecha</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            {% for donor in last_month_donors %}
+                            <tr>
+                                <td scope="row">{{ forloop.counter }}</td>
+                                <td>{{ donor.name }}</td>
+                                <td>${{ donor.amount }} MXN</td>
+                                <td>{{ donor.donation_date }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <button type="button" class="btn btn-secondary my-3" data-bs-toggle="collapse" data-bs-target="#lifetimeDonors">
+            Mostrar todos los donadores
+        </button>
+        <div id="lifetimeDonors" class="collapse">
+            <h3 class="text-center my-3">Todos los donadores</h3>
+            <div class="row">
+                <div class="col-12">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Monto</th>
+                            <th scope="col">Fecha</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            {% for donor in lifetime_donors %}
+                            <tr>
+                                <td scope="row">{{ forloop.counter }}</td>
+                                <td>{{ donor.name }}</td>
+                                <td>${{ donor.amount }} MXN</td>
+                                <td>{{ donor.donation_date }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
     <h2 class="text-center my-3">Patrocinadores</h2>
     <p>Si eres dueño de algún negocio y deseas que este aparezca como patrocinador, asegúrate de escribir el nombre al momento de donar.</p>

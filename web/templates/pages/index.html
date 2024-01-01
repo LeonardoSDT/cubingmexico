@@ -12,12 +12,112 @@
 {% block meta_description %}Cubing México - Tu fuente de información para rankings, récords y más en el mundo del cubo Rubik en México.{% endblock %}
 {% block meta_keywords %}Cubing México, Rubik's cube, rankings, récords, competiciones, competencias, WCA, México{% endblock %}
 
+{% load split_events %}
+{% load date_formatter %}
+
+{% block stylesheets %}
+  <link rel="stylesheet" href="{% static 'css/cubing-icons.css' %}">
+{% endblock stylesheets %}
+
 {% block content %}
 
 <p class="text-center"><img src="{% static 'img/cubingmexico_logo.svg' %}" width="200" height="200" alt="Logo de Cubing México"></p>
 <h1 class="text-center my-3">Bienvenido a Cubing México</h1>
 
 <div class="container">
+  <div class="row">
+    <div class="col-12 col-sm-4 mb-3">
+      <h3 class="text-center">Patrocinadores</h3>
+      <div id="sponsorCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+          {% for sponsor in sponsors %}
+          <div class="carousel-item {% if forloop.first %}active{% endif %}">
+            <div class="card text-center">
+              <img class="card-img-top" src="{{ sponsor.sponsor_logo.url }}" alt="Logo del patrocinador">
+              <div class="card-body">
+                <h2 class="card-title fs-5">{{ sponsor.name }}</h2>
+                <p class="card-text">{{ sponsor.description|truncatewords:10 }}</p>
+                <a href="{{ sponsor.link }}" class="btn btn-primary">Ver patrocinador</a>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#sponsorCarousel" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Siguiente</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#sponsorCarousel" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Anterior</span>
+        </button>
+      </div>
+    </div>
+    <div class="col-12 col-sm-4 mb-3">
+      <h3 class="text-center">Teams</h3>
+      <div id="stateTeamCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+          {% for team in state_teams %}
+          <div class="carousel-item {% if forloop.first %}active{% endif %}">
+            <div class="card text-center">
+              {% if team.team_logo %}
+                  <img src="{{ team.team_logo.url }}" class="card-img-top" alt="Logotipo de {{ team.name }}">
+              {% else %}
+                  <img src="" class="card-img-top" alt="Logotipo de {{ team.name }}">
+              {% endif %}
+              <div class="card-body">
+                <h2 class="card-title fs-5">{{ team.name }}</h2>
+                <p class="card-text"><strong>Estado:</strong> {{ team.state }}</p>
+                <p class="card-text"><strong>Miembros:</strong> {{ team.person_count }}</p>
+                <a href="{% url 'cubingmexico_web:team' team_code=team.state.three_letter_code %}" class="btn btn-primary"><i class="bi bi-people-fill me-2"></i>Ver team</a>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#stateTeamCarousel" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Anterior</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#stateTeamCarousel" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Siguiente</span>
+        </button>
+      </div>
+    </div>
+    <div class="col-12 col-sm-4 mb-3">
+      <h3 class="text-center">Competencias</h3>
+      <div id="competitionCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+          {% for competition in upcoming_competitions %}
+          <div class="carousel-item {% if forloop.first %}active{% endif %}">
+            <div class="card text-center">
+              <img class="card-img-top" src="https://www.worldcubeassociation.org/files/WCAlogo_notext.svg" alt="Logo del patrocinador">
+              <div class="card-body">
+                <h2 class="card-title fs-5">{{ competition.name }}</h2>
+                <p class="card-text">
+                  {% for spec in competition.event_specs|split_string_and_sort %}
+                    <span class="cubing-icon event-{{ spec }}"></span>
+                  {% endfor %}
+                </p>
+                <p class="card-text"><strong>Estado:</strong> {{ competition.competition_state }}</p>
+                <a href="https://www.worldcubeassociation.org/competitions/{{ competition.id }}" class="btn btn-primary">Ver competencia</a>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#competitionCarousel" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Anterior</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#competitionCarousel" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Siguiente</span>
+        </button>
+      </div>
+    </div>
+  </div>
   <div class="row">
     <div class="col mb-3">
       <div class="card text-center">
