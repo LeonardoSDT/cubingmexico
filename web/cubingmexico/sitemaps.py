@@ -14,7 +14,6 @@ class StaticViewSitemap(Sitemap):
             'cubingmexico_web:logo',
             'cubingmexico_web:faq',
             'cubingmexico_web:competitions',
-            'cubingmexico_web:records',
             'cubingmexico_web:state_teams',
             ]
     
