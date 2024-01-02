@@ -206,4 +206,4 @@ WCA_CLIENT_SECRET = env("WCA_CLIENT_SECRET")
 if os.getenv("PYTHON_ENV") == "dev":
     WCA_CALLBACK = 'http://localhost:8080/cubingmexico_wca/callback/'
 else:
-    WCA_CALLBACK = 'https://cubingmexico.net/cubingmexico_wca/callback/',
+    WCA_CALLBACK = 'https://cubingmexico.net/cubingmexico_wca/callback/'
