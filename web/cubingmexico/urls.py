@@ -23,6 +23,15 @@ from .sitemaps import *
 sitemaps = {
     'about': StaticViewSitemap,
     'stateteam': StateTeamSitemap,
+    'recordsgender': RecordsViewGenderSitemap,
+    'recordsgenderstate': RecordsViewGenderStateSitemap,
+    'competitionsstate': CompetitionsStateSitemap,
+    'personsstate': PersonsStateSitemap,
+    'rankingsgender': RankingsViewGenderSitemap,
+    'rankingsgenderstate': RankingsViewGenderStateSitemap,
+    'sorviewgender': SORViewGenderSitemap,
+    'sorviewgenderstate': SORViewGenderStateSitemap,
+    'kinchviewgender': KinchViewGenderSitemap,
 }
 
 urlpatterns = [
