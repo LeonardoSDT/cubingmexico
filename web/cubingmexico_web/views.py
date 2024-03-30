@@ -14,14 +14,14 @@ from django.views.generic.edit import UpdateView, CreateView
 
 from django.core.files.storage import default_storage
 
-from django.db.models import Max, F, Value, Q, Count, Case, IntegerField, When, OuterRef, Subquery
+from django.db.models import Max, F, Value, Q, Count, Case, IntegerField, When, OuterRef, Subquery, Prefetch
 
 from itertools import groupby
 from collections import defaultdict, OrderedDict
 
 import copy, json
 
-from .models import User, WCAProfile, CubingmexicoProfile, PersonStateTeam, StateRanksSingle, StateRanksAverage, Donor, Sponsor
+from .models import User, WCAProfile, CubingmexicoProfile, PersonStateTeam, StateRanksSingle, StateRanksAverage, Donor, Sponsor, SponsorTeam
 from cubingmexico_wca.models import Event, RanksSingle, RanksAverage, Competition
 from .forms import *
 from .utils import *
@@ -236,6 +236,22 @@ class DonationCancelView(ContentMixin, TemplateView):
             return redirect(reverse_lazy('cubingmexico_web:logout'))
         return super().dispatch(request, *args, **kwargs)
     
+class CompetitorTutorialView(ContentMixin, TemplateView):
+    template_name = 'pages/about/competitor_tutorial.html'
+    page = 'cubingmexico_web:competitor_tutorial'
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_superuser:
+            return redirect(reverse_lazy('cubingmexico_web:logout'))
+        return super().dispatch(request, *args, **kwargs)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        
+
+        return context
+    
 class CompetitionsView(ContentMixin, TemplateView):
     template_name = 'pages/competitions.html'
     page = 'cubingmexico_web:competitions'
@@ -314,6 +330,57 @@ class CompetitionsView(ContentMixin, TemplateView):
         context['past_competitions_list_json'] = json.dumps(list(past_competitions.values('name', 'latitude', 'longitude', 'competitionstate__state__name')))
         context['current_competitions_list_json'] = json.dumps(list(current_competitions.values('name', 'latitude', 'longitude', 'competitionstate__state__name')))
         
+        return context
+    
+class SponsorsCupView(ContentMixin, TemplateView):
+    template_name = 'pages/sponsors_cup.html'
+    page = 'cubingmexico_web:sponsors_cup'
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_superuser:
+            return redirect(reverse_lazy('cubingmexico_web:logout'))
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        state = self.kwargs.get('state')
+        context = super().get_context_data(**kwargs)
+
+        sponsor_teams = SponsorTeam.objects.all()
+
+        competitions = Competition.objects.none()
+
+        member_ids = []
+        for team in sponsor_teams:
+            members = team.members.all()
+            for member in members:
+                member_ids.append(member.id)
+                new_competitions = Competition.objects.filter(result__person_id=member.id, year=2024, month__gte=1, month__lte=4).distinct()
+                competitions = competitions | new_competitions
+
+        for competition in competitions:
+            registrant_ids = []
+            response = requests.get(f'https://www.worldcubeassociation.org/api/v0/competitions/{competition.id}/wcif/public')
+            data = response.json()
+            events = data['events']
+            persons = data['persons']
+            for person in persons:
+                if person['wcaId'] in member_ids:
+                    registrant_ids.append(person['registrantId'])
+                    print(person['registrantId'])
+            print(competition.name)
+            for event in events:
+                print(event['id'])
+                for round in event['rounds']:
+                    for result in round['results']:
+                        if result['personId'] in registrant_ids:
+                            print(f"ranking: {result['ranking']}")
+
+            print(registrant_ids)
+
+        context['competitions'] = competitions
+        context['competitions_count'] = competitions.count()
+        context['sponsor_teams'] = sponsor_teams
+
         return context
 
 class ProfileView(AuthenticateMixin, ContentMixin, TemplateView):

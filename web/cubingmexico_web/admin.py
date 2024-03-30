@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import StateTeam, CubingmexicoProfile, PersonStateTeam, WCAProfile, User, CompetitionState, Competition, Donor, Sponsor
+from .models import StateTeam, CubingmexicoProfile, PersonStateTeam, WCAProfile, User, CompetitionState, Competition, Donor, Sponsor, SponsorTeam
 
 # Register your models here.
 
@@ -10,6 +10,7 @@ admin.site.register(PersonStateTeam)
 admin.site.register(CubingmexicoProfile)
 admin.site.register(Donor)
 admin.site.register(Sponsor)
+admin.site.register(SponsorTeam)
 
 class CompetitionStateAdmin(admin.ModelAdmin):
     def formfield_for_foreignkey(self, db_field, request, **kwargs):

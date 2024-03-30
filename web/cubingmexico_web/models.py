@@ -153,3 +153,15 @@ class Sponsor(models.Model):
     class Meta:
         verbose_name = _('Patrocinador')
         verbose_name_plural = _('Patrocinadores')
+
+class SponsorTeam(models.Model):
+    sponsor = models.ForeignKey(Sponsor, on_delete=models.CASCADE, verbose_name=_("Patrocinador"))
+    members = models.ManyToManyField(Person, verbose_name=_("Miembros del equipo"))
+    team_name = models.CharField(_("Nombre del equipo"), max_length=255)
+
+    def __str__(self):
+        return self.team_name
+
+    class Meta:
+        verbose_name = _('Equipo de Patrocinador')
+        verbose_name_plural = _('Equipos de Patrocinadores')

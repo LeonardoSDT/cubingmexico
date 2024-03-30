@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Tutorial para competidores de la WCA{% endblock %}
+
+{% block meta_title %}Tutorial para competidores de la WCA{% endblock %}
+{% block meta_type %}website{% endblock %}
+{% block meta_url %}https://cubingmexico.net/competitor_tutorial/{% endblock %}
+{% block meta_image %}{% static 'img/cubingmexico_logo.png' %}{% endblock %}
+
+{% block meta_description %}{% endblock %}
+{% block meta_keywords %}{% endblock %}
+
+{% block content %}
+
+<h1 class="text-center my-3">Tutorial para competidores de la WCA</h1>
+
+
+<div class="container">
+    <div class="row">
+        <p>En general, no existen muchos requisitos para que una persona pueda participar en una competencia de la WCA. Sin embargo, se espera que todos los participantes de una competencia comprendan bien el <a href="https://www.worldcubeassociation.org/regulations/translations/spanish-american/" class="text-decoration-none">Reglamento de la WCA.</a></p>
+
+        <p>En adición, es importante aclarar que todos los competidores deben estar familiarizados con las tareas de staff, por lo que se recomienda también revisar estos documentos:</p>
+        <ul>
+            <li><a href="https://www.worldcubeassociation.org/edudoc/competitor-tutorial/es/tutorial.pdf" class="text-decoration-none">Tutorial de Competiciones de la WCA</a></li>
+            <li><a href="https://www.worldcubeassociation.org/edudoc/judge-tutorial/judge-tutorial-es.pdf" class="text-decoration-none">Tutorial para Jueces Novatos</a></li>
+        </ul>
+
+        <p>Por último, te recomendamos ver el siguiente video que resume todo lo importante sobre asistir a una competencia de la WCA:</p>
+
+        <iframe width="640" height="360" src="https://www.youtube.com/embed/NYxjR0laeNA" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+    <div class="row">
+        <a href="{% url 'cubingmexico_web:donations' %}" class="btn btn-secondary mt-3">¿Te interesa donar? Puedes hacerlo aquí</a>
+    </div>
+</div>
+
+{% endblock %}
