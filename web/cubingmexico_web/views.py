@@ -124,9 +124,7 @@ class IndexView(ContentMixin, TemplateView):
         context['upcoming_competitions'] = upcoming_competitions
 
         return context
-    
-
-    
+      
 class AboutView(ContentMixin, TemplateView):
     template_name = 'pages/about/about.html'
     page = 'cubingmexico_web:about'
@@ -910,4 +908,17 @@ class StateTeamEndpointView(APIView):
     def get(self, request):
         queryset = StateTeam.objects.all()
         serializer = StateTeamSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+class IndividualStateTeamEndpointView(APIView):
+    def get_object(self, team_code):
+        try:
+            state = State.objects.get(three_letter_code=team_code)
+            return StateTeam.objects.get(state=state)
+        except StateTeam.DoesNotExist or State.DoesNotExist:
+            raise Http404
+
+    def get(self, request, team_code, format=None):
+        team = self.get_object(team_code)
+        serializer = StateTeamSerializer(team)
         return Response(serializer.data)

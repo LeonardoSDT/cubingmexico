@@ -36,5 +36,6 @@ urlpatterns = [
     path('team/<str:team_code>/add_member/', AddStateTeamMemberView.as_view(), name='add_member'),
     path('team/<str:team_code>/remove_member/<int:pk>/', RemoveStateTeamMemberView.as_view(), name='remove_member'),
     path('cubingmexico_wca/callback/', WCACallbackView.as_view(), name='wca_callback'),
-    # path('api-endpoint/', StateTeamEndpointView.as_view(), name='state_team_endpoint_view'),
+    path('api/v0/teams', StateTeamEndpointView.as_view(), name='teams_endpoint'),
+    path('api/v0/teams/<str:team_code>/', IndividualStateTeamEndpointView.as_view(), name='state_team_detail'),
 ]
