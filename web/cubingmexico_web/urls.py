@@ -38,4 +38,6 @@ urlpatterns = [
     path('cubingmexico_wca/callback/', WCACallbackView.as_view(), name='wca_callback'),
     path('api/v0/teams', StateTeamEndpointView.as_view(), name='teams_endpoint'),
     path('api/v0/teams/<str:team_code>/', IndividualStateTeamEndpointView.as_view(), name='state_team_detail'),
+    path('api/v0/rank/single/<str:event_id>/', SingleRankEndpointView.as_view(), name='single_rank_endpoint'),
+    path('api/v0/rank/average/<str:event_id>/', AverageRankEndpointView.as_view(), name='average_rank_endpoint'),
 ]

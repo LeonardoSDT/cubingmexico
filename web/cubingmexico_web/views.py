@@ -28,8 +28,9 @@ from .utils import *
 from datetime import date, datetime
 
 from rest_framework.views import APIView
+from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
-from .serializers import StateTeamSerializer
+from .serializers import AverageRankSerializer, SingleRankSerializer, StateTeamSerializer
 
 # Create your views here.
 
@@ -922,3 +923,17 @@ class IndividualStateTeamEndpointView(APIView):
         team = self.get_object(team_code)
         serializer = StateTeamSerializer(team)
         return Response(serializer.data)
+    
+class SingleRankEndpointView(ListAPIView):
+    serializer_class = SingleRankSerializer
+
+    def get_queryset(self):
+        event_id = self.kwargs['event_id']
+        return RanksSingle.objects.filter(event_id=event_id)
+        
+class AverageRankEndpointView(ListAPIView):
+    serializer_class = AverageRankSerializer
+
+    def get_queryset(self):
+        event_id = self.kwargs['event_id']
+        return RanksAverage.objects.filter(event_id=event_id)
