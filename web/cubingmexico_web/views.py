@@ -28,8 +28,9 @@ from .utils import *
 from datetime import date, datetime
 
 from rest_framework.views import APIView
+from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
-from .serializers import StateTeamSerializer
+from .serializers import AverageRankSerializer, SingleRankSerializer, StateTeamSerializer
 
 # Create your views here.
 
@@ -124,9 +125,7 @@ class IndexView(ContentMixin, TemplateView):
         context['upcoming_competitions'] = upcoming_competitions
 
         return context
-    
-
-    
+      
 class AboutView(ContentMixin, TemplateView):
     template_name = 'pages/about/about.html'
     page = 'cubingmexico_web:about'
@@ -911,3 +910,30 @@ class StateTeamEndpointView(APIView):
         queryset = StateTeam.objects.all()
         serializer = StateTeamSerializer(queryset, many=True)
         return Response(serializer.data)
+
+class IndividualStateTeamEndpointView(APIView):
+    def get_object(self, team_code):
+        try:
+            state = State.objects.get(three_letter_code=team_code)
+            return StateTeam.objects.get(state=state)
+        except StateTeam.DoesNotExist or State.DoesNotExist:
+            raise Http404
+
+    def get(self, request, team_code, format=None):
+        team = self.get_object(team_code)
+        serializer = StateTeamSerializer(team)
+        return Response(serializer.data)
+    
+class SingleRankEndpointView(ListAPIView):
+    serializer_class = SingleRankSerializer
+
+    def get_queryset(self):
+        event_id = self.kwargs['event_id']
+        return RanksSingle.objects.filter(event_id=event_id)
+        
+class AverageRankEndpointView(ListAPIView):
+    serializer_class = AverageRankSerializer
+
+    def get_queryset(self):
+        event_id = self.kwargs['event_id']
+        return RanksAverage.objects.filter(event_id=event_id)

@@ -15,7 +15,6 @@ class User(AbstractUser):
     def __str__(self):
         return self.username
 
-
 class WCAProfile(models.Model):
     def __str__(self):
         return self.wca_id or self.name
@@ -135,7 +134,6 @@ class Donor(models.Model):
     class Meta:
         verbose_name = _('Donador')
         verbose_name_plural = _('Donadores')
-
 
 class Sponsor(models.Model):
     def __str__(self):

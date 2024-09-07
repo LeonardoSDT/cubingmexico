@@ -105,7 +105,7 @@
                   Más que nada sirve para que puedas ver tu ranking estatal al estilo de la WCA en tu perfil, aquí puedes ver un <a href="{% url 'cubingmexico_web:my_results' wca_id='2018GONZ21' %}" class="text-decoration-none">ejemplo</a>.<br>
                   {% if not user.is_authenticated %}
                     ¡Te invitamos a unirte!<br>
-                    <a href="{{ wca_login_uri }}" class="btn btn-primary mt-2">¡Únete a Cubing México con tu cuenta de la WCA! <img src="https://www.worldcubeassociation.org/packs/static/components/StaticPages/LogoImages/WCA%20Logo%20Only%20Positive%20Primary-de8bfbd9d4fde40ccc22.svg" alt="WCA" width="20"></a>
+                    <a href="{{ wca_login_uri }}" class="btn btn-primary mt-2">¡Únete a Cubing México con tu cuenta de la WCA! <img src="https://storage.cloud.google.com/cubingmexico_dev_bucket/img/WCA%20Logo.svg" alt="WCA" width="20"></a>
                   {% endif %}
                 </div>
               </div>
